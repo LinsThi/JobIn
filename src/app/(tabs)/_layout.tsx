@@ -1,31 +1,41 @@
-import { Link, Tabs } from 'expo-router';
+import { Tabs } from "expo-router";
 
-import { HeaderButton } from '@/HeaderButton';
-import { TabBarIcon } from '@/TabBarIcon';
+import { TabBarIcon } from "@/TabBarIcon";
+import useTheme from "~/src/shared/store/useTheme";
+
+export const unstable_tabs_settings = {
+  initialRouteName: "home",
+};
+
+const { Screen } = Tabs;
 
 export default function TabLayout() {
+  const {
+    state: { theme },
+  } = useTheme();
+
+  const ACTIVE_TINT_COLOR = theme === "dark" ? "#CDAEF5" : "#007AFF";
+  const INACTIVE_TINT_COLOR = theme === "dark" ? "#515151" : "#787880";
+
   return (
     <Tabs
+      initialRouteName="home"
       screenOptions={{
-        tabBarActiveTintColor: 'black',
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: theme === "dark" ? "#222232" : "#F8F8F8",
+          borderTopWidth: 0,
+        },
+        tabBarActiveTintColor: ACTIVE_TINT_COLOR,
+        tabBarInactiveTintColor: INACTIVE_TINT_COLOR,
       }}>
-      <Tabs.Screen
-        name="home/index"
+      <Screen
+        name="home"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <HeaderButton />
-            </Link>
+          title: "Home",
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon name="home" color={focused ? ACTIVE_TINT_COLOR : INACTIVE_TINT_COLOR} />
           ),
-        }}
-      />
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
     </Tabs>

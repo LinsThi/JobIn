@@ -3,37 +3,29 @@
     "name": "JobIn",
     "slug": "JobIn",
     "version": "1.0.0",
-    
-      "scheme": "JobIn",
-      "web": {
-        "bundler": "metro",
-        "output": "static",
-        "favicon": "./assets/favicon.png"
-      },
-      "plugins": [
-      "expo-router"
-      
-      
-        ,[
+    "scheme": "JobIn",
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
         "expo-dev-launcher",
         {
           "launchMode": "most-recent"
         }
-      ]
-      
+      ],
+      "expo-font"
     ],
-      "experiments": {
-        "typedRoutes": true
-        
-          ,"tsconfigPaths": true
-        
-      },
-    
+    "experiments": {
+      "typedRoutes": true,
+      "tsconfigPaths": true
+    },
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    
-     "userInterfaceStyle": "light",
-    
+    "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -49,7 +41,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
-    }
+      },
+      "package": "com.linsdev.JobIn"
+    },
+    "newArchEnabled": true
   }
 }
