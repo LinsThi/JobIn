@@ -100,7 +100,7 @@ export function RecentlyAdded() {
         data={RECENTLY_ADDED}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => (
-          <Link href="/(tabs)/home/alou" asChild>
+          <Link href="/alou" asChild>
             <TouchableOpacity className="mb-4 flex h-56 flex-row gap-4 rounded-lg border border-foreground bg-foreground p-4 dark:border-foreground-dark dark:bg-foreground-dark">
               <Image
                 className="h-12 w-12"

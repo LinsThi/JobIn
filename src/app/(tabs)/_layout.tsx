@@ -19,7 +19,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
-      initialRouteName="home"
+      initialRouteName="home/index"
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
@@ -30,11 +30,21 @@ export default function TabLayout() {
         tabBarInactiveTintColor: INACTIVE_TINT_COLOR,
       }}>
       <Screen
-        name="home"
+        name="home/index"
         options={{
           title: "Home",
           tabBarIcon: ({ focused }) => (
             <TabBarIcon name="home" color={focused ? ACTIVE_TINT_COLOR : INACTIVE_TINT_COLOR} />
+          ),
+        }}
+      />
+
+      <Screen
+        name="search/index"
+        options={{
+          title: "Search",
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon name="search" color={focused ? ACTIVE_TINT_COLOR : INACTIVE_TINT_COLOR} />
           ),
         }}
       />

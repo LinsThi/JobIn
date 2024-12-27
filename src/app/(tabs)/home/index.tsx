@@ -23,7 +23,11 @@ export default function Home() {
         />
 
         <TouchableOpacity onPress={handleToggleTheme}>
-          <Feather name={theme === "dark" ? "moon" : "sun"} size={32} color="black" />
+          <Feather
+            name={theme === "dark" ? "moon" : "sun"}
+            size={32}
+            color={theme === "dark" ? "#fff" : "#000"}
+          />
         </TouchableOpacity>
       </View>
 
