@@ -4,6 +4,8 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useNavigation } from "expo-router";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
+import useTheme from "~/src/shared/store/useTheme";
+
 const ICON_SIZE = 28;
 
 const OPPORTUNITY_DETAILS = {
@@ -27,6 +29,10 @@ One of our team's key focus areas is the Next Billion Users (NBU) where we uncov
 };
 
 export default function Opportunity() {
+  const {
+    state: { theme },
+  } = useTheme();
+
   const isSaved = false;
 
   const { goBack } = useNavigation();
@@ -35,20 +41,36 @@ export default function Opportunity() {
     <View className="flex flex-1 bg-background px-4 pt-8 dark:bg-background-dark">
       <View className="flex-row justify-between px-4">
         <TouchableOpacity onPress={goBack}>
-          <MaterialIcons name="arrow-back-ios" size={ICON_SIZE} color="white" />
+          <MaterialIcons
+            name="arrow-back-ios"
+            size={ICON_SIZE}
+            color={theme === "dark" ? "white" : "black"}
+          />
         </TouchableOpacity>
 
         <View className="flex-row gap-6">
           <TouchableOpacity>
             {isSaved ? (
-              <FontAwesome name="bookmark" size={ICON_SIZE} color="white" />
+              <FontAwesome
+                name="bookmark"
+                size={ICON_SIZE}
+                color={theme === "dark" ? "white" : "black"}
+              />
             ) : (
-              <FontAwesome name="bookmark-o" size={ICON_SIZE} color="white" />
+              <FontAwesome
+                name="bookmark-o"
+                size={ICON_SIZE}
+                color={theme === "dark" ? "white" : "black"}
+              />
             )}
           </TouchableOpacity>
 
           <TouchableOpacity>
-            <AntDesign name="sharealt" size={ICON_SIZE} color="white" />
+            <AntDesign
+              name="sharealt"
+              size={ICON_SIZE}
+              color={theme === "dark" ? "white" : "black"}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -74,15 +96,15 @@ export default function Opportunity() {
             </View>
 
             <View className="flex-row gap-2">
-              <Text className="rounded-md bg-[#606060] p-1 text-fontTertiary dark:text-fontTertiary-dark">
+              <Text className="bg-backgroundDetailsVacantion dark:to-backgroundDetailsVacantion-dark rounded-md p-1 text-white">
                 {OPPORTUNITY_DETAILS.location}
               </Text>
 
-              <Text className="rounded-md bg-[#606060] p-1 text-fontTertiary dark:text-fontTertiary-dark">
+              <Text className="bg-backgroundDetailsVacantion dark:to-backgroundDetailsVacantion-dark rounded-md p-1 text-white">
                 {OPPORTUNITY_DETAILS.job_location}
               </Text>
 
-              <Text className="rounded-md bg-[#606060] p-1 text-fontTertiary dark:text-fontTertiary-dark">
+              <Text className="bg-backgroundDetailsVacantion dark:to-backgroundDetailsVacantion-dark rounded-md p-1 text-white">
                 {OPPORTUNITY_DETAILS.job_hour}
               </Text>
             </View>
@@ -95,7 +117,7 @@ export default function Opportunity() {
         contentContainerStyle={{
           gap: 8,
         }}>
-        <View className="bg-[#222232] px-4 py-4">
+        <View className="bg-foreground px-4 py-4 dark:bg-foreground-dark">
           <Text className="pb-4 font-roboto-bold text-xl text-fontTertiary dark:text-fontTertiary-dark">
             Sobre a vaga
           </Text>
@@ -105,7 +127,7 @@ export default function Opportunity() {
           </Text>
         </View>
 
-        <View className="bg-[#222232] px-4 py-4">
+        <View className="bg-foreground px-4 py-4 dark:bg-foreground-dark">
           <Text className="pb-4 font-roboto-bold text-xl text-fontTertiary dark:text-fontTertiary-dark">
             Habilidades & Responsabilidades
           </Text>
@@ -131,7 +153,7 @@ export default function Opportunity() {
 
         <View className="items-center py-4">
           <TouchableOpacity className="w-[70%] items-center justify-center rounded-xl bg-fontLink py-5 dark:bg-fontLink-dark">
-            <Text className="text-center font-roboto-medium text-xl text-fontDefault dark:text-fontDefault-dark">
+            <Text className="text-center font-roboto-medium text-xl text-fontDefault-dark">
               Acessar vaga
             </Text>
           </TouchableOpacity>

@@ -30,6 +30,10 @@ module.exports = {
           dark: "#222232",
           DEFAULT: "#fffafa",
         },
+        backgroundDetailsVacantion: {
+          dark: "#606060",
+          DEFAULT: "#959595",
+        },
         borderForeground: {
           dark: "transparent",
           DEFAULT: "#f5f5f5",
@@ -52,7 +56,7 @@ module.exports = {
         },
         fontLink: {
           dark: "#8A31FF",
-          DEFAULT: "#000000",
+          DEFAULT: "#1c5bff",
         },
         followedBackground: {
           dark: "#0F0F0F",

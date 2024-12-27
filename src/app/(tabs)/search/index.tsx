@@ -3,8 +3,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
 import { useState } from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
-import SearchInput from "~/src/components/SearchInput";
 
+import SearchInput from "~/src/components/SearchInput";
 import useTheme from "~/src/shared/store/useTheme";
 
 const RECENTLY_ADDED = [
@@ -144,7 +144,7 @@ export default function SearchScreen() {
           </View>
 
           <TouchableOpacity>
-            <Ionicons name="filter-sharp" size={32} color="white" />
+            <Ionicons name="filter-sharp" size={32} color={theme === "dark" ? "white" : "black"} />
           </TouchableOpacity>
         </View>
 

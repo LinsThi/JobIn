@@ -32,7 +32,7 @@ export default function Home() {
       </View>
 
       <View className="flex">
-        <Text className="font-roboto-medium text-2xl text-fontWelcome-dark dark:text-fontWelcome-dark">
+        <Text className="font-roboto-medium text-2xl text-fontWelcome dark:text-fontWelcome-dark">
           Bem-Vindo,
         </Text>
         <Text className="font-roboto-semibold text-2xl text-fontSecondary dark:text-fontSecondary-dark">
