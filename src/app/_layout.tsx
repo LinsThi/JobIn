@@ -6,16 +6,16 @@ import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import useTheme from "../shared/store/useTheme";
+import useAppStatus from "~/src/shared/store/useAppStatus";
+import useTheme from "~/src/shared/store/useTheme";
 
 const { Screen } = Stack;
 
-// export const unstable_settings = {
-//   initialRouteName: "welcome",
-// };
-
 export default function RootLayout() {
   const { setColorScheme } = useColorScheme();
+  const {
+    state: { alreadyOpenedApp },
+  } = useAppStatus();
 
   const {
     state: { theme },
@@ -30,7 +30,7 @@ export default function RootLayout() {
       <StatusBar backgroundColor={theme === "dark" ? "#181829" : "#FFFFFF"} translucent />
 
       <Stack
-        //  initialRouteName="welcome"
+        initialRouteName={alreadyOpenedApp ? "(tabs)" : "welcome"}
         screenOptions={{ headerShown: false }}>
         <Screen name="(tabs)" />
         <Screen name="welcome" />

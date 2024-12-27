@@ -4,7 +4,7 @@ import { TabBarIcon } from "@/TabBarIcon";
 import useTheme from "~/src/shared/store/useTheme";
 
 export const unstable_tabs_settings = {
-  initialRouteName: "home",
+  initialRouteName: "home/index",
 };
 
 const { Screen } = Tabs;
