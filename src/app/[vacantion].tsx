@@ -1,10 +1,11 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useNavigation } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import useTheme from "~/src/shared/store/useTheme";
+import { IVacationProps } from "~/src/shared/types/vacantion";
 
 const ICON_SIZE = 28;
 
@@ -28,10 +29,17 @@ One of our team's key focus areas is the Next Billion Users (NBU) where we uncov
   icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
 };
 
+type LocalParams = {
+  vacantion: string;
+};
+
 export default function Opportunity() {
   const {
     state: { theme },
   } = useTheme();
+  const { vacantion } = useLocalSearchParams<LocalParams>();
+
+  const vacantionData = JSON.parse(vacantion) as IVacationProps;
 
   const isSaved = false;
 
@@ -88,24 +96,24 @@ export default function Opportunity() {
           <View>
             <View className="pb-2">
               <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
-                {OPPORTUNITY_DETAILS.company}
+                {vacantionData.companyName}
               </Text>
               <Text className="font-roboto-medium text-lg text-fontDefault dark:text-fontDefault-dark">
-                {OPPORTUNITY_DETAILS.name}
+                {vacantionData.vacationTitle}
               </Text>
             </View>
 
             <View className="flex-row gap-2">
-              <Text className="bg-backgroundDetailsVacantion dark:to-backgroundDetailsVacantion-dark rounded-md p-1 text-white">
-                {OPPORTUNITY_DETAILS.location}
+              <Text className="rounded-md bg-backgroundDetailsVacantion p-1 text-white dark:to-backgroundDetailsVacantion-dark">
+                {vacantionData.vacantionLocation}
               </Text>
 
-              <Text className="bg-backgroundDetailsVacantion dark:to-backgroundDetailsVacantion-dark rounded-md p-1 text-white">
-                {OPPORTUNITY_DETAILS.job_location}
+              <Text className="rounded-md bg-backgroundDetailsVacantion p-1 text-white dark:to-backgroundDetailsVacantion-dark">
+                {vacantionData.vacantionType}
               </Text>
 
-              <Text className="bg-backgroundDetailsVacantion dark:to-backgroundDetailsVacantion-dark rounded-md p-1 text-white">
-                {OPPORTUNITY_DETAILS.job_hour}
+              <Text className="rounded-md bg-backgroundDetailsVacantion p-1 text-white dark:to-backgroundDetailsVacantion-dark">
+                Hora integral
               </Text>
             </View>
           </View>
@@ -123,7 +131,7 @@ export default function Opportunity() {
           </Text>
 
           <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
-            {OPPORTUNITY_DETAILS.job_description}
+            {vacantionData.vacantionDescription}
           </Text>
         </View>
 
@@ -132,7 +140,7 @@ export default function Opportunity() {
             Habilidades & Responsabilidades
           </Text>
 
-          {OPPORTUNITY_DETAILS.job_skills.map((skill, index) => (
+          {vacantionData.vacantionRequirements.map((skill, index) => (
             <View
               key={index}
               style={{ flexDirection: "row", alignItems: "center", marginBottom: 8 }}>

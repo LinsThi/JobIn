@@ -1,87 +1,13 @@
 import { Link } from "expo-router";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 
-const RECENTLY_ADDED = [
-  {
-    id: 0,
-    name: "Desenvolvedor Front-End",
-    company: "Google",
-    location: "São Paulo",
-    job_location: "Remoto",
-    job_hour: "Hora integral",
-    job_description:
-      "Necessário utilizar React Native, suas habilidades serão testadas em um projeto real e você terá a oportunidade de trabalhar com uma equipe de desenvolvedores experientes.",
-    icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-  },
-  {
-    id: 1,
-    name: "Desenvolvedor Front-End",
-    company: "Google",
-    location: "São Paulo",
-    job_location: "Remoto",
-    job_hour: "Hora integral",
-    job_description:
-      "Necessário utilizar React Native, suas habilidades serão testadas em um projeto real e você terá a oportunidade de trabalhar com uma equipe de desenvolvedores experientes.",
-    icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-  },
-  {
-    id: 2,
-    name: "Desenvolvedor Front-End",
-    company: "Google",
-    location: "São Paulo",
-    job_location: "Remoto",
-    job_hour: "Hora integral",
-    job_description:
-      "Necessário utilizar React Native, suas habilidades serão testadas em um projeto real e você terá a oportunidade de trabalhar com uma equipe de desenvolvedores experientes.",
-    icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-  },
-  {
-    id: 3,
-    name: "Desenvolvedor Front-End",
-    company: "Google",
-    location: "São Paulo",
-    job_location: "Remoto",
-    job_hour: "Hora integral",
-    job_description:
-      "Necessário utilizar React Native, suas habilidades serão testadas em um projeto real e você terá a oportunidade de trabalhar com uma equipe de desenvolvedores experientes.",
-    icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-  },
-  {
-    id: 4,
-    name: "Desenvolvedor Front-End",
-    company: "Google",
-    location: "São Paulo",
-    job_location: "Remoto",
-    job_hour: "Hora integral",
-    job_description:
-      "Necessário utilizar React Native, suas habilidades serão testadas em um projeto real e você terá a oportunidade de trabalhar com uma equipe de desenvolvedores experientes.",
-    icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-  },
-  {
-    id: 5,
-    name: "Desenvolvedor Front-End",
-    company: "Google",
-    location: "São Paulo",
-    job_location: "Remoto",
-    job_hour: "Hora integral",
-    job_description:
-      "Necessário utilizar React Native, suas habilidades serão testadas em um projeto real.",
-    icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-  },
-  {
-    id: 6,
-    name: "Desenvolvedor Front-End - Ultimo",
-    company: "Google",
-    location: "São Paulo",
-    job_location: "Remoto",
-    job_hour: "Hora integral",
-    job_description:
-      "Necessário utilizar React Native, suas habilidades serão testadas em um projeto real e você terá a oportunidade de trabalhar com uma equipe de desenvolvedores experientes.",
-    icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-  },
-];
+import { SkeletonCard } from "~/src/components/Home/components/SkeletonCard";
+import { useQueryGetVacantions } from "~/src/shared/queries/useQueryGetVacations";
+import { IVacationProps } from "~/src/shared/types/vacantion";
 
 export function RecentlyAdded() {
+  const { isLoading, data: vacantionData } = useQueryGetVacantions("Desenvolvedor Mobile");
+
   return (
     <View className="mt-4 flex flex-1 gap-2">
       <View className="flex flex-row justify-between">
@@ -97,47 +23,61 @@ export function RecentlyAdded() {
       </View>
 
       <FlatList
-        data={RECENTLY_ADDED}
+        data={vacantionData || Array.from({ length: 5 }, () => ({}) as IVacationProps)}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item }) => (
-          <Link href="/alou" asChild>
-            <TouchableOpacity className="mb-4 flex h-56 flex-row gap-4 rounded-lg border border-foreground bg-foreground p-4 dark:border-foreground-dark dark:bg-foreground-dark">
-              <Image
-                className="h-12 w-12"
-                source={{ uri: item.icon_plataform }}
-                alt="icon_plataform"
-              />
+        renderItem={({ item }) =>
+          isLoading ? (
+            <SkeletonCard />
+          ) : (
+            <Link
+              href={{
+                pathname: "/[vacantion]",
+                params: { vacantion: JSON.stringify(item) },
+              }}
+              asChild>
+              <TouchableOpacity className="mb-4 flex h-56 flex-row gap-4 rounded-lg border border-foreground bg-foreground p-4 dark:border-foreground-dark dark:bg-foreground-dark">
+                <Image
+                  className="h-12 w-12"
+                  source={{ uri: item.companyImage }}
+                  alt="icon_plataform"
+                />
 
-              <View className="flex flex-1 justify-between">
-                <View className="flex gap-2">
-                  <View>
-                    <Text className="font-roboto-semibold dark: text-xl text-fontDefault dark:text-fontDefault-dark">
-                      {item.name}
-                    </Text>
-                    <Text className="font-roboto-medium text-lg text-fontDefault dark:text-fontDefault-dark">
-                      {item.company}
+                <View className="flex flex-1 justify-between">
+                  <View className="flex gap-2">
+                    <View>
+                      <Text
+                        className="font-roboto-semibold text-fontDefault dark:text-xl dark:text-fontDefault-dark"
+                        numberOfLines={1}>
+                        {item.vacationTitle}
+                      </Text>
+
+                      <Text
+                        className="font-roboto-medium text-lg text-fontDefault dark:text-fontDefault-dark"
+                        numberOfLines={1}>
+                        {item.companyName}
+                      </Text>
+                    </View>
+
+                    <Text
+                      className="font-roboto-regular text-base text-fontDefault dark:text-fontDefault-dark"
+                      numberOfLines={3}>
+                      {item.vacantionDescription}
                     </Text>
                   </View>
 
-                  <Text
-                    className="font-roboto-regular text-base text-fontDefault dark:text-fontDefault-dark"
-                    numberOfLines={3}>
-                    {item.job_description}
-                  </Text>
+                  <View className="flex flex-1 flex-row items-end justify-end">
+                    <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
+                      Hora integral •
+                    </Text>
+                    <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
+                      {" " + item.vacantionType}
+                    </Text>
+                  </View>
                 </View>
-
-                <View className="flex flex-1 flex-row items-end justify-end ">
-                  <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
-                    {item.job_hour} •
-                  </Text>
-                  <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
-                    {" " + item.job_location}
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          </Link>
-        )}
+              </TouchableOpacity>
+            </Link>
+          )
+        }
         showsVerticalScrollIndicator={false}
       />
     </View>
