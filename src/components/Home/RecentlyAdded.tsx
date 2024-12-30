@@ -5,6 +5,7 @@ import { SkeletonCard } from "~/src/components/Home/components/SkeletonCard";
 import { useQueryGetVacantions } from "~/src/shared/queries/useQueryGetVacations";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 import { IVacationProps } from "~/src/shared/types/vacantion";
+import { isValidUrl } from "~/src/shared/utils/url";
 
 export function RecentlyAdded() {
   const {
@@ -42,7 +43,11 @@ export function RecentlyAdded() {
               <TouchableOpacity className="mb-4 flex h-56 flex-row gap-4 rounded-lg border border-foreground bg-foreground p-4 dark:border-foreground-dark dark:bg-foreground-dark">
                 <Image
                   className="h-12 w-12"
-                  source={{ uri: item.companyImage }}
+                  source={{
+                    uri: isValidUrl(item.companyImage)
+                      ? (item.companyImage as string)
+                      : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8lRbS7eKYzDq-Ftxc1p8G_TTw2unWBMEYUw&s",
+                  }}
                   alt="icon_plataform"
                 />
 
@@ -58,7 +63,7 @@ export function RecentlyAdded() {
                       <Text
                         className="font-roboto-medium text-lg text-fontDefault dark:text-fontDefault-dark"
                         numberOfLines={1}>
-                        {item.companyName}
+                        {item.companyName || "Não informado"}
                       </Text>
                     </View>
 

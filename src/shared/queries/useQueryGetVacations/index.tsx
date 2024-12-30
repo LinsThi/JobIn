@@ -20,7 +20,6 @@ async function handleGetVacantions(vacantionName: string) {
 }
 
 export const useQueryGetVacantions = (vacantionName: string) => {
-  console.log("vacantionName", vacantionName);
   return useQuery({
     queryKey: ["getVacantions"],
     queryFn: () => handleGetVacantions(vacantionName),

@@ -10,7 +10,6 @@ const useUserDetails = create<StoreProps>()(
       state: initialStateUserDetails,
       actions: {
         handleChangeVacantion: (vacantion) => {
-          console.log("recebi", vacantion);
           set(() => ({
             state: {
               vacantionRequired: vacantion,

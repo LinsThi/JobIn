@@ -33,8 +33,6 @@ export function ModalVacantion() {
       return ToastAndroid.show("Digite uma vaga válida", ToastAndroid.SHORT);
     }
 
-    console.log("vacantion", vacantion);
-
     handleChangeVacantion(vacantion);
     handleCloseModalVacantion();
     handleChangeFirstOpenedApp();
