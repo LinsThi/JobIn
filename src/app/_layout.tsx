@@ -9,6 +9,7 @@ import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { ModalVacantion } from "~/src/shared/components/ModalVacantion";
 import useAppStatus from "~/src/shared/store/useAppStatus";
 import useTheme from "~/src/shared/store/useTheme";
 
@@ -34,6 +35,8 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <SafeAreaView style={{ flex: 1 }}>
         <StatusBar backgroundColor={theme === "dark" ? "#181829" : "#FFFFFF"} translucent />
+
+        <ModalVacantion />
 
         <Stack
           initialRouteName={alreadyOpenedApp ? "(tabs)" : "welcome"}

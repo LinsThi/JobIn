@@ -3,10 +3,14 @@ import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 
 import { SkeletonCard } from "~/src/components/Home/components/SkeletonCard";
 import { useQueryGetVacantions } from "~/src/shared/queries/useQueryGetVacations";
+import useUserDetails from "~/src/shared/store/useUserDetails";
 import { IVacationProps } from "~/src/shared/types/vacantion";
 
 export function RecentlyAdded() {
-  const { isLoading, data: vacantionData } = useQueryGetVacantions("Desenvolvedor Mobile");
+  const {
+    state: { vacantionRequired },
+  } = useUserDetails();
+  const { isLoading, data: vacantionData } = useQueryGetVacantions(vacantionRequired);
 
   return (
     <View className="mt-4 flex flex-1 gap-2">
