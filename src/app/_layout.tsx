@@ -9,6 +9,7 @@ import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { BottomPlatform } from "~/src/shared/components/BottomPlatform";
 import { ModalVacantion } from "~/src/shared/components/ModalVacantion";
 import useAppStatus from "~/src/shared/store/useAppStatus";
 import useTheme from "~/src/shared/store/useTheme";
@@ -37,6 +38,7 @@ export default function RootLayout() {
         <StatusBar backgroundColor={theme === "dark" ? "#181829" : "#FFFFFF"} translucent />
 
         <ModalVacantion />
+        <BottomPlatform />
 
         <Stack
           initialRouteName={alreadyOpenedApp ? "(tabs)" : "welcome"}

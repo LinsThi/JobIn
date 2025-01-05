@@ -3,7 +3,6 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 
 import { FollowedByYou } from "~/src/components/Home/FollowedByYou";
 import { RecentlyAdded } from "~/src/components/Home/RecentlyAdded";
-import { BottomPlatform } from "~/src/shared/components/BottomPlatform";
 import useTheme from "~/src/shared/store/useTheme";
 
 export default function Home() {
@@ -47,8 +46,6 @@ export default function Home() {
       </View>
 
       <RecentlyAdded />
-
-      <BottomPlatform />
     </View>
   );
 }

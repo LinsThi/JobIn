@@ -15,7 +15,7 @@ export function BottomPlatform() {
   } = useBottomPlatform();
 
   return (
-    <Modal animationType="slide" transparent visible={isOpened}>
+    <Modal animationType="fade" transparent visible={isOpened}>
       <View className="flex-1 items-center justify-center bg-black/50">
         <View className="flex w-4/5 rounded-lg bg-white">
           {Object.entries(PLATFORMS).map(([_, currentPlatform]) => {

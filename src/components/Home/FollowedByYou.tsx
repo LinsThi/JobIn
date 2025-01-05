@@ -1,6 +1,6 @@
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
-import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 
+import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 
 export function FollowedByYou() {

@@ -4,7 +4,7 @@ type Props = TextInputProps;
 
 export function Input({ ...rest }: Props) {
   return (
-    <View className="rounded-lg bg-[#F2F2F7] px-2">
+    <View className="rounded-lg bg-[#F2F2F7] p-2">
       <TextInput {...rest} />
     </View>
   );

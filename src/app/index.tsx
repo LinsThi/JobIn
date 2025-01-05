@@ -16,7 +16,6 @@ import {
 import { Redirect } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import useAppStatus from "~/src/shared/store/useAppStatus";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,10 +35,6 @@ export default function App() {
     Roboto_900Black_Italic,
   });
 
-  const {
-    state: { alreadyOpenedApp },
-  } = useAppStatus();
-
   useEffect(() => {
     if (fontsLoaded || error) {
       SplashScreen.hideAsync();
@@ -51,5 +46,4 @@ export default function App() {
   }
 
   return <Redirect href="splash" />;
-  // return <Redirect href={alreadyOpenedApp ? "/(tabs)/home" : "/welcome"} />;
 }
