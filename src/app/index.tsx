@@ -50,5 +50,6 @@ export default function App() {
     return null;
   }
 
-  return <Redirect href={alreadyOpenedApp ? "/(tabs)/home" : "/welcome"} />;
+  return <Redirect href="splash" />;
+  // return <Redirect href={alreadyOpenedApp ? "/(tabs)/home" : "/welcome"} />;
 }

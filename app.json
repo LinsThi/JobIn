@@ -3,7 +3,7 @@
     "name": "JobIn",
     "slug": "JobIn",
     "version": "1.0.0",
-    "scheme": "JobIn",
+    "scheme": "jobin",
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -29,7 +29,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#222232"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -44,6 +44,14 @@
       },
       "package": "com.linsdev.JobIn"
     },
-    "newArchEnabled": true
+    "newArchEnabled": true,
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "1f223b13-a5d1-43d6-9de7-e433a2912cdd"
+      }
+    }
   }
 }
