@@ -6,6 +6,8 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import useTheme from "~/src/shared/store/useTheme";
 import { IVacationProps } from "~/src/shared/types/vacantion";
+import { PLATFORMS } from "~/src/shared/utils/platforms";
+import { isValidUrl } from "~/src/shared/utils/url";
 
 const ICON_SIZE = 28;
 
@@ -84,12 +86,15 @@ export default function Opportunity() {
       </View>
 
       <View>
-        <View className="flex-row items-center gap-6 px-2 py-8">
+        <View className="flex-row items-center gap-6 px-2 pb-4 pt-8">
           <Image
-            className="h-16 w-16 rounded-full"
+            className="h-20 w-20 rounded-full"
             source={{
-              uri: OPPORTUNITY_DETAILS.icon_plataform,
+              uri: isValidUrl(vacantionData.companyImage)
+                ? (vacantionData.companyImage as string)
+                : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8lRbS7eKYzDq-Ftxc1p8G_TTw2unWBMEYUw&s",
             }}
+            resizeMode="stretch"
             alt="company_image"
           />
 
@@ -115,6 +120,14 @@ export default function Opportunity() {
               <Text className="rounded-md bg-backgroundDetailsVacantion p-1 text-white dark:to-backgroundDetailsVacantion-dark">
                 Hora integral
               </Text>
+            </View>
+
+            <View className="flex-row items-center gap-2 pt-2">
+              <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
+                Publicada há 9h
+              </Text>
+
+              {PLATFORMS[vacantionData.platform as keyof typeof PLATFORMS].longLogo}
             </View>
           </View>
         </View>
