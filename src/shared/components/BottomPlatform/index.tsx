@@ -1,10 +1,10 @@
 import { forwardRef } from "react";
-import { Image, ScrollView, Text, TouchableOpacity } from "react-native";
+import { ScrollView, Text, TouchableOpacity } from "react-native";
 import BottomSheet from "react-native-gesture-bottom-sheet";
 
 import useTheme from "~/src/shared/store/useTheme";
 import useUserDetails from "~/src/shared/store/useUserDetails";
-import { PLATFORMS } from "~/src/shared/utils/platforms";
+import { PLATFORMS, SHORT_LOGOS } from "~/src/shared/utils/platforms";
 
 export const BottomPlatform = forwardRef((_, ref) => {
   const {
@@ -31,11 +31,11 @@ export const BottomPlatform = forwardRef((_, ref) => {
               key={currentPlatform.name}
               onPress={() => functionToCall(currentPlatform)}
               className={`flex flex-row items-center p-4 ${isFollowed ? "bg-backgroundDetailsVacantion dark:bg-backgroundDetailsVacantion-dark" : "transparent"} w-full gap-4`}>
-              <Image
-                className="h-12 w-12 rounded-full"
-                source={{ uri: currentPlatform.shortLogo }}
-              />
-              <Text className="rounded-tl font-roboto-bold text-xl">{currentPlatform.name}</Text>
+              {SHORT_LOGOS[`${currentPlatform.shortLogo}` as keyof typeof SHORT_LOGOS]}
+
+              <Text className="rounded-tl font-roboto-bold text-xl text-fontDefault dark:text-fontDefault-dark">
+                {currentPlatform.name}
+              </Text>
             </TouchableOpacity>
           );
         })}

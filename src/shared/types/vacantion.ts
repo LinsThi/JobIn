@@ -12,5 +12,7 @@ export interface IVacationProps {
   numberOfVacancies: string;
   vacantionContractType: string;
   vacantionProfessionalArea: string;
+  vacantionLink: string;
   platform: string;
+  createdAt: string;
 }

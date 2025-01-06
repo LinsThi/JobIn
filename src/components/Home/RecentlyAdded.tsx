@@ -2,26 +2,38 @@ import { Link } from "expo-router";
 import { useEffect } from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 
+import ListEmptySVG from "~/src/assets/svg/list_empty.svg";
 import { SkeletonCard } from "~/src/components/Home/components/SkeletonCard";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import { useQueryGetVacantions } from "~/src/shared/queries/useQueryGetVacations";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 import { IVacationProps } from "~/src/shared/types/vacantion";
+import { LONG_LOGOS } from "~/src/shared/utils/platforms";
 import { isValidUrl } from "~/src/shared/utils/url";
 
 export function RecentlyAdded() {
   const {
-    state: { vacantionRequired },
+    state: { vacantionRequired, platformsFollowed },
   } = useUserDetails();
   const {
     actions: { handleChangeHaveALoading },
   } = useBottomPlatform();
 
-  const { isLoading, data: vacantionData, isError } = useQueryGetVacantions(vacantionRequired);
+  const {
+    isLoading,
+    data: vacantionData,
+    isError,
+    refetch: handleRefetchVacantion,
+    isRefetching,
+  } = useQueryGetVacantions(vacantionRequired);
 
   useEffect(() => {
     handleChangeHaveALoading();
-  }, [isLoading]);
+  }, [isLoading, isRefetching]);
+
+  useEffect(() => {
+    handleRefetchVacantion();
+  }, [platformsFollowed]);
 
   return (
     <View className="mt-4 flex flex-1 gap-2">
@@ -53,7 +65,7 @@ export function RecentlyAdded() {
           data={vacantionData || Array.from({ length: 5 }, () => ({}) as IVacationProps)}
           keyExtractor={(_, index) => index.toString()}
           renderItem={({ item }) =>
-            isLoading ? (
+            isLoading || isRefetching ? (
               <SkeletonCard />
             ) : (
               <Link
@@ -62,7 +74,7 @@ export function RecentlyAdded() {
                   params: { vacantion: JSON.stringify(item) },
                 }}
                 asChild>
-                <TouchableOpacity className="mb-4 flex h-56 flex-row gap-4 rounded-lg border border-foreground bg-foreground p-4 dark:border-foreground-dark dark:bg-foreground-dark">
+                <TouchableOpacity className="mb-4 flex h-60 flex-row gap-4 rounded-lg border border-foreground bg-foreground p-4 dark:border-foreground-dark dark:bg-foreground-dark">
                   <Image
                     className="h-12 w-12"
                     source={{
@@ -93,17 +105,28 @@ export function RecentlyAdded() {
                       <Text
                         className="font-roboto-regular text-base text-fontDefault dark:text-fontDefault-dark"
                         numberOfLines={3}>
-                        {item.vacantionDescription}
+                        {item.vacantionDescription ||
+                          "Não foi possível buscar a descrição da vaga!"}
                       </Text>
                     </View>
 
-                    <View className="flex flex-1 flex-row items-end justify-end">
-                      <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
-                        Hora integral •
-                      </Text>
-                      <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
-                        {" " + item.vacantionType}
-                      </Text>
+                    <View className="flex flex-1 pt-1">
+                      <View className="flex-1 flex-row justify-end">
+                        <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
+                          Hora integral •
+                        </Text>
+                        <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
+                          {" " + item.vacantionType.split(",")[0]}
+                        </Text>
+                      </View>
+
+                      <View className="flex-row items-center gap-2">
+                        {LONG_LOGOS[`${item.platform}LongLogo` as keyof typeof LONG_LOGOS]}
+
+                        <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
+                          Publicada há {item.createdAt}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </TouchableOpacity>
@@ -111,6 +134,16 @@ export function RecentlyAdded() {
             )
           }
           showsVerticalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <View className="flex-1 items-center justify-center">
+              <ListEmptySVG width={200} height={200} />
+              <Text className="text-center text-xl text-fontDefault dark:text-fontDefault-dark">
+                {platformsFollowed.length === 0
+                  ? "A lista de adicionados está vazia, pois nenhuma plataforma foi seguida."
+                  : `Não foi encontrada nenhuma vaga para ${vacantionRequired}!`}
+              </Text>
+            </View>
+          )}
         />
       )}
     </View>

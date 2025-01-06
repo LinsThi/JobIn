@@ -1,7 +1,8 @@
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import useUserDetails from "~/src/shared/store/useUserDetails";
+import { SHORT_LOGOS } from "~/src/shared/utils/platforms";
 
 type Props = {
   isLoading: boolean;
@@ -37,14 +38,10 @@ export function FollowedByYou({ isLoading }: Props) {
         renderItem={({ item }) => (
           <View className="m-3 flex w-52 gap-4 rounded-lg bg-cardFollowed p-4 dark:bg-cardFollowed-dark">
             <View className="flex flex-row items-center justify-center gap-4">
-              <Image
-                className="h-12 w-12 rounded-full"
-                source={{ uri: item.shortLogo }}
-                alt="company_icon"
-              />
+              {SHORT_LOGOS[`${item.shortLogo}` as keyof typeof SHORT_LOGOS]}
 
               <Text
-                className="flex-1 bg-red-300 font-roboto-medium text-2xl text-fontDefault dark:text-fontDefault-dark"
+                className="flex-1 font-roboto-medium text-2xl text-fontDefault dark:text-fontDefault-dark"
                 numberOfLines={1}>
                 {item.name}
               </Text>
@@ -58,9 +55,9 @@ export function FollowedByYou({ isLoading }: Props) {
         horizontal
         showsHorizontalScrollIndicator={false}
         ListEmptyComponent={() => (
-          <View className="flex h-16 pt-4">
-            <Text className="px-[1rem] text-lg text-white">
-              Você não segue nenhuma plataforma no momento.
+          <View className="flex h-28 items-center justify-center pt-4">
+            <Text className="px-[2.7rem] text-center text-lg text-fontDefault dark:text-fontDefault-dark">
+              Você ainda não segue nenhuma plataforma.
             </Text>
           </View>
         )}

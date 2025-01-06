@@ -2,34 +2,15 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useMemo } from "react";
+import { Image, Linking, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import useTheme from "~/src/shared/store/useTheme";
 import { IVacationProps } from "~/src/shared/types/vacantion";
-import { PLATFORMS } from "~/src/shared/utils/platforms";
+import { LONG_LOGOS } from "~/src/shared/utils/platforms";
 import { isValidUrl } from "~/src/shared/utils/url";
 
 const ICON_SIZE = 28;
-
-const OPPORTUNITY_DETAILS = {
-  name: "Desenvolvedor Front-End",
-  company: "Google",
-  location: "São Paulo",
-  job_location: "Remoto",
-  job_hour: "Hora integral",
-  job_description: `As a UX Designer, you’ll rely on user-centered design methods to craft industry-leading user experiences—from concept to execution. Like all of our UX jobs, you’ll collaborate with your design partners to leverage and evolve the Google design language to build beautiful, innovative inspired products.
-
-One of our team's key focus areas is the Next Billion Users (NBU) where we uncover human-centered insights to build products that ensure Google’s goal rings true for everyone, everywhere. In this role, you will research users needs, contexts, aspirations, and challenges and create products that meet those needs.`,
-  job_skills: [
-    "Adapting to device, network, and user constraints",
-    "Applied research and product R&D",
-    "Problem-solving in emerging markets",
-    "End-to-end design, prototyping, and user validation",
-    "Strong verbal, written, and visual communication skills",
-  ],
-
-  icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-};
 
 type LocalParams = {
   vacantion: string;
@@ -46,6 +27,17 @@ export default function Opportunity() {
   const isSaved = false;
 
   const { goBack } = useNavigation();
+
+  const vacationInformations = useMemo(() => {
+    return {
+      location: vacantionData.vacantionLocation.split(",")[0],
+      type:
+        vacantionData.vacantionLocation.split(",")[0] === vacantionData.vacantionType.split(",")[0]
+          ? null
+          : vacantionData.vacantionType.split(",")[0],
+      fullTime: "Hora integral",
+    };
+  }, [vacantionData]);
 
   return (
     <View className="flex flex-1 bg-background px-4 pt-8 dark:bg-background-dark">
@@ -98,24 +90,28 @@ export default function Opportunity() {
             alt="company_image"
           />
 
-          <View>
+          <View className="flex-1">
             <View className="pb-2">
               <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
                 {vacantionData.companyName}
               </Text>
-              <Text className="font-roboto-medium text-lg text-fontDefault dark:text-fontDefault-dark">
+              <Text
+                className="font-roboto-medium text-lg text-fontDefault dark:text-fontDefault-dark"
+                numberOfLines={2}>
                 {vacantionData.vacationTitle}
               </Text>
             </View>
 
             <View className="flex-row gap-2">
               <Text className="rounded-md bg-backgroundDetailsVacantion p-1 text-white dark:to-backgroundDetailsVacantion-dark">
-                {vacantionData.vacantionLocation}
+                {vacationInformations.location}
               </Text>
 
-              <Text className="rounded-md bg-backgroundDetailsVacantion p-1 text-white dark:to-backgroundDetailsVacantion-dark">
-                {vacantionData.vacantionType}
-              </Text>
+              {vacationInformations.type && (
+                <Text className="rounded-md bg-backgroundDetailsVacantion p-1 text-white dark:to-backgroundDetailsVacantion-dark">
+                  {vacationInformations.type}
+                </Text>
+              )}
 
               <Text className="rounded-md bg-backgroundDetailsVacantion p-1 text-white dark:to-backgroundDetailsVacantion-dark">
                 Hora integral
@@ -124,10 +120,10 @@ export default function Opportunity() {
 
             <View className="flex-row items-center gap-2 pt-2">
               <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
-                Publicada há 9h
+                Publicada há {vacantionData.createdAt}
               </Text>
 
-              {PLATFORMS[vacantionData.platform as keyof typeof PLATFORMS].longLogo}
+              {LONG_LOGOS[`${vacantionData.platform}LongLogo` as keyof typeof LONG_LOGOS]}
             </View>
           </View>
         </View>
@@ -144,7 +140,7 @@ export default function Opportunity() {
           </Text>
 
           <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
-            {vacantionData.vacantionDescription}
+            {vacantionData.vacantionDescription || "Não foi possível buscar a descrição da vaga!"}
           </Text>
         </View>
 
@@ -153,27 +149,35 @@ export default function Opportunity() {
             Habilidades & Responsabilidades
           </Text>
 
-          {vacantionData.vacantionRequirements.map((skill, index) => (
-            <View
-              key={index}
-              style={{ flexDirection: "row", alignItems: "center", marginBottom: 8 }}>
+          {vacantionData.vacantionRequirements.length === 0 ? (
+            <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
+              "Não foi possível buscar a descrição da vaga!
+            </Text>
+          ) : (
+            vacantionData.vacantionRequirements.map((skill, index) => (
               <View
-                style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: 4,
-                  backgroundColor: "#dcdcdc",
-                }}
-              />
-              <Text className="ml-2 font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
-                {skill}
-              </Text>
-            </View>
-          ))}
+                key={index}
+                style={{ flexDirection: "row", alignItems: "center", marginBottom: 8 }}>
+                <View
+                  style={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: 4,
+                    backgroundColor: "#dcdcdc",
+                  }}
+                />
+                <Text className="ml-2 font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
+                  {skill}
+                </Text>
+              </View>
+            ))
+          )}
         </View>
 
         <View className="items-center py-4">
-          <TouchableOpacity className="w-[70%] items-center justify-center rounded-xl bg-fontLink py-5 dark:bg-fontLink-dark">
+          <TouchableOpacity
+            className="w-[70%] items-center justify-center rounded-xl bg-fontLink py-5 dark:bg-fontLink-dark"
+            onPress={() => Linking.openURL(vacantionData.vacantionLink)}>
             <Text className="text-center font-roboto-medium text-xl text-fontDefault-dark">
               Acessar vaga
             </Text>
