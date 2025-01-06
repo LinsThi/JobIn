@@ -42,5 +42,6 @@ export const useQueryGetVacantions = (vacantionName: string) => {
   return useQuery({
     queryKey: ["getVacantions"],
     queryFn: () => handleGetVacantions(vacantionName, plataformsToSearch),
+    enabled: !!plataformsToSearch.length,
   });
 };

@@ -9,7 +9,7 @@ export type StateProps = {
 export type ActionProps = {
   addBottomSheetRef: (ref: RefObject<BottomSheet>) => void;
   handleOpenBottomPlatform: () => void;
-  handleChangeHaveALoading: () => void;
+  handleChangeHaveALoading: (isLoading: boolean) => void;
 };
 
 export type StorePropsBottomPlatform = {
