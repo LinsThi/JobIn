@@ -1,7 +1,9 @@
 import { Link } from "expo-router";
+import { useEffect } from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 
 import { SkeletonCard } from "~/src/components/Home/components/SkeletonCard";
+import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import { useQueryGetVacantions } from "~/src/shared/queries/useQueryGetVacations";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 import { IVacationProps } from "~/src/shared/types/vacantion";
@@ -11,7 +13,15 @@ export function RecentlyAdded() {
   const {
     state: { vacantionRequired },
   } = useUserDetails();
+  const {
+    actions: { handleChangeHaveALoading },
+  } = useBottomPlatform();
+
   const { isLoading, data: vacantionData, isError } = useQueryGetVacantions(vacantionRequired);
+
+  useEffect(() => {
+    handleChangeHaveALoading();
+  }, [isLoading]);
 
   return (
     <View className="mt-4 flex flex-1 gap-2">
@@ -21,7 +31,8 @@ export function RecentlyAdded() {
         </Text>
 
         <TouchableOpacity>
-          <Text className="font-roboto-medium text-lg text-fontLink dark:text-fontLink-dark">
+          <Text
+            className={`font-roboto-medium text-lg ${isLoading ? "text-slate-200 opacity-50" : "text-fontLink dark:text-fontLink-dark"}`}>
             Ver todos
           </Text>
         </TouchableOpacity>

@@ -6,10 +6,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useColorScheme } from "nativewind";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { BottomPlatform } from "~/src/shared/components/BottomPlatform";
+import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import { ModalVacantion } from "~/src/shared/components/ModalVacantion";
 import useAppStatus from "~/src/shared/store/useAppStatus";
 import useTheme from "~/src/shared/store/useTheme";
@@ -23,6 +24,9 @@ export default function RootLayout() {
   const {
     state: { alreadyOpenedApp },
   } = useAppStatus();
+  const {
+    actions: { addBottomSheetRef },
+  } = useBottomPlatform();
 
   const {
     state: { theme },
@@ -32,13 +36,21 @@ export default function RootLayout() {
     setColorScheme(theme);
   }, [theme]);
 
+  const bottomSheetRef = useRef(null);
+
+  useEffect(() => {
+    if (bottomSheetRef.current) {
+      addBottomSheetRef(bottomSheetRef);
+    }
+  }, [bottomSheetRef]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaView style={{ flex: 1 }}>
         <StatusBar backgroundColor={theme === "dark" ? "#181829" : "#FFFFFF"} translucent />
 
         <ModalVacantion />
-        <BottomPlatform />
+        <BottomPlatform ref={bottomSheetRef} />
 
         <Stack
           initialRouteName={alreadyOpenedApp ? "(tabs)" : "welcome"}

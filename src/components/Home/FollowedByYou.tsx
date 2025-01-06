@@ -3,7 +3,11 @@ import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 
-export function FollowedByYou() {
+type Props = {
+  isLoading: boolean;
+};
+
+export function FollowedByYou({ isLoading }: Props) {
   const {
     state: { platformsFollowed },
   } = useUserDetails();
@@ -18,8 +22,9 @@ export function FollowedByYou() {
           Seguidos por você
         </Text>
 
-        <TouchableOpacity onPress={handleOpenBottomPlatform}>
-          <Text className="font-roboto-medium text-lg text-fontLink dark:text-fontLink-dark">
+        <TouchableOpacity onPress={handleOpenBottomPlatform} disabled={isLoading}>
+          <Text
+            className={`font-roboto-medium text-lg ${isLoading ? "text-slate-200 opacity-50" : "text-fontLink dark:text-fontLink-dark"}`}>
             Ver todos
           </Text>
         </TouchableOpacity>
@@ -38,7 +43,9 @@ export function FollowedByYou() {
                 alt="company_icon"
               />
 
-              <Text className="font-roboto-medium text-2xl text-fontDefault dark:text-fontDefault-dark">
+              <Text
+                className="flex-1 bg-red-300 font-roboto-medium text-2xl text-fontDefault dark:text-fontDefault-dark"
+                numberOfLines={1}>
                 {item.name}
               </Text>
             </View>

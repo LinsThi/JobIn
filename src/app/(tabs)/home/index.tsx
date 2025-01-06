@@ -3,6 +3,7 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 
 import { FollowedByYou } from "~/src/components/Home/FollowedByYou";
 import { RecentlyAdded } from "~/src/components/Home/RecentlyAdded";
+import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import useTheme from "~/src/shared/store/useTheme";
 
 export default function Home() {
@@ -10,6 +11,9 @@ export default function Home() {
     state: { theme },
     actions: { handleToggleTheme },
   } = useTheme();
+  const {
+    state: { haveALoading: isLoading },
+  } = useBottomPlatform();
 
   return (
     <View className="flex flex-1 bg-background px-4 dark:bg-background-dark">
@@ -42,7 +46,7 @@ export default function Home() {
       </View>
 
       <View className="-mx-[1rem]">
-        <FollowedByYou />
+        <FollowedByYou isLoading={isLoading} />
       </View>
 
       <RecentlyAdded />

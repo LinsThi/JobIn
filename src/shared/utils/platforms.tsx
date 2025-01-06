@@ -2,6 +2,8 @@ import { View } from "react-native";
 
 import GupyLongLogo from "~/src/assets/svg/gupy_logo.svg";
 import InfojobsLongLogo from "~/src/assets/svg/infojobs_logo.svg";
+import LinkedinLongLogo from "~/src/assets/svg/linkedin_logo.svg";
+import TrabalhaBrasilLongLogo from "~/src/assets/svg/trabalhaBrasil_logo.svg";
 
 export const LONG_LOGOS = {
   GupyLongLogo: <GupyLongLogo width={50} height={30} />,
@@ -10,6 +12,8 @@ export const LONG_LOGOS = {
       <InfojobsLongLogo width={50} height={30} />
     </View>
   ),
+  LinkedinLongLogo: <LinkedinLongLogo width={50} height={30} />,
+  TrabalhaBrasilLongLogo: <TrabalhaBrasilLongLogo width={50} height={30} />,
 };
 
 export type PlataformProps = {
@@ -20,10 +24,16 @@ export type PlataformProps = {
 };
 
 export const PLATFORMS = {
-  Gupy: {
-    name: "Gupy",
-    shortLogo: "https://raichu-uploads.s3.amazonaws.com/logo_gupy_Fkctg7.png",
-    longLogo: "GupyLongLogo",
+  // Gupy: {
+  //   name: "Gupy",
+  //   shortLogo: "https://raichu-uploads.s3.amazonaws.com/logo_gupy_Fkctg7.png",
+  //   longLogo: "GupyLongLogo",
+  //   description: "Plataforma oficial da Gupy, feita para buscar novas vagas.",
+  // },
+  Linkedin: {
+    name: "Linkedin",
+    shortLogo: "https://banner2.cleanpng.com/20180406/jpq/avgi8oddr.webp",
+    longLogo: "LinkedinLongLogo",
     description: "Plataforma oficial da Gupy, feita para buscar novas vagas.",
   },
   InfoJobs: {
@@ -32,5 +42,11 @@ export const PLATFORMS = {
       "https://yt3.googleusercontent.com/TWGupP3fyLSSwXq3ViIt3qDZhzdI0rKNR5BvaH-VcZrtsUu_PU8N5yv-wdECxlKR-RWdw_VIgg=s900-c-k-c0x00ffffff-no-rj",
     longLogo: "InfoJobsLongLogo",
     description: "Plataforma oficial da Gupy, feita para buscar novas vagas.",
+  },
+  TrabalhaBrasil: {
+    name: "Trabalha Brasil",
+    shortLogo: "https://www.trabalhabrasil.com.br/images/touch/trabalha-brasil-favicon.png",
+    longLogo: "TrabalhaBrasilLongLogo",
+    description: "Plataforma oficial da Gupy, feita para buscar nov",
   },
 };
