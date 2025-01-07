@@ -1,4 +1,5 @@
 import EvilIcons from "@expo/vector-icons/EvilIcons";
+
 import { ComponentProps } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
 
@@ -25,7 +26,7 @@ export default function SearchInput({
         {...props}
       />
 
-      {functionToClear && (
+      {functionToClear && props.value !== "" && (
         <TouchableOpacity onPress={functionToClear}>
           <EvilIcons name="close" size={32} color="white" className="-mt-2" />
         </TouchableOpacity>

@@ -4,7 +4,7 @@ import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import ListEmptySVG from "~/src/assets/svg/list_empty.svg";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import { CardVacantion } from "~/src/shared/components/CardVacantion";
-import { useQueryGetVacantions } from "~/src/shared/queries/useQueryGetVacations";
+import { useQueryGetVacantionsAddRecently } from "~/src/shared/queries/useQueryGetVacantionsAddRecently";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 import { IVacationProps } from "~/src/shared/types/vacantion";
 
@@ -22,7 +22,7 @@ export function RecentlyAdded() {
     isError,
     refetch: handleRefetchVacantion,
     isRefetching,
-  } = useQueryGetVacantions(vacantionRequired);
+  } = useQueryGetVacantionsAddRecently(vacantionRequired);
 
   const dataToRender = useMemo(
     () => vacantionData || Array.from({ length: 5 }, () => ({}) as IVacationProps),

@@ -24,13 +24,13 @@ async function handleGetVacantions(vacantionName: string, plataformsToSearch: st
 
     return data.data;
   } catch (err: AxiosError | any) {
-    console.log("Error useQueryGetVacantions", err);
+    console.log("Error useQuerySearchVacantion", err);
 
     return [];
   }
 }
 
-export const useQueryGetVacantions = (vacantionName: string) => {
+export const useQuerySearchVacantion = (vacantionName: string) => {
   const {
     state: { platformsFollowed },
   } = useUserDetails();
@@ -40,8 +40,10 @@ export const useQueryGetVacantions = (vacantionName: string) => {
   });
 
   return useQuery({
-    queryKey: ["getVacantions"],
+    queryKey: ["searchVacantions"],
     queryFn: () => handleGetVacantions(vacantionName, plataformsToSearch),
-    enabled: !!plataformsToSearch.length,
+    enabled: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 };

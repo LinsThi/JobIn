@@ -1,100 +1,52 @@
 import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Link } from "expo-router";
-import { useState } from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { useMemo, useState } from "react";
+import { FlatList, Image, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 
+import { PlatformsFilter } from "./components/PlatformsFilter";
+
+import QuestionSVG from "~/src/assets/svg/question.svg";
 import SearchInput from "~/src/components/SearchInput";
+import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
+import { CardVacantion } from "~/src/shared/components/CardVacantion";
+import { useQuerySearchVacantion } from "~/src/shared/queries/useQuerySearchVacantion";
 import useTheme from "~/src/shared/store/useTheme";
-
-const RECENTLY_ADDED = [
-  {
-    id: 0,
-    name: "Desenvolvedor Front-End",
-    company: "Google",
-    location: "São Paulo",
-    job_location: "Remoto",
-    job_hour: "Hora integral",
-    job_description:
-      "Necessário utilizar React Native, suas habilidades serão testadas em um projeto real e você terá a oportunidade de trabalhar com uma equipe de desenvolvedores experientes.",
-    icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-  },
-  {
-    id: 1,
-    name: "Desenvolvedor Front-End",
-    company: "Google",
-    location: "São Paulo",
-    job_location: "Remoto",
-    job_hour: "Hora integral",
-    job_description:
-      "Necessário utilizar React Native, suas habilidades serão testadas em um projeto real e você terá a oportunidade de trabalhar com uma equipe de desenvolvedores experientes.",
-    icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-  },
-  {
-    id: 2,
-    name: "Desenvolvedor Front-End",
-    company: "Google",
-    location: "São Paulo",
-    job_location: "Remoto",
-    job_hour: "Hora integral",
-    job_description:
-      "Necessário utilizar React Native, suas habilidades serão testadas em um projeto real e você terá a oportunidade de trabalhar com uma equipe de desenvolvedores experientes.",
-    icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-  },
-  {
-    id: 3,
-    name: "Desenvolvedor Front-End",
-    company: "Google",
-    location: "São Paulo",
-    job_location: "Remoto",
-    job_hour: "Hora integral",
-    job_description:
-      "Necessário utilizar React Native, suas habilidades serão testadas em um projeto real e você terá a oportunidade de trabalhar com uma equipe de desenvolvedores experientes.",
-    icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-  },
-  {
-    id: 4,
-    name: "Desenvolvedor Front-End",
-    company: "Google",
-    location: "São Paulo",
-    job_location: "Remoto",
-    job_hour: "Hora integral",
-    job_description:
-      "Necessário utilizar React Native, suas habilidades serão testadas em um projeto real e você terá a oportunidade de trabalhar com uma equipe de desenvolvedores experientes.",
-    icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-  },
-  {
-    id: 5,
-    name: "Desenvolvedor Front-End",
-    company: "Google",
-    location: "São Paulo",
-    job_location: "Remoto",
-    job_hour: "Hora integral",
-    job_description:
-      "Necessário utilizar React Native, suas habilidades serão testadas em um projeto real.",
-    icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-  },
-  {
-    id: 6,
-    name: "Desenvolvedor Front-End - Ultimo",
-    company: "Google",
-    location: "São Paulo",
-    job_location: "Remoto",
-    job_hour: "Hora integral",
-    job_description:
-      "Necessário utilizar React Native, suas habilidades serão testadas em um projeto real e você terá a oportunidade de trabalhar com uma equipe de desenvolvedores experientes.",
-    icon_plataform: "https://cdn-icons-png.flaticon.com/512/145/145807.png",
-  },
-];
+import useUserDetails from "~/src/shared/store/useUserDetails";
 
 export default function SearchScreen() {
   const {
     state: { theme },
     actions: { handleToggleTheme },
   } = useTheme();
+  const {
+    actions: { handleOpenBottomPlatform },
+  } = useBottomPlatform();
+  const {
+    state: { platformsFollowed },
+  } = useUserDetails();
 
   const [searchValue, setSearchValue] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+
+  const {
+    data: vacantionData,
+    refetch: handleSearchVacantions,
+    isRefetching,
+    isSuccess,
+    isError,
+  } = useQuerySearchVacantion(searchValue);
+
+  const dataToRender = useMemo(() => vacantionData || [], [vacantionData]);
+  const textoToShow = useMemo(() => {
+    if (isError) {
+      return "Não foi possível realizar a busca, tente novamente mais tarde.";
+    }
+
+    if (isSuccess) {
+      return "Nenhuma vaga encontrada";
+    }
+
+    return "Qual vaga você deseja buscar?";
+  }, [isError, isSuccess]);
 
   const handleChangeSearch = (value: string) => {
     setSearchValue(value);
@@ -104,8 +56,15 @@ export default function SearchScreen() {
     setSearchValue("");
   };
 
-  const handleSearch = () => {
-    setSearchResults(RECENTLY_ADDED);
+  const handleSearch = async () => {
+    if (platformsFollowed.length === 0) {
+      return ToastAndroid.show(
+        "Escolha uma plataforma antes de buscar uma vaga!",
+        ToastAndroid.SHORT
+      );
+    }
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    await handleSearchVacantions();
   };
 
   return (
@@ -143,58 +102,29 @@ export default function SearchScreen() {
             />
           </View>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenBottomPlatform}>
             <Ionicons name="filter-sharp" size={32} color={theme === "dark" ? "white" : "black"} />
           </TouchableOpacity>
         </View>
 
         <View>
-          <Text className="text-white">aqui vai ficar os filtros</Text>
+          <PlatformsFilter />
         </View>
 
         <FlatList
-          data={searchResults}
+          data={dataToRender}
           keyExtractor={(_, index) => index.toString()}
-          renderItem={({ item }) => (
-            <Link push href="/job" asChild>
-              <TouchableOpacity className="mb-4 flex h-56 flex-row gap-4 rounded-lg border border-foreground bg-foreground p-4 dark:border-foreground-dark dark:bg-foreground-dark">
-                <Image
-                  className="h-12 w-12"
-                  source={{ uri: item.icon_plataform }}
-                  alt="icon_plataform"
-                />
-
-                <View className="flex flex-1 justify-between">
-                  <View className="flex gap-2">
-                    <View>
-                      <Text className="font-roboto-semibold dark: text-xl text-fontDefault dark:text-fontDefault-dark">
-                        {item.name}
-                      </Text>
-                      <Text className="font-roboto-medium text-lg text-fontDefault dark:text-fontDefault-dark">
-                        {item.company}
-                      </Text>
-                    </View>
-
-                    <Text
-                      className="font-roboto-regular text-base text-fontDefault dark:text-fontDefault-dark"
-                      numberOfLines={3}>
-                      {item.job_description}
-                    </Text>
-                  </View>
-
-                  <View className="flex flex-1 flex-row items-end justify-end ">
-                    <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
-                      {item.job_hour} •
-                    </Text>
-                    <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
-                      {" " + item.job_location}
-                    </Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            </Link>
-          )}
+          renderItem={({ item }) => <CardVacantion cardIsLoading={isRefetching} item={item} />}
           showsVerticalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <View className="flex-1 items-center justify-center">
+              <QuestionSVG width={200} height={200} />
+
+              <Text className="text-center text-xl text-fontDefault dark:text-fontDefault-dark">
+                {textoToShow}
+              </Text>
+            </View>
+          )}
         />
       </View>
     </View>
