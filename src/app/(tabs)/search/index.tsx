@@ -5,6 +5,7 @@ import { FlatList, Image, Text, ToastAndroid, TouchableOpacity, View } from "rea
 
 import { PlatformsFilter } from "./components/PlatformsFilter";
 
+import iconImg from "~/src/assets/icon.png";
 import QuestionSVG from "~/src/assets/svg/question.svg";
 import SearchInput from "~/src/components/SearchInput";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
@@ -70,13 +71,7 @@ export default function SearchScreen() {
   return (
     <View className="flex flex-1 bg-background px-4 dark:bg-background-dark">
       <View className="flex flex-row items-center justify-between pb-8 pt-4">
-        <Image
-          className="h-12 w-12 rounded-full"
-          source={{
-            uri: "https://media.licdn.com/dms/image/v2/C4E03AQG1y-9alH9S7Q/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1655859794624?e=1738800000&v=beta&t=YxXkOHOHQZ22c55SW8T-AOcIMqzZ_iNDCbIeuBIWk9Y",
-          }}
-          alt="user_image"
-        />
+        <Image className="h-14 w-14 rounded-full" source={iconImg} alt="app_image" />
 
         <TouchableOpacity onPress={handleToggleTheme}>
           <Feather

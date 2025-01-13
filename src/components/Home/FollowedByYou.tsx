@@ -20,7 +20,7 @@ export function FollowedByYou({ isLoading }: Props) {
     <View className="mt-4 flex gap-2">
       <View className="flex flex-row justify-between px-4">
         <Text className="font-roboto-medium text-lg text-fontDefault dark:text-fontDefault-dark">
-          Seguidos por você
+          Plataformas seguidas
         </Text>
 
         <TouchableOpacity onPress={handleOpenBottomPlatform} disabled={isLoading}>

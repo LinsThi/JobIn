@@ -60,7 +60,7 @@ export function CardVacantion({ cardIsLoading, item }: Props) {
                 Hora integral •
               </Text>
               <Text className="font-roboto-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
-                {" " + item.vacantionType.split(",")[0]}
+                {item.vacantionType ? " " + item.vacantionType.split(",")[0] : ""}
               </Text>
             </View>
             <View className="flex-row items-center gap-2">
