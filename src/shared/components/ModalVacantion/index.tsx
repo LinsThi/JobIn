@@ -51,7 +51,7 @@ export function ModalVacantion() {
 
           <Input placeholder="Ex: Desenvolvedor Frontend" onChangeText={handleSetVacantion} />
 
-          <Button title="Salvar" onPress={handleSendVacantion} customClassName="py-2" />
+          <Button title="Salvar" onPress={handleSendVacantion} customClassName="py-[0.6rem]" />
         </View>
       </View>
     </Modal>
