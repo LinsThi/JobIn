@@ -38,18 +38,18 @@ export const PLATFORMS = {
     name: "LinkedIn",
     shortLogo: "LinkedinShortLogo",
     longLogo: "LinkedinLongLogo",
-    description: "Plataforma oficial da Gupy, feita para buscar novas vagas.",
+    description: "Plataforma oficial do LinkedIn, feita para buscar novas vagas.",
   },
   InfoJobs: {
     name: "InfoJobs",
     shortLogo: "InfoJobsShortLogo",
     longLogo: "InfoJobsLongLogo",
-    description: "Plataforma oficial da Gupy, feita para buscar novas vagas.",
+    description: "Plataforma oficial do InfoJobs, feita para buscar novas vagas.",
   },
   TrabalhaBrasil: {
     name: "TrabalhaBrasil",
     shortLogo: "TrabalhaBrasilShortLogo",
     longLogo: "TrabalhaBrasilLongLogo",
-    description: "Plataforma oficial da Gupy, feita para buscar nov",
+    description: "Plataforma oficial da Trabalha Brasil, feita para buscar nov",
   },
 };

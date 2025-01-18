@@ -1,5 +1,4 @@
 import EvilIcons from "@expo/vector-icons/EvilIcons";
-
 import { ComponentProps } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
 
