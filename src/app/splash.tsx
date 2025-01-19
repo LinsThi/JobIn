@@ -13,7 +13,7 @@ export default function SplashScreen() {
   } = useAppStatus();
 
   const finishAnimation = () => {
-    router.push(alreadyOpenedApp ? "/(tabs)/home" : "/welcome");
+    router.push(alreadyOpenedApp ? "/(tabs)" : "/welcome");
   };
 
   return (

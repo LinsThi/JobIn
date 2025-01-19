@@ -1,8 +1,8 @@
 import { Text, View } from "react-native";
 
-import { FollowedByYou } from "~/src/components/Home/FollowedByYou";
-import { RecentlyAdded } from "~/src/components/Home/RecentlyAdded";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
+import { FollowedByYou } from "~/src/shared/components/FollowedByYou";
+import { RecentlyAdded } from "~/src/shared/components/RecentlyAdded";
 
 export default function Home() {
   const {

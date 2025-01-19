@@ -1,23 +1,18 @@
 import { useMemo, useState } from "react";
 import { FlatList, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 
-import { PlatformsFilter } from "./components/PlatformsFilter";
-
 import FilterIcon from "~/src/assets/svg/icon/filter.svg";
 import QuestionSVG from "~/src/assets/svg/question.svg";
-import SearchInput from "~/src/components/SearchInput";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import { CardVacantion } from "~/src/shared/components/CardVacantion";
 import { ItemSeparatorComponent } from "~/src/shared/components/FlatList/ItemSeparatorComponent";
 import { ListEmptyComponent } from "~/src/shared/components/FlatList/ListEmptyComponent";
+import { PlatformsFilter } from "~/src/shared/components/PlatformsFilter";
+import SearchInput from "~/src/shared/components/SearchInput";
 import { useQuerySearchVacantion } from "~/src/shared/queries/useQuerySearchVacantion";
-import useTheme from "~/src/shared/store/useTheme";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 
 export default function SearchScreen() {
-  const {
-    state: { theme },
-  } = useTheme();
   const {
     actions: { handleOpenBottomPlatform },
   } = useBottomPlatform();
@@ -31,22 +26,9 @@ export default function SearchScreen() {
     data: vacantionData,
     refetch: handleSearchVacantions,
     isRefetching,
-    isSuccess,
-    isError,
   } = useQuerySearchVacantion(searchValue);
 
   const dataToRender = useMemo(() => vacantionData || [], [vacantionData]);
-  const textoToShow = useMemo(() => {
-    if (isError) {
-      return "Não foi possível realizar a busca, tente novamente mais tarde.";
-    }
-
-    if (isSuccess) {
-      return "Nenhuma vaga encontrada";
-    }
-
-    return "Qual vaga você deseja buscar?";
-  }, [isError, isSuccess]);
 
   const handleChangeSearch = (value: string) => {
     setSearchValue(value);

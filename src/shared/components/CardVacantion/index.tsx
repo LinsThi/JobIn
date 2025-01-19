@@ -3,8 +3,8 @@ import { Link } from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 import noImage from "~/src/assets/images/no_image.jpg";
-import { SkeletonCard } from "~/src/components/Home/components/SkeletonCard";
 import { useModalRemove } from "~/src/shared/components/ModalRemove/store/useModalRemove";
+import { SkeletonCard } from "~/src/shared/components/SkeletonCard";
 import useTheme from "~/src/shared/store/useTheme";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 import { IVacationProps } from "~/src/shared/types/vacantion";
@@ -22,7 +22,7 @@ export function CardVacantion({ cardIsLoading = false, item, showIconToSave = fa
     state: { theme },
   } = useTheme();
   const {
-    actions: { verifyIfVacantionIsSaved, handleSaveVacantion, handleUnsaveVacantion },
+    actions: { verifyIfVacantionIsSaved, handleSaveVacantion },
   } = useUserDetails();
   const {
     actions: { handleOpenModalVacantion },

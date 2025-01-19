@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 
-import { TabBarIcon } from "@/TabBarIcon";
 import { Header } from "~/src/shared/components/Header";
+import { TabBarIcon } from "~/src/shared/components/TabBarIcon";
 import useTheme from "~/src/shared/store/useTheme";
 
 export const unstable_tabs_settings = {
@@ -20,7 +20,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
-      initialRouteName="home/index"
+      initialRouteName="index"
       screenOptions={{
         header: () => <Header />,
         tabBarStyle: {
@@ -31,7 +31,7 @@ export default function TabLayout() {
         tabBarInactiveTintColor: INACTIVE_TINT_COLOR,
       }}>
       <Screen
-        name="home/index"
+        name="index"
         options={{
           title: "Inicio",
           tabBarIcon: ({ focused }) => (
@@ -41,7 +41,7 @@ export default function TabLayout() {
       />
 
       <Screen
-        name="search/index"
+        name="search"
         options={{
           title: "Buscar",
           tabBarIcon: ({ focused }) => (
@@ -51,7 +51,7 @@ export default function TabLayout() {
       />
 
       <Screen
-        name="saved/index"
+        name="saved"
         options={{
           title: "Salvos",
           tabBarIcon: ({ focused }) => (
