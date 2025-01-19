@@ -8,7 +8,8 @@ import {
 export const useModalVacation = create<StorePropsModalVacantion>((set) => ({
   state: initialStateModalVacantion,
   actions: {
-    handleOpenModalVacantion: () => set((state) => ({ state: { ...state.state, isOpened: true } })),
+    handleOpenModalVacantion: (type) =>
+      set((state) => ({ state: { ...state.state, isOpened: true, type } })),
     handleCloseModalVacantion: () =>
       set((state) => ({ state: { ...state.state, isOpened: false } })),
   },

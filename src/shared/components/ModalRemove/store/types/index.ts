@@ -1,10 +1,12 @@
+import { IVacationProps } from "~/src/shared/types/vacantion";
+
 export type StateProps = {
   isOpened: boolean;
-  type: "create" | "edit" | null;
+  vacantion: IVacationProps | null;
 };
 
 export type ActionProps = {
-  handleOpenModalVacantion: (type: "create" | "edit") => void;
+  handleOpenModalVacantion: (vacantion: IVacationProps) => void;
   handleCloseModalVacantion: () => void;
 };
 
@@ -15,5 +17,5 @@ export type StorePropsModalVacantion = {
 
 export const initialStateModalVacantion: StateProps = {
   isOpened: false,
-  type: null,
+  vacantion: null,
 };

@@ -7,37 +7,39 @@ import { Input } from "~/src/shared/components/Input";
 import { useModalVacation } from "~/src/shared/components/ModalVacantion/store/useModalVacantion";
 import useAppStatus from "~/src/shared/store/useAppStatus";
 import useUserDetails from "~/src/shared/store/useUserDetails";
+import { showCustomToast } from "~/src/shared/utils/toast";
 
 export function ModalVacantion() {
   const {
-    state: { isOpened },
+    state: { isOpened, type },
     actions: { handleCloseModalVacantion },
   } = useModalVacation();
   const {
+    state: { vacantionRequired },
     actions: { handleChangeVacantion },
   } = useUserDetails();
   const {
     actions: { handleChangeFirstOpenedApp },
   } = useAppStatus();
 
-  const [vacantion, setVacantion] = useState("");
+  const [vacantionChoosen, setVacantionChoosen] = useState(vacantionRequired);
 
   const router = useRouter();
 
   const handleSetVacantion = (value: string) => {
-    setVacantion(value);
+    setVacantionChoosen(value);
   };
 
   const handleSendVacantion = () => {
-    if (vacantion.length < 6) {
+    if (vacantionChoosen.length < 6) {
       return ToastAndroid.show("Digite uma vaga válida", ToastAndroid.SHORT);
     }
 
-    handleChangeVacantion(vacantion);
+    handleChangeVacantion(vacantionChoosen);
     handleCloseModalVacantion();
     handleChangeFirstOpenedApp();
 
-    ToastAndroid.show("Vaga salva com sucesso", ToastAndroid.SHORT);
+    showCustomToast("Prefêrencias atualizadas");
     return router.push("/(tabs)/home");
   };
 
@@ -46,10 +48,16 @@ export function ModalVacantion() {
       <View className="flex-1 items-center justify-center bg-black/50">
         <View className="flex w-4/5 gap-4 rounded-lg bg-white p-6">
           <Text className="text-center text-base font-bold">
-            Antes de começar, qual vaga você deseja ficar por dentro de atualizações?
+            {type === "create"
+              ? "Antes de começar, qual posição você deseja ficar por dentro de atualizações?"
+              : "Qual posição você deseja ficar por dentro de atualizações?"}
           </Text>
 
-          <Input placeholder="Ex: Desenvolvedor Frontend" onChangeText={handleSetVacantion} />
+          <Input
+            placeholder="Ex: Desenvolvedor Frontend"
+            value={vacantionChoosen}
+            onChangeText={handleSetVacantion}
+          />
 
           <Button title="Salvar" onPress={handleSendVacantion} customClassName="py-[0.6rem]" />
         </View>

@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import { ScrollView, Text, TouchableOpacity } from "react-native";
 import BottomSheet from "react-native-gesture-bottom-sheet";
 
+import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import useTheme from "~/src/shared/store/useTheme";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 import { PLATFORMS, SHORT_LOGOS } from "~/src/shared/utils/platforms";
@@ -10,6 +11,9 @@ export const BottomPlatform = forwardRef((_, ref) => {
   const {
     actions: { handleFollowPlatform, handleUnfollowPlatform, verifyIfPlatformIsFollowed },
   } = useUserDetails();
+  const {
+    actions: { handleCloseBottomPlatform },
+  } = useBottomPlatform();
 
   const {
     state: { theme },
@@ -29,7 +33,10 @@ export const BottomPlatform = forwardRef((_, ref) => {
           return (
             <TouchableOpacity
               key={currentPlatform.name}
-              onPress={() => functionToCall(currentPlatform)}
+              onPress={() => {
+                functionToCall(currentPlatform);
+                handleCloseBottomPlatform();
+              }}
               className={`flex flex-row items-center p-4 ${isFollowed ? "bg-backgroundDetailsVacantion dark:bg-backgroundDetailsVacantion-dark" : "transparent"} w-full gap-4`}>
               {SHORT_LOGOS[`${currentPlatform.shortLogo}` as keyof typeof SHORT_LOGOS]}
 

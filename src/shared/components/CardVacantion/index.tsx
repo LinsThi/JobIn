@@ -4,6 +4,7 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 
 import noImage from "~/src/assets/images/no_image.jpg";
 import { SkeletonCard } from "~/src/components/Home/components/SkeletonCard";
+import { useModalRemove } from "~/src/shared/components/ModalRemove/store/useModalRemove";
 import useTheme from "~/src/shared/store/useTheme";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 import { IVacationProps } from "~/src/shared/types/vacantion";
@@ -23,6 +24,9 @@ export function CardVacantion({ cardIsLoading = false, item, showIconToSave = fa
   const {
     actions: { verifyIfVacantionIsSaved, handleSaveVacantion, handleUnsaveVacantion },
   } = useUserDetails();
+  const {
+    actions: { handleOpenModalVacantion },
+  } = useModalRemove();
 
   if (cardIsLoading) {
     return <SkeletonCard />;
@@ -65,7 +69,7 @@ export function CardVacantion({ cardIsLoading = false, item, showIconToSave = fa
               <TouchableOpacity
                 onPress={
                   verifyIfVacantionIsSaved(item)
-                    ? () => handleUnsaveVacantion(item)
+                    ? () => handleOpenModalVacantion(item)
                     : () => handleSaveVacantion(item)
                 }>
                 <FontAwesome

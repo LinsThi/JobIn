@@ -20,7 +20,7 @@ export default function SavedScreen() {
       <FlatList
         data={vacantionSaved}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item }) => <CardVacantion item={item} />}
+        renderItem={({ item }) => <CardVacantion item={item} showIconToSave />}
         showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => <ItemSeparatorComponent />}
         ListEmptyComponent={() => (

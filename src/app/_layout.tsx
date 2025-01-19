@@ -8,12 +8,15 @@ import { StatusBar } from "expo-status-bar";
 import { useColorScheme } from "nativewind";
 import { useEffect, useRef } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 import { BottomPlatform } from "~/src/shared/components/BottomPlatform";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
+import { ModalRemove } from "~/src/shared/components/ModalRemove";
 import { ModalVacantion } from "~/src/shared/components/ModalVacantion";
 import useAppStatus from "~/src/shared/store/useAppStatus";
 import useTheme from "~/src/shared/store/useTheme";
+import { toastConfig } from "~/src/shared/utils/toast";
 
 const { Screen } = Stack;
 
@@ -50,6 +53,7 @@ export default function RootLayout() {
         <StatusBar backgroundColor={theme === "dark" ? "#181829" : "#FFFFFF"} translucent />
 
         <ModalVacantion />
+        <ModalRemove />
         <BottomPlatform ref={bottomSheetRef} />
 
         <Stack
@@ -60,6 +64,8 @@ export default function RootLayout() {
           <Screen name="splash" />
         </Stack>
       </SafeAreaView>
+
+      <Toast config={toastConfig} />
     </QueryClientProvider>
   );
 }

@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { PlataformProps } from "~/src/shared/utils/platforms";
+import { showCustomToast } from "~/src/shared/utils/toast";
 import { StoreProps, initialStateUserDetails } from "./@types";
 
 const useUserDetails = create<StoreProps>()(
@@ -31,6 +32,8 @@ const useUserDetails = create<StoreProps>()(
               },
             }));
           }
+
+          showCustomToast("Plataformas atualizadas");
         },
         handleUnfollowPlatform: (platform: PlataformProps) => {
           const followedPlatforms = get().state.platformsFollowed;
@@ -43,6 +46,8 @@ const useUserDetails = create<StoreProps>()(
               ),
             },
           }));
+
+          showCustomToast("Plataformas atualizadas");
         },
         handleSaveVacantion: (vacantion) => {
           const vacantionSaved = get().state.vacantionSaved;
@@ -60,6 +65,8 @@ const useUserDetails = create<StoreProps>()(
                 vacantionSaved: [...vacantionSaved, vacantion],
               },
             }));
+
+            showCustomToast("Oportunidade salva");
           }
         },
         handleUnsaveVacantion: (vacantion) => {
@@ -75,6 +82,8 @@ const useUserDetails = create<StoreProps>()(
               ),
             },
           }));
+
+          showCustomToast("Oportunidade removida dos salvos");
         },
         verifyIfPlatformIsFollowed: (platform: PlataformProps) => {
           const followedPlatforms = get().state.platformsFollowed;

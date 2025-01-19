@@ -17,6 +17,10 @@ export const useBottomPlatform = create<StorePropsBottomPlatform>((set, get) => 
       const bottomSheet = get().state.bottomSheetRef;
       bottomSheet?.current.show();
     },
+    handleCloseBottomPlatform: () => {
+      const bottomSheet = get().state.bottomSheetRef;
+      bottomSheet?.current.close();
+    },
     handleChangeHaveALoading: (isLoading) => {
       set((prevState) => ({
         state: {

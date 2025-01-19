@@ -70,7 +70,7 @@ export function RecentlyAdded() {
           data={dataToRender}
           keyExtractor={(_, index) => index.toString()}
           renderItem={({ item }) => (
-            <CardVacantion cardIsLoading={isLoading || isRefetching} item={item} showIconToSave />
+            <CardVacantion cardIsLoading={isLoading || isRefetching} item={item} />
           )}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
