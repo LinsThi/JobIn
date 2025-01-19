@@ -44,11 +44,52 @@ const useUserDetails = create<StoreProps>()(
             },
           }));
         },
+        handleSaveVacantion: (vacantion) => {
+          const vacantionSaved = get().state.vacantionSaved;
+
+          if (
+            !vacantionSaved.find(
+              (currentVacantion) =>
+                currentVacantion.vacationTitle === vacantion.vacationTitle &&
+                currentVacantion.companyName === vacantion.companyName
+            )
+          ) {
+            set((prevState) => ({
+              state: {
+                ...prevState.state,
+                vacantionSaved: [...vacantionSaved, vacantion],
+              },
+            }));
+          }
+        },
+        handleUnsaveVacantion: (vacantion) => {
+          const vacantionSaved = get().state.vacantionSaved;
+
+          set((prevState) => ({
+            state: {
+              ...prevState.state,
+              vacantionSaved: vacantionSaved.filter(
+                (vacantionSaved) =>
+                  vacantionSaved.vacationTitle !== vacantion.vacationTitle &&
+                  vacantionSaved.companyName !== vacantion.companyName
+              ),
+            },
+          }));
+        },
         verifyIfPlatformIsFollowed: (platform: PlataformProps) => {
           const followedPlatforms = get().state.platformsFollowed;
 
           return !!followedPlatforms.find(
             (followedPlatform) => followedPlatform.name === platform.name
+          );
+        },
+        verifyIfVacantionIsSaved: (vacantion) => {
+          const vacantionSaved = get().state.vacantionSaved;
+
+          return !!vacantionSaved.find(
+            (vacantionSaved) =>
+              vacantionSaved.vacationTitle === vacantion.vacationTitle &&
+              vacantionSaved.companyName === vacantion.companyName
           );
         },
       },

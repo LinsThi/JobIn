@@ -15,7 +15,7 @@ export default function SearchInput({
   ...props
 }: Props) {
   return (
-    <View className="w-full flex-row items-center rounded-lg bg-gray-300 px-2 py-1 dark:bg-gray-500">
+    <View className="w-full flex-row items-center rounded-xl bg-gray-300 px-2 dark:bg-gray-500">
       <EvilIcons name="search" size={32} color="white" className="-mt-2" />
 
       <TextInput

@@ -19,14 +19,14 @@ export function FollowedByYou({ isLoading }: Props) {
   return (
     <View className="mt-4 flex gap-2">
       <View className="flex flex-row justify-between px-4">
-        <Text className="font-roboto-medium text-lg text-fontDefault dark:text-fontDefault-dark">
+        <Text className="font-inter-semi-bold text-lg text-fontDefault dark:text-fontDefault-dark">
           Plataformas seguidas
         </Text>
 
         <TouchableOpacity onPress={handleOpenBottomPlatform} disabled={isLoading}>
           <Text
-            className={`font-roboto-medium text-lg ${isLoading ? "text-slate-200 opacity-50" : "text-fontLink dark:text-fontLink-dark"}`}>
-            Ver todos
+            className={`font-inter-semi-bold text-lg ${isLoading ? "text-slate-200 opacity-50" : "text-fontLink dark:text-fontLink-dark"}`}>
+            Ver tudo
           </Text>
         </TouchableOpacity>
       </View>
@@ -41,23 +41,24 @@ export function FollowedByYou({ isLoading }: Props) {
               {SHORT_LOGOS[`${item.shortLogo}` as keyof typeof SHORT_LOGOS]}
 
               <Text
-                className="flex-1 font-roboto-medium text-2xl text-fontDefault dark:text-fontDefault-dark"
+                className="font-inter-semi-bold flex-1 text-xl text-fontDefault dark:text-fontDefault-dark"
                 numberOfLines={1}>
                 {item.name}
               </Text>
             </View>
 
-            <Text className="text-center font-roboto-regular text-base text-fontTertiary dark:text-fontTertiary-dark">
+            <Text className="font-inter-regular text-center text-sm text-fontTertiary dark:text-fontTertiary-dark">
               {item.description}
             </Text>
           </View>
         )}
         horizontal
         showsHorizontalScrollIndicator={false}
+        contentContainerClassName="w-full"
         ListEmptyComponent={() => (
-          <View className="flex h-28 items-center justify-center pt-4">
-            <Text className="px-[2.7rem] text-center text-lg text-fontDefault dark:text-fontDefault-dark">
-              Você ainda não segue nenhuma plataforma.
+          <View className="flex h-28 w-full items-center justify-center pt-4">
+            <Text className="text-center text-lg text-fontDefault dark:text-fontDefault-dark">
+              Você ainda não segue nenhuma plataforma
             </Text>
           </View>
         )}

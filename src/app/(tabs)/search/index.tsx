@@ -1,15 +1,15 @@
-import Feather from "@expo/vector-icons/Feather";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useMemo, useState } from "react";
-import { FlatList, Image, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 
 import { PlatformsFilter } from "./components/PlatformsFilter";
 
-import iconImg from "~/src/assets/icon.png";
+import FilterIcon from "~/src/assets/svg/icon/filter.svg";
 import QuestionSVG from "~/src/assets/svg/question.svg";
 import SearchInput from "~/src/components/SearchInput";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import { CardVacantion } from "~/src/shared/components/CardVacantion";
+import { ItemSeparatorComponent } from "~/src/shared/components/FlatList/ItemSeparatorComponent";
+import { ListEmptyComponent } from "~/src/shared/components/FlatList/ListEmptyComponent";
 import { useQuerySearchVacantion } from "~/src/shared/queries/useQuerySearchVacantion";
 import useTheme from "~/src/shared/store/useTheme";
 import useUserDetails from "~/src/shared/store/useUserDetails";
@@ -17,7 +17,6 @@ import useUserDetails from "~/src/shared/store/useUserDetails";
 export default function SearchScreen() {
   const {
     state: { theme },
-    actions: { handleToggleTheme },
   } = useTheme();
   const {
     actions: { handleOpenBottomPlatform },
@@ -70,24 +69,12 @@ export default function SearchScreen() {
 
   return (
     <View className="flex flex-1 bg-background px-4 dark:bg-background-dark">
-      <View className="flex flex-row items-center justify-between pb-8 pt-4">
-        <Image className="h-14 w-14 rounded-full" source={iconImg} alt="app_image" />
-
-        <TouchableOpacity onPress={handleToggleTheme}>
-          <Feather
-            name={theme === "dark" ? "moon" : "sun"}
-            size={32}
-            color={theme === "dark" ? "#fff" : "#000"}
-          />
-        </TouchableOpacity>
-      </View>
-
       <View className="flex gap-y-4">
-        <Text className="font-roboto-semibold text-2xl text-fontSecondary dark:text-fontSecondary-dark">
-          Vamos buscar novas vagas.
+        <Text className="font-inter-semibold text-lg text-fontSecondary dark:text-fontSecondary-dark">
+          Descubra novas oportunidades
         </Text>
 
-        <View className="flex w-full flex-row items-center gap-4">
+        <View className="flex w-full flex-row items-center gap-3">
           <View className="w-[85%]">
             <SearchInput
               value={searchValue}
@@ -98,27 +85,23 @@ export default function SearchScreen() {
           </View>
 
           <TouchableOpacity onPress={handleOpenBottomPlatform}>
-            <Ionicons name="filter-sharp" size={32} color={theme === "dark" ? "white" : "black"} />
+            <FilterIcon height={40} width={40} />
           </TouchableOpacity>
         </View>
 
-        <View>
-          <PlatformsFilter />
-        </View>
+        <PlatformsFilter />
 
         <FlatList
           data={dataToRender}
           keyExtractor={(_, index) => index.toString()}
           renderItem={({ item }) => <CardVacantion cardIsLoading={isRefetching} item={item} />}
           showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={() => <ItemSeparatorComponent />}
           ListEmptyComponent={() => (
-            <View className="flex-1 items-center justify-center">
-              <QuestionSVG width={200} height={200} />
-
-              <Text className="text-center text-xl text-fontDefault dark:text-fontDefault-dark">
-                {textoToShow}
-              </Text>
-            </View>
+            <ListEmptyComponent
+              text="Qual oportunidade você deseja buscar hoje?"
+              Image={() => <QuestionSVG width={200} height={200} />}
+            />
           )}
         />
       </View>

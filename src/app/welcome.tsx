@@ -37,7 +37,7 @@ export default function Welcome() {
 
         <TouchableOpacity
           onPress={handleOpenModalVacantion}
-          className="dark:bg-primary-dark flex items-center justify-center rounded-lg bg-blue-300 py-5">
+          className="dark:bg-primary-dark bg-backgroundButton flex items-center justify-center rounded-lg py-5">
           <Text className="text-lg text-white">Entrar</Text>
         </TouchableOpacity>
       </View>

@@ -1,11 +1,22 @@
+import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { StyleSheet } from "react-native";
 
-export const TabBarIcon = (props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
+type Props = {
+  name: string;
   color: string;
-}) => {
-  return <FontAwesome size={28} style={styles.tabBarIcon} {...props} />;
+};
+
+export const TabBarIcon = ({ name, color }: Props) => {
+  if (name === "home") {
+    return <Entypo name="briefcase" size={24} style={styles.tabBarIcon} color={color} />;
+  }
+
+  if (name === "search") {
+    return <FontAwesome size={24} style={styles.tabBarIcon} color={color} name="search" />;
+  }
+
+  return <FontAwesome size={24} style={styles.tabBarIcon} color={color} name="bookmark-o" />;
 };
 
 export const styles = StyleSheet.create({

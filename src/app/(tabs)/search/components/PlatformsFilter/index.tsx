@@ -21,7 +21,7 @@ export function PlatformsFilter() {
 
   const IconProps = useMemo(() => {
     return {
-      size: 18,
+      size: 12,
       color: theme === "dark" ? "#FFFFFF" : "#000000",
     };
   }, [theme]);
@@ -29,13 +29,18 @@ export function PlatformsFilter() {
   const renderItem = ({ item }: RenderItemProps) => {
     return (
       <TouchableOpacity
-        className="flex-row items-center gap-2 rounded-xl bg-cardFollowed px-4 py-2 dark:bg-cardFollowed-dark"
+        className="bg-platformLabel dark:bg-platformLabel-dark flex-row items-center gap-2 rounded-xl px-4 py-2"
         onPress={() => handleUnfollowPlatform(item)}>
         <Text className="font-roboto-medium text-base text-fontDefault dark:text-fontDefault-dark">
           {item.name}
         </Text>
 
-        <AntDesign name="close" size={IconProps.size} color={IconProps.color} />
+        <AntDesign
+          name="close"
+          size={IconProps.size}
+          color={IconProps.color}
+          className="pt-[0.2rem]"
+        />
       </TouchableOpacity>
     );
   };
