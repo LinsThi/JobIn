@@ -4,7 +4,6 @@ import { FlatList, Text, View } from "react-native";
 import ListEmptySVG from "~/src/assets/svg/images/list_empty.svg";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import { CardVacantion } from "~/src/shared/components/CardVacantion";
-import { ItemSeparatorComponent } from "~/src/shared/components/FlatList/ItemSeparatorComponent";
 import { ListEmptyComponent } from "~/src/shared/components/FlatList/ListEmptyComponent";
 import { Loading } from "~/src/shared/components/Loading";
 import { useQueryGetVacantionsAddRecently } from "~/src/shared/queries/useQueryGetVacantionsAddRecently";
@@ -87,7 +86,6 @@ export function RecentlyAdded() {
             Image={() => <ListEmptySVG width={200} height={200} />}
           />
         }
-        ItemSeparatorComponent={() => <ItemSeparatorComponent />}
         onEndReached={loadMoreData}
         onEndReachedThreshold={0.5}
         ListFooterComponent={loadingMore ? <Loading /> : null}

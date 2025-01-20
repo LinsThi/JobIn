@@ -6,11 +6,12 @@ import { apiServe } from "~/src/shared/services/api";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 
 async function handleGetVacantions(vacantionName: string, plataformsToSearch: string[]) {
-  if (plataformsToSearch.length === 0) {
+  if (plataformsToSearch.length === 0 || vacantionName === "") {
     return [];
   }
 
   try {
+    console.log("rodei");
     const querySearch = vacantionName.toLowerCase().replace(" ", "-");
 
     const params = new URLSearchParams();
@@ -40,10 +41,8 @@ export const useQuerySearchVacantion = (vacantionName: string) => {
   });
 
   return useQuery({
-    queryKey: ["searchVacantions"],
+    queryKey: ["searchVacantions", vacantionName, plataformsToSearch],
     queryFn: () => handleGetVacantions(vacantionName, plataformsToSearch),
-    enabled: false,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    enabled: !!vacantionName && !!plataformsToSearch,
   });
 };

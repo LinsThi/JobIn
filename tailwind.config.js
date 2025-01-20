@@ -8,18 +8,6 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["Roboto_400Regular", "sans-serif"],
-        // "roboto-thin": ["Roboto_100Thin", "sans-serif"],
-        // "roboto-thin-italic": ["Roboto_100Thin_Italic", "sans-serif"],
-        // "roboto-light": ["Roboto_300Light", "sans-serif"],
-        // "roboto-light-italic": ["Roboto_300Light_Italic", "sans-serif"],
-        // "roboto-regular": ["Roboto_400Regular", "sans-serif"],
-        // "roboto-regular-italic": ["Roboto_400Regular_Italic", "sans-serif"],
-        // "roboto-medium": ["Roboto_500Medium", "sans-serif"],
-        // "roboto-medium-italic": ["Roboto_500Medium_Italic", "sans-serif"],
-        // "roboto-bold": ["Roboto_700Bold", "sans-serif"],
-        // "roboto-bold-italic": ["Roboto_700Bold_Italic", "sans-serif"],
-        // "roboto-black": ["Roboto_900Black", "sans-serif"],
-        // "roboto-black-italic": ["Roboto_900Black_Italic", "sans-serif"],
         "inter-thin": ["Inter_100Thin", "sans-serif"],
         "inter-extra-light": ["Inter_200ExtraLight", "sans-serif"],
         "inter-light": ["Inter_300Light", "sans-serif"],
@@ -47,9 +35,21 @@ module.exports = {
           dark: "#606060",
           DEFAULT: "#959595",
         },
+        backgroundSeparator: {
+          dark: "#9747FF",
+          DEFAULT: "#acacac",
+        },
+        backgroundPlatformSelected: {
+          dark: "#39394B",
+          DEFAULT: "#D9D9D9",
+        },
+        backgroundLabelVacantion: {
+          dark: "#707070",
+          DEFAULT: "#707070",
+        },
         borderForeground: {
-          dark: "transparent",
-          DEFAULT: "#f5f5f5",
+          dark: "#dcdcdc",
+          DEFAULT: "#dcdcdc",
         },
         fontDefault: {
           dark: "#FFFFFF",
@@ -69,23 +69,23 @@ module.exports = {
         },
         fontQuartenary: {
           dark: "#808080",
-          DEFAULT: "#000000",
+          DEFAULT: "#808080",
         },
         fontLink: {
           dark: "#8A31FF",
-          DEFAULT: "#1c5bff",
+          DEFAULT: "#0082FB",
         },
         followedBackground: {
           dark: "#0F0F0F",
-          DEFAULT: "#f5f5f5",
+          DEFAULT: "#F0F0F0",
         },
         cardFollowed: {
           dark: "#2A272E",
-          DEFAULT: "#fffafa",
+          DEFAULT: "#FFFFFF",
         },
         platformLabel: {
           dark: "#440992",
-          DEFAULT: "#1c5bff",
+          DEFAULT: "#B3D8FF",
         },
       },
     },

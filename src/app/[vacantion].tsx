@@ -55,7 +55,7 @@ export default function Opportunity() {
   };
 
   return (
-    <View className="flex flex-1 bg-background px-4 pt-8 dark:bg-background-dark">
+    <View className="flex flex-1 bg-background px-3 pt-8 dark:bg-background-dark">
       <View className="flex flex-col gap-6">
         <View className="flex-row justify-between px-4">
           <TouchableOpacity onPress={goBack}>
@@ -91,7 +91,7 @@ export default function Opportunity() {
             <TouchableOpacity onPress={handleToggleTheme}>
               <Feather
                 name={theme === "dark" ? "moon" : "sun"}
-                size={32}
+                size={ICON_SIZE}
                 color={theme === "dark" ? "#fff" : "#000"}
               />
             </TouchableOpacity>
@@ -103,7 +103,7 @@ export default function Opportunity() {
 
       <View className="flex-row items-center gap-6 px-4 pb-4 pt-8">
         <Image
-          className="h-20 w-20 rounded-full"
+          className="h-20 w-20 rounded-full border-[2px] border-borderForeground dark:border-foreground-dark"
           source={vacationInformations.imageVacantion}
           resizeMode="stretch"
           alt="company_image"
@@ -122,17 +122,17 @@ export default function Opportunity() {
           </View>
 
           <View className="flex-row flex-wrap gap-2">
-            <Text className="font-inter-regular rounded-md bg-backgroundDetailsVacantion p-1 text-white dark:to-backgroundDetailsVacantion-dark">
+            <Text className="bg-backgroundLabelVacantion dark:to-backgroundLabelVacantion-dark rounded-md px-2 py-1 font-inter-regular text-white">
               {vacationInformations.location}
             </Text>
 
             {vacationInformations.type && (
-              <Text className="font-inter-regular rounded-md bg-backgroundDetailsVacantion p-1 text-white dark:to-backgroundDetailsVacantion-dark">
+              <Text className="bg-backgroundLabelVacantion dark:to-backgroundLabelVacantion-dark rounded-md px-2 py-1 font-inter-regular text-white">
                 {vacationInformations.type}
               </Text>
             )}
 
-            <Text className="font-inter-regular rounded-md bg-backgroundDetailsVacantion p-1 text-white dark:to-backgroundDetailsVacantion-dark">
+            <Text className="bg-backgroundLabelVacantion dark:to-backgroundLabelVacantion-dark rounded-md px-2 py-1 font-inter-regular text-white">
               Hora integral
             </Text>
           </View>
@@ -147,13 +147,9 @@ export default function Opportunity() {
         </View>
       </View>
 
-      <ScrollView
-        className="-mx-[1rem]"
-        contentContainerStyle={{
-          gap: 8,
-        }}>
-        <View className="bg-foreground px-4 py-4 dark:bg-foreground-dark">
-          <Text className="font-inter-bold pb-4 text-xl text-fontTertiary dark:text-fontTertiary-dark">
+      <ScrollView contentContainerClassName="gap-2">
+        <View className="bg-background px-4 py-4 dark:bg-background-dark">
+          <Text className="pb-4 font-inter-bold text-xl text-fontTertiary dark:text-fontTertiary-dark">
             Sobre a vaga
           </Text>
 
@@ -162,8 +158,8 @@ export default function Opportunity() {
           </Text>
         </View>
 
-        <View className="bg-foreground px-4 py-4 dark:bg-foreground-dark">
-          <Text className="font-inter-bold pb-4 text-xl text-fontTertiary dark:text-fontTertiary-dark">
+        <View className="bg-background px-4 py-4 dark:bg-background-dark">
+          <Text className="pb-4 font-inter-bold text-xl text-fontTertiary dark:text-fontTertiary-dark">
             Habilidades & Responsabilidades
           </Text>
 
@@ -181,10 +177,10 @@ export default function Opportunity() {
                     width: 6,
                     height: 6,
                     borderRadius: 4,
-                    backgroundColor: "#dcdcdc",
+                    backgroundColor: "#000000",
                   }}
                 />
-                <Text className="font-inter-medium ml-2 text-base text-fontTertiary dark:text-fontTertiary-dark">
+                <Text className="ml-2 font-inter-medium text-base text-fontTertiary dark:text-fontTertiary-dark">
                   {skill}
                 </Text>
               </View>
@@ -196,7 +192,7 @@ export default function Opportunity() {
           <TouchableOpacity
             className="w-[70%] items-center justify-center rounded-xl bg-fontLink py-5 dark:bg-fontLink-dark"
             onPress={() => Linking.openURL(vacantionData.vacantionLink)}>
-            <Text className="font-inter-medium text-center text-xl text-fontDefault-dark">
+            <Text className="text-center font-inter-medium text-xl text-fontDefault-dark">
               Acessar vaga
             </Text>
           </TouchableOpacity>

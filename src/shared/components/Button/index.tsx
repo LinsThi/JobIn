@@ -10,7 +10,7 @@ export function Button({ title, onPress, isLoading = false, customClassName, ...
   return (
     <TouchableOpacity
       onPress={onPress}
-      className={`bg-backgroundButton dark:bg-backgroundButton-dark flex items-center justify-center rounded-lg py-5 ${customClassName}`}
+      className={`flex items-center justify-center rounded-lg bg-backgroundButton py-5 dark:bg-backgroundButton-dark ${customClassName}`}
       {...props}>
       {isLoading ? (
         <ActivityIndicator size="small" color="#fff" />

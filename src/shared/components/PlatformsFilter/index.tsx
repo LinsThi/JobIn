@@ -29,7 +29,7 @@ export function PlatformsFilter() {
   const renderItem = ({ item }: RenderItemProps) => {
     return (
       <TouchableOpacity
-        className="bg-platformLabel dark:bg-platformLabel-dark flex-row items-center gap-2 rounded-xl px-4 py-2"
+        className="flex-row items-center gap-2 rounded-xl bg-platformLabel px-4 py-2 dark:bg-platformLabel-dark"
         onPress={() => handleUnfollowPlatform(item)}>
         <Text className="font-roboto-medium text-base text-fontDefault dark:text-fontDefault-dark">
           {item.name}
