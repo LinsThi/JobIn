@@ -10,27 +10,20 @@ async function handleGetVacantions(vacantionName: string, plataformsToSearch: st
   if (!plataformsToSearch.length) return [];
 
   try {
-    console.log("request");
     const querySearch = vacantionName.toLowerCase().replace(" ", "-");
 
     const params = new URLSearchParams();
     params.append("querySearch", querySearch);
-    params.append("quantityToSearch", "5");
 
     plataformsToSearch.forEach((platform) => {
       params.append("platforms", platform);
     });
 
-    const { data, request } = await apiServe.get<IResponseGetVacation>(
-      `/jobSearch?${params.toString()}`
-    );
-
-    console.log("request", request);
+    const { data } = await apiServe.get<IResponseGetVacation>(`/jobSearch?${params.toString()}`);
 
     return data.data;
   } catch (err: AxiosError | any) {
     console.log("Error useQueryGetVacantions", err);
-    console.log(JSON.stringify(err));
 
     return [];
   }
