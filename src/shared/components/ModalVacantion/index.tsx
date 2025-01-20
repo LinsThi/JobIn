@@ -47,7 +47,7 @@ export function ModalVacantion() {
     <Modal animationType="slide" transparent visible={isOpened}>
       <View className="flex-1 items-center justify-center bg-black/50">
         <View className="flex w-4/5 gap-4 rounded-lg bg-white p-6">
-          <Text className="font-inter-bold text-center text-base">
+          <Text className="text-center font-inter-bold text-base">
             {type === "create"
               ? "Antes de começar, qual posição você deseja ficar por dentro de atualizações?"
               : "Qual posição você deseja ficar por dentro de atualizações?"}
