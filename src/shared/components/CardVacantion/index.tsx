@@ -4,7 +4,6 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 
 import noImage from "~/src/assets/images/no_image.jpg";
 import { useModalRemove } from "~/src/shared/components/ModalRemove/store/useModalRemove";
-import { SkeletonCard } from "~/src/shared/components/SkeletonCard";
 import useTheme from "~/src/shared/store/useTheme";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 import { IVacationProps } from "~/src/shared/types/vacantion";
@@ -17,7 +16,7 @@ type Props = {
   showIconToSave?: boolean;
 };
 
-export function CardVacantion({ cardIsLoading = false, item, showIconToSave = false }: Props) {
+export function CardVacantion({ item, showIconToSave = false }: Props) {
   const {
     state: { theme },
   } = useTheme();
@@ -27,10 +26,6 @@ export function CardVacantion({ cardIsLoading = false, item, showIconToSave = fa
   const {
     actions: { handleOpenModalVacantion },
   } = useModalRemove();
-
-  if (cardIsLoading) {
-    return <SkeletonCard />;
-  }
 
   const imageVacantion = isValidUrl(item.companyImage) ? { uri: item.companyImage } : noImage;
 
@@ -82,10 +77,10 @@ export function CardVacantion({ cardIsLoading = false, item, showIconToSave = fa
           </View>
 
           <View className="flex-1 flex-row">
-            <Text className="font-inter-semi-bold text-fontQuartenary dark:text-fontQuartenary-dark text-base">
+            <Text className="font-inter-semi-bold text-base text-fontQuartenary dark:text-fontQuartenary-dark">
               Hora integral
             </Text>
-            <Text className="font-inter-semi-bold text-fontQuartenary dark:text-fontQuartenary-dark text-base">
+            <Text className="font-inter-semi-bold text-base text-fontQuartenary dark:text-fontQuartenary-dark">
               {item.vacantionType ? " • " + item.vacantionType.split(",")[0] : ""}
             </Text>
           </View>

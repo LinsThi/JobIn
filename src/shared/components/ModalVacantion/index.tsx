@@ -58,6 +58,7 @@ export function ModalVacantion() {
             value={vacantionChoosen}
             onChangeText={handleSetVacantion}
             customContainerClass="bg-[#D9D9D9]"
+            maxLength={50}
           />
 
           <Button title="Salvar" onPress={handleSendVacantion} customClassName="py-[0.6rem]" />

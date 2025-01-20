@@ -6,8 +6,9 @@ type Props = TextInputProps & {
 
 export function Input({ customContainerClass, ...rest }: Props) {
   return (
-    <View className={`rounded-lg bg-[#F2F2F7] p-2 ${customContainerClass}`}>
-      <TextInput {...rest} />
+    <View
+      className={`rounded-lg bg-[#F2F2F7] p-2 ${customContainerClass} max-w-full overflow-hidden`}>
+      <TextInput {...rest} className="w-ful max-h-10 overflow-hidden text-base" />
     </View>
   );
 }

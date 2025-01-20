@@ -2,8 +2,8 @@ import Feather from "@expo/vector-icons/Feather";
 import { useMemo } from "react";
 import { TouchableOpacity, View } from "react-native";
 
-import IconLogoDarkSVG from "~/src/assets/logo_name_dark.svg";
-import IconLogoLightSVG from "~/src/assets/logo_name_light.svg";
+import IconLogoDarkSVG from "~/src/assets/app_logo/logo_name_dark.svg";
+import IconLogoLightSVG from "~/src/assets/app_logo/logo_name_light.svg";
 import IconEditDarkSVG from "~/src/assets/svg/icon/edit_dark.svg";
 import IconEditLightSVG from "~/src/assets/svg/icon/edit_light.svg";
 import { useModalVacation } from "~/src/shared/components/ModalVacantion/store/useModalVacantion";
@@ -20,10 +20,10 @@ export function Header() {
 
   const logoToRender = useMemo(() => {
     if (theme === "dark") {
-      return <IconLogoLightSVG />;
+      return <IconLogoLightSVG width={80} height={60} />;
     }
 
-    return <IconLogoDarkSVG />;
+    return <IconLogoDarkSVG width={80} height={60} />;
   }, [theme]);
 
   return (

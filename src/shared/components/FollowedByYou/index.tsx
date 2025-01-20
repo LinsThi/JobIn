@@ -4,15 +4,12 @@ import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/
 import useUserDetails from "~/src/shared/store/useUserDetails";
 import { SHORT_LOGOS } from "~/src/shared/utils/platforms";
 
-type Props = {
-  isLoading: boolean;
-};
-
-export function FollowedByYou({ isLoading }: Props) {
+export function FollowedByYou() {
   const {
     state: { platformsFollowed },
   } = useUserDetails();
   const {
+    state: { haveALoading: isLoading },
     actions: { handleOpenBottomPlatform },
   } = useBottomPlatform();
 
@@ -41,13 +38,13 @@ export function FollowedByYou({ isLoading }: Props) {
               {SHORT_LOGOS[`${item.shortLogo}` as keyof typeof SHORT_LOGOS]}
 
               <Text
-                className="font-inter-semi-bold flex-1 text-xl text-fontDefault dark:text-fontDefault-dark"
+                className="flex-1 font-inter-semi-bold text-xl text-fontDefault dark:text-fontDefault-dark"
                 numberOfLines={1}>
                 {item.name}
               </Text>
             </View>
 
-            <Text className="font-inter-regular text-center text-sm text-fontTertiary dark:text-fontTertiary-dark">
+            <Text className="text-center font-inter-regular text-sm text-fontTertiary dark:text-fontTertiary-dark">
               {item.description}
             </Text>
           </View>

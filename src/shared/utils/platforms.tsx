@@ -3,9 +3,9 @@ import { Image, View } from "react-native";
 import InfoJobsShortLogo from "~/src/assets/images/injojobs_short.jpg";
 import LinkedinShortLogo from "~/src/assets/images/linkedin_short.webp";
 import TrabalhaBrasilShortLogo from "~/src/assets/images/trabalhabrasil_short.png";
-import InfojobsLongLogo from "~/src/assets/svg/infojobs_logo.svg";
-import LinkedinLongLogo from "~/src/assets/svg/linkedin_logo.svg";
-import TrabalhaBrasilLongLogo from "~/src/assets/svg/trabalhaBrasil_logo.svg";
+import InfojobsLongLogo from "~/src/assets/svg/logos//infojobs_logo.svg";
+import LinkedinLongLogo from "~/src/assets/svg/logos//linkedin_logo.svg";
+import TrabalhaBrasilLongLogo from "~/src/assets/svg/logos//trabalhaBrasil_logo.svg";
 
 export const LONG_LOGOS = {
   InfoJobsLongLogo: (

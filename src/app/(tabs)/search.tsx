@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { FlatList, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 
 import FilterIcon from "~/src/assets/svg/icon/filter.svg";
-import QuestionSVG from "~/src/assets/svg/question.svg";
+import QuestionSVG from "~/src/assets/svg/images/list_question.svg";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import { CardVacantion } from "~/src/shared/components/CardVacantion";
 import { ItemSeparatorComponent } from "~/src/shared/components/FlatList/ItemSeparatorComponent";
