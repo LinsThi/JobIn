@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 
 import ListEmptySVG from "~/src/assets/svg/images/list_empty.svg";
@@ -9,6 +9,9 @@ import { ListEmptyComponent } from "~/src/shared/components/FlatList/ListEmptyCo
 import { Loading } from "~/src/shared/components/Loading";
 import { useQueryGetVacantionsAddRecently } from "~/src/shared/queries/useQueryGetVacantionsAddRecently";
 import useUserDetails from "~/src/shared/store/useUserDetails";
+import { IVacationProps } from "~/src/shared/types/vacantion";
+
+const QUANTITY_PER_PAGE = 5;
 
 export function RecentlyAdded() {
   const {
@@ -25,9 +28,30 @@ export function RecentlyAdded() {
     isRefetching,
   } = useQueryGetVacantionsAddRecently(vacantionRequired);
 
+  const [displayedData, setDisplayedData] = useState<IVacationProps[]>([]);
+  const [page, setPage] = useState(1);
+  const [loadingMore, setLoadingMore] = useState(false);
+
   useEffect(() => {
     handleChangeHaveALoading(isLoading || isRefetching);
   }, [isLoading, isRefetching]);
+
+  useEffect(() => {
+    if (vacantionData) {
+      const newData = vacantionData.slice(0, page * QUANTITY_PER_PAGE);
+      setDisplayedData(newData);
+    }
+  }, [vacantionData, page]);
+
+  const loadMoreData = () => {
+    if (!loadingMore && (vacantionData?.length ?? 0) > displayedData.length) {
+      setLoadingMore(true);
+      setTimeout(() => {
+        setPage((prev) => prev + 1);
+        setLoadingMore(false);
+      }, 1000);
+    }
+  };
 
   const renderContent = useMemo(() => {
     if (isLoading) {
@@ -49,7 +73,7 @@ export function RecentlyAdded() {
 
     return (
       <FlatList
-        data={vacantionData}
+        data={displayedData}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => <CardVacantion item={item} />}
         showsVerticalScrollIndicator={false}
@@ -64,9 +88,20 @@ export function RecentlyAdded() {
           />
         }
         ItemSeparatorComponent={() => <ItemSeparatorComponent />}
+        onEndReached={loadMoreData}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={loadingMore ? <Loading /> : null}
       />
     );
-  }, [isLoading, isError, vacantionData, platformsFollowed, vacantionRequired]);
+  }, [
+    isLoading,
+    isError,
+    vacantionData,
+    platformsFollowed,
+    vacantionRequired,
+    displayedData,
+    loadingMore,
+  ]);
 
   return (
     <View className="mt-4 flex flex-1 gap-2">
