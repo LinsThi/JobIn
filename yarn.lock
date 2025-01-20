@@ -1411,21 +1411,6 @@
     find-up "^5.0.0"
     js-yaml "^4.1.0"
 
-"@gorhom/bottom-sheet@^5":
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/@gorhom/bottom-sheet/-/bottom-sheet-5.0.6.tgz#f20736502399c7bcf8c73ea09e6b571dc07fe0eb"
-  integrity sha512-SI/AhPvgRfnCWN6/+wbE6TXwRE4X8F2fLyE4L/0bRwgE34Zenq585qLT139uEcfCIyovC2swC3ICqQpkmWEcFA==
-  dependencies:
-    "@gorhom/portal" "1.0.14"
-    invariant "^2.2.4"
-
-"@gorhom/portal@1.0.14":
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/@gorhom/portal/-/portal-1.0.14.tgz#1953edb76aaba80fb24021dc774550194a18e111"
-  integrity sha512-MXyL4xvCjmgaORr/rtryDNFy3kU4qUbKlwtQqqsygd0xX3mhKjOLn6mQK8wfu0RkoE0pBE0nAasRoHua+/QZ7A==
-  dependencies:
-    nanoid "^3.3.1"
-
 "@humanwhocodes/config-array@^0.13.0":
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.13.0.tgz#fb907624df3256d04b9aa2df50d7aa97ec648748"
@@ -1646,11 +1631,6 @@
   integrity sha512-Qd2kQ3yi6Y3+AcUlrHxSLlnBvpdCEMVGFlVBneVOjaFaPU61g1huc38g339ysXspwY1QZA2aNhrk/KlHGO+ewA==
   dependencies:
     merge-options "^3.0.4"
-
-"@react-native-masked-view/masked-view@0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@react-native-masked-view/masked-view/-/masked-view-0.3.2.tgz#7064533a573e3539ec912f59c1f457371bf49dd9"
-  integrity sha512-XwuQoW7/GEgWRMovOQtX3A4PrXhyaZm0lVUiY8qJDvdngjLms9Cpdck6SmGAUNqQwcj2EadHC1HwL0bEyoa/SQ==
 
 "@react-native/assets-registry@0.76.5":
   version "0.76.5"
@@ -4278,11 +4258,6 @@ expo-keep-awake@~14.0.1:
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-14.0.1.tgz#77c38feefa95c494aa167e6df5a6eacd17af2358"
   integrity sha512-c5mGCAIk2YM+Vsdy90BlEJ4ZX+KG5Au9EkJUIxXWlpnuKmDAJ3N+5nEZ7EUO1ZTheqoSBeAo4jJ8rTWPU+JXdw==
 
-expo-linear-gradient@~14.0.1:
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/expo-linear-gradient/-/expo-linear-gradient-14.0.1.tgz#f93c518014b6eb5ee17ed6562db716640ad27f3e"
-  integrity sha512-apGtUO9AZ52ZWvX9f6K9TamWw8XcUby7jZ0Pcvd5LxUO7pl7tDPx2VlKqpzbhhS4yfCiUwX58wqocwVnE/0ZVg==
-
 expo-linking@~7.0.3:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/expo-linking/-/expo-linking-7.0.3.tgz#307851288ec65e1c533bcc70b57dfb6372f9679e"
@@ -4338,15 +4313,6 @@ expo-router@~4.0.15:
     schema-utils "^4.0.1"
     semver "~7.6.3"
     server-only "^0.0.1"
-
-expo-skeleton-loading@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/expo-skeleton-loading/-/expo-skeleton-loading-1.0.8.tgz#49e58471d7d77be15b4004836f6fdf4f4bfaac70"
-  integrity sha512-b6Wa8AdxYDIoVfoiqDN7ICLPxn/7Ov89ssYLalbbtw6+EuFvgb/1PXnANPGu4R1ljwfYx+uMom1MPTgdflowdQ==
-  dependencies:
-    "@react-native-masked-view/masked-view" "0.3.2"
-    expo-linear-gradient "~14.0.1"
-    react-native-reanimated "~3.16.1"
 
 expo-splash-screen@~0.17.0:
   version "0.17.5"
@@ -6294,7 +6260,7 @@ mz@^2.7.0:
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
 
-nanoid@3.3.8, nanoid@^3.3.1:
+nanoid@3.3.8:
   version "3.3.8"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.8.tgz#b1be3030bee36aaff18bacb375e5cce521684baf"
   integrity sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==
@@ -7014,11 +6980,6 @@ rc@~1.2.7:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
-
-react-content-loader@^7.0.2:
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/react-content-loader/-/react-content-loader-7.0.2.tgz#5d5e0f723cb937db88f9fec1c5b0651cd301c42e"
-  integrity sha512-773S98JTyC8VB2nu7LXUhpHx8tZMieGxMcx3qTe7IkohT6Br7d9AXnIXs/wQ6IhlUdKQcw6JLKk1QKigYCWDRA==
 
 react-devtools-core@^5.3.1:
   version "5.3.2"
