@@ -12,7 +12,7 @@ export default function SavedScreen() {
   } = useUserDetails();
 
   return (
-    <View className="flex flex-1 bg-background px-4 dark:bg-background-dark">
+    <View className="flex flex-1 gap-4 bg-background px-4 dark:bg-background-dark">
       <Text className="font-inter-bold text-3xl text-fontDefault dark:text-fontDefault-dark">
         Oportunidades salvas
       </Text>

@@ -1,22 +1,37 @@
-import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { StyleSheet } from "react-native";
 
 type Props = {
   name: string;
   color: string;
+  focused?: boolean;
 };
 
-export const TabBarIcon = ({ name, color }: Props) => {
+export const TabBarIcon = ({ name, color, focused = false }: Props) => {
   if (name === "home") {
-    return <Entypo name="briefcase" size={24} style={styles.tabBarIcon} color={color} />;
+    return (
+      <Ionicons
+        name={focused ? "briefcase" : "briefcase-outline"}
+        size={24}
+        style={styles.tabBarIcon}
+        color={color}
+      />
+    );
   }
 
   if (name === "search") {
     return <FontAwesome size={24} style={styles.tabBarIcon} color={color} name="search" />;
   }
 
-  return <FontAwesome size={24} style={styles.tabBarIcon} color={color} name="bookmark-o" />;
+  return (
+    <Ionicons
+      size={24}
+      style={styles.tabBarIcon}
+      color={color}
+      name={focused ? "bookmark" : "bookmark-outline"}
+    />
+  );
 };
 
 export const styles = StyleSheet.create({

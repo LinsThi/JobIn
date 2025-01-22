@@ -41,6 +41,5 @@ export const useQueryGetVacantionsAddRecently = (vacantionName: string) => {
   return useQuery({
     queryKey: ["getVacantionsAddRecently", vacantionName, platformsKey],
     queryFn: () => handleGetVacantions(vacantionName, plataformsToSearch),
-    enabled: !!plataformsToSearch.length,
   });
 };

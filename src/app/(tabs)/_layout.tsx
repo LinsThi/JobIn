@@ -35,7 +35,11 @@ export default function TabLayout() {
         options={{
           title: "Inicio",
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon name="home" color={focused ? ACTIVE_TINT_COLOR : INACTIVE_TINT_COLOR} />
+            <TabBarIcon
+              name="home"
+              color={focused ? ACTIVE_TINT_COLOR : INACTIVE_TINT_COLOR}
+              focused={focused}
+            />
           ),
         }}
       />
@@ -55,7 +59,11 @@ export default function TabLayout() {
         options={{
           title: "Salvos",
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon name="bookmark" color={focused ? ACTIVE_TINT_COLOR : INACTIVE_TINT_COLOR} />
+            <TabBarIcon
+              name="bookmark"
+              color={focused ? ACTIVE_TINT_COLOR : INACTIVE_TINT_COLOR}
+              focused={focused}
+            />
           ),
         }}
       />

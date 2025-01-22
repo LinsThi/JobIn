@@ -1,4 +1,5 @@
 import Feather from "@expo/vector-icons/Feather";
+import { usePathname } from "expo-router";
 import { useMemo } from "react";
 import { TouchableOpacity, View } from "react-native";
 
@@ -8,6 +9,7 @@ import IconEditDarkSVG from "~/src/assets/svg/icon/edit_dark.svg";
 import IconEditLightSVG from "~/src/assets/svg/icon/edit_light.svg";
 import { useModalVacation } from "~/src/shared/components/ModalVacantion/store/useModalVacantion";
 import useTheme from "~/src/shared/store/useTheme";
+import { showCustomToast } from "~/src/shared/utils/toast";
 
 export function Header() {
   const {
@@ -18,6 +20,8 @@ export function Header() {
     actions: { handleOpenModalVacantion },
   } = useModalVacation();
 
+  const pathname = usePathname();
+
   const logoToRender = useMemo(() => {
     if (theme === "dark") {
       return <IconLogoLightSVG width={80} height={60} />;
@@ -27,13 +31,17 @@ export function Header() {
   }, [theme]);
 
   return (
-    <View className="flex flex-row items-center justify-between bg-background px-4 pb-8 pt-4 dark:bg-background-dark">
-      {logoToRender}
+    <View className="flex flex-row items-center justify-between bg-background px-4 pb-8 dark:bg-background-dark">
+      <TouchableOpacity onPress={() => showCustomToast("Mayh te amo")}>
+        {logoToRender}
+      </TouchableOpacity>
 
       <View className="flex flex-row items-center gap-4">
-        <TouchableOpacity onPress={() => handleOpenModalVacantion("edit")}>
-          {theme === "dark" ? <IconEditLightSVG /> : <IconEditDarkSVG />}
-        </TouchableOpacity>
+        {pathname === "/" && (
+          <TouchableOpacity onPress={() => handleOpenModalVacantion("edit")}>
+            {theme === "dark" ? <IconEditLightSVG /> : <IconEditDarkSVG />}
+          </TouchableOpacity>
+        )}
 
         <TouchableOpacity onPress={handleToggleTheme}>
           <Feather

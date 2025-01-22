@@ -40,7 +40,8 @@ export const BottomPlatform = forwardRef((_, ref) => {
               className={`flex flex-row items-center py-4 ${isFollowed ? "bg-backgroundPlatformSelected dark:bg-backgroundPlatformSelected-dark" : "transparent"} w-full gap-4 px-8`}>
               {SHORT_LOGOS[`${currentPlatform.shortLogo}` as keyof typeof SHORT_LOGOS]}
 
-              <Text className="font-roboto-bold rounded-tl text-xl text-fontDefault dark:text-fontDefault-dark">
+              <Text
+                className={`rounded-tl text-xl text-fontDefault dark:text-fontDefault-dark ${isFollowed ? "font-inter-semi-bold" : "font-inter-regular"}`}>
                 {currentPlatform.name}
               </Text>
             </TouchableOpacity>

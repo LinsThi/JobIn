@@ -15,7 +15,7 @@ export const THEME_TYPES = {
 };
 
 const initialState: StateProps = {
-  theme: "dark",
+  theme: "light",
 };
 
 const useTheme = create<StoreProps>()(

@@ -47,9 +47,9 @@ export const PLATFORMS = {
     description: "Plataforma oficial do InfoJobs, feita para buscar novas vagas.",
   },
   TrabalhaBrasil: {
-    name: "TrabalhaBrasil",
+    name: "Trabalha Brasil",
     shortLogo: "TrabalhaBrasilShortLogo",
     longLogo: "TrabalhaBrasilLongLogo",
-    description: "Plataforma oficial da Trabalha Brasil, feita para buscar nov",
+    description: "Plataforma oficial da Trabalha Brasil, feita para buscar novas vagas.",
   },
 };

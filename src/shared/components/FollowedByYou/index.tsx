@@ -39,7 +39,7 @@ export function FollowedByYou() {
 
               <Text
                 className="flex-1 font-inter-semi-bold text-xl text-fontDefault dark:text-fontDefault-dark"
-                numberOfLines={1}>
+                numberOfLines={2}>
                 {item.name}
               </Text>
             </View>
@@ -51,10 +51,9 @@ export function FollowedByYou() {
         )}
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerClassName="w-full"
         ListEmptyComponent={() => (
-          <View className="flex h-28 w-full items-center justify-center pt-4">
-            <Text className="text-center text-lg text-fontDefault dark:text-fontDefault-dark">
+          <View className="flex h-28 flex-1 items-center justify-center  text-center">
+            <Text className="w-screen text-center text-lg text-fontDefault dark:text-fontDefault-dark">
               Você ainda não segue nenhuma plataforma
             </Text>
           </View>

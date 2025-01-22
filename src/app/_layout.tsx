@@ -4,9 +4,9 @@ import "../../global.css";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import { useColorScheme } from "nativewind";
 import { useEffect, useRef } from "react";
+import { StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
@@ -49,7 +49,9 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView
+        style={{ flex: 1, paddingTop: 10 }}
+        className="bg-background dark:bg-background-dark">
         <StatusBar backgroundColor={theme === "dark" ? "#181829" : "#FFFFFF"} translucent />
 
         <ModalVacantion />

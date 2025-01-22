@@ -51,6 +51,11 @@ export default function SearchScreen() {
         ToastAndroid.SHORT
       );
     }
+
+    if (searchValue.length < 2) {
+      return ToastAndroid.show("Digite uma oportunidade válida!", ToastAndroid.SHORT);
+    }
+
     await new Promise((resolve) => setTimeout(resolve, 500));
     await handleSearchVacantions();
   };
@@ -87,6 +92,7 @@ export default function SearchScreen() {
                 onChangeText={handleChangeSearch}
                 functionToClear={handleClearSearch}
                 functionToSearch={handleSearch}
+                placeholder="Buscar..."
               />
             </View>
 

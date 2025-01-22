@@ -11,7 +11,6 @@ async function handleGetVacantions(vacantionName: string, plataformsToSearch: st
   }
 
   try {
-    console.log("rodei");
     const querySearch = vacantionName.toLowerCase().replace(" ", "-");
 
     const params = new URLSearchParams();
@@ -43,6 +42,6 @@ export const useQuerySearchVacantion = (vacantionName: string) => {
   return useQuery({
     queryKey: ["searchVacantions", vacantionName, plataformsToSearch],
     queryFn: () => handleGetVacantions(vacantionName, plataformsToSearch),
-    enabled: !!vacantionName && !!plataformsToSearch,
+    // enabled: true,
   });
 };

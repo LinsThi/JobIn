@@ -16,7 +16,9 @@ export default function SearchInput({
 }: Props) {
   return (
     <View className="w-full flex-row items-center rounded-xl bg-[#767680]/15 px-2">
-      <EvilIcons name="search" size={32} color="#89898E" className="-mt-2" />
+      <TouchableOpacity onPress={functionToSearch}>
+        <EvilIcons name="search" size={32} color="#89898E" className="-mt-2" />
+      </TouchableOpacity>
 
       <TextInput
         className="flex-1 px-4 text-black dark:text-white"

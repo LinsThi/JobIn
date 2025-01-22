@@ -1,6 +1,6 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useMemo } from "react";
@@ -81,8 +81,8 @@ export default function Opportunity() {
                   ? () => handleUnsaveVacantion(vacantionData)
                   : () => handleSaveVacantion(vacantionData)
               }>
-              <FontAwesome
-                name={vacationInformations.isSaved ? "bookmark" : "bookmark-o"}
+              <Ionicons
+                name={vacationInformations.isSaved ? "bookmark" : "bookmark-outline"}
                 size={ICON_SIZE}
                 color={theme === "dark" ? "white" : "black"}
               />
@@ -122,22 +122,22 @@ export default function Opportunity() {
           </View>
 
           <View className="flex-row flex-wrap gap-2">
-            <Text className="bg-backgroundLabelVacantion dark:to-backgroundLabelVacantion-dark rounded-md px-2 py-1 font-inter-regular text-white">
+            <Text className="rounded-md bg-backgroundLabelVacantion px-2 py-1 font-inter-regular text-white dark:to-backgroundLabelVacantion-dark">
               {vacationInformations.location}
             </Text>
 
             {vacationInformations.type && (
-              <Text className="bg-backgroundLabelVacantion dark:to-backgroundLabelVacantion-dark rounded-md px-2 py-1 font-inter-regular text-white">
+              <Text className="rounded-md bg-backgroundLabelVacantion px-2 py-1 font-inter-regular text-white dark:to-backgroundLabelVacantion-dark">
                 {vacationInformations.type}
               </Text>
             )}
 
-            <Text className="bg-backgroundLabelVacantion dark:to-backgroundLabelVacantion-dark rounded-md px-2 py-1 font-inter-regular text-white">
+            <Text className="rounded-md bg-backgroundLabelVacantion px-2 py-1 font-inter-regular text-white dark:to-backgroundLabelVacantion-dark">
               Hora integral
             </Text>
           </View>
 
-          <View className="flex-row items-center justify-between gap-2 pt-2">
+          <View className="flex-col pt-2">
             <Text className="font-inter-semi-bold text-base text-fontTertiary dark:text-fontTertiary-dark">
               Publicação: {vacantionData.createdAt}
             </Text>

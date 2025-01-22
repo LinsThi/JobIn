@@ -1,4 +1,4 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Fontisto from "@expo/vector-icons/Fontisto";
 import { Link } from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
@@ -71,8 +71,8 @@ export function CardVacantion({ item, showIconToSave = false }: Props) {
                       ? () => handleOpenModalVacantion(item)
                       : () => handleSaveVacantion(item)
                   }>
-                  <FontAwesome
-                    name={verifyIfVacantionIsSaved(item) ? "bookmark" : "bookmark-o"}
+                  <Fontisto
+                    name="bookmark-alt"
                     size={30}
                     color={theme === "dark" ? "white" : "black"}
                   />
@@ -81,15 +81,21 @@ export function CardVacantion({ item, showIconToSave = false }: Props) {
             </View>
 
             <View className="flex-1 flex-row">
-              <Text className="font-inter-semi-bold text-base text-fontQuartenary dark:text-fontQuartenary-dark">
+              <Text
+                className="font-inter-semi-bold text-base text-fontQuartenary dark:text-fontQuartenary-dark"
+                numberOfLines={1}>
                 Hora integral
               </Text>
-              <Text className="font-inter-semi-bold text-base text-fontQuartenary dark:text-fontQuartenary-dark">
+
+              <Text
+                className="flex-1 overflow-hidden text-ellipsis font-inter-semi-bold text-base text-fontQuartenary dark:text-fontQuartenary-dark"
+                numberOfLines={1}>
+                {" "}
                 {item.vacantionType ? " • " + item.vacantionType.split(",")[0] : ""}
               </Text>
             </View>
 
-            <View className="flex-row items-center justify-between gap-2 pt-2">
+            <View className="flex-col pt-2">
               <Text className="font-inter-semi-bold text-base text-fontTertiary dark:text-fontTertiary-dark">
                 Publicação: {item.createdAt}
               </Text>
