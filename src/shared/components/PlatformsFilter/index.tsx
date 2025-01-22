@@ -6,11 +6,15 @@ import useTheme from "~/src/shared/store/useTheme";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 import { PlataformProps } from "~/src/shared/utils/platforms";
 
+type Props = {
+  platformsToShow?: PlataformProps[];
+};
+
 type RenderItemProps = {
   item: PlataformProps;
 };
 
-export function PlatformsFilter() {
+export function PlatformsFilter({ platformsToShow }: Props) {
   const {
     state: { theme },
   } = useTheme();
@@ -47,7 +51,7 @@ export function PlatformsFilter() {
 
   return (
     <FlatList
-      data={platformsFollowed}
+      data={platformsToShow || platformsFollowed}
       keyExtractor={(item) => item.name}
       renderItem={renderItem}
       horizontal

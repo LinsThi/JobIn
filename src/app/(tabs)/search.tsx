@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FlatList, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
+import BottomSheet from "react-native-gesture-bottom-sheet";
 
 import FilterIcon from "~/src/assets/svg/icon/filter.svg";
 import QuestionSVG from "~/src/assets/svg/images/list_question.svg";
-import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
+import { BottomPlatformSearch } from "~/src/shared/components/BottomPlatformSearch";
 import { CardVacantion } from "~/src/shared/components/CardVacantion";
 import { ItemSeparatorComponent } from "~/src/shared/components/FlatList/ItemSeparatorComponent";
 import { ListEmptyComponent } from "~/src/shared/components/FlatList/ListEmptyComponent";
@@ -13,18 +14,19 @@ import SearchInput from "~/src/shared/components/SearchInput";
 import { useQuerySearchVacantion } from "~/src/shared/queries/useQuerySearchVacantion";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 import { IVacationProps } from "~/src/shared/types/vacantion";
+import { PlataformProps } from "~/src/shared/utils/platforms";
 
 const QUANTITY_PER_PAGE = 10;
 
 export default function SearchScreen() {
   const {
-    actions: { handleOpenBottomPlatform },
-  } = useBottomPlatform();
-  const {
     state: { platformsFollowed },
   } = useUserDetails();
 
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
   const [searchValue, setSearchValue] = useState("");
+  const [selectedPlatforms, setSelectedPlatforms] = useState<PlataformProps[]>(platformsFollowed);
   const [displayedData, setDisplayedData] = useState<IVacationProps[]>([]);
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -34,7 +36,7 @@ export default function SearchScreen() {
     refetch: handleSearchVacantions,
     isRefetching,
     isLoading,
-  } = useQuerySearchVacantion(searchValue);
+  } = useQuerySearchVacantion(searchValue, selectedPlatforms);
 
   const handleChangeSearch = (value: string) => {
     setSearchValue(value);
@@ -77,6 +79,24 @@ export default function SearchScreen() {
     }
   };
 
+  const handleOpenBottomPlatform = () => {
+    bottomSheetRef.current?.show();
+  };
+
+  const handleChangeFollowPlatform = (platform: PlataformProps) => {
+    setSelectedPlatforms((prevState) => {
+      if (verifyIfPlatformIsFollowed(platform)) {
+        return prevState.filter((currentPlatform) => currentPlatform.name !== platform.name);
+      }
+
+      return [...prevState, platform];
+    });
+  };
+
+  const verifyIfPlatformIsFollowed = (platform: PlataformProps) => {
+    return selectedPlatforms.some((currentPlatform) => currentPlatform.name === platform.name);
+  };
+
   return (
     <View className="flex flex-1 bg-background px-4 dark:bg-background-dark">
       <View className="flex flex-1 gap-4">
@@ -101,7 +121,7 @@ export default function SearchScreen() {
             </TouchableOpacity>
           </View>
 
-          <PlatformsFilter />
+          <PlatformsFilter platformsToShow={selectedPlatforms} />
         </View>
 
         <View className="flex-1">
@@ -128,6 +148,14 @@ export default function SearchScreen() {
           )}
         </View>
       </View>
+
+      <BottomPlatformSearch
+        ref={bottomSheetRef}
+        handleCloseBottomPlatform={() => bottomSheetRef.current?.close()}
+        platformsSelected={selectedPlatforms}
+        handleChangeFollowPlatform={handleChangeFollowPlatform}
+        verifyIfPlatformIsFollowed={verifyIfPlatformIsFollowed}
+      />
     </View>
   );
 }
