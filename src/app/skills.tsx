@@ -4,6 +4,7 @@ import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
+import EmptySkills from "~/src/assets/svg/images/list_skills.svg";
 import { PieChartSkills } from "~/src/shared/components/PieChartSkills";
 import { RankedSkillProps } from "~/src/shared/queries/useQueryGetVacantionsAddRecently/types";
 import useTheme from "~/src/shared/store/useTheme";
@@ -34,6 +35,8 @@ export default function SkillsScreen() {
     return topicExpanded === index;
   }
 
+  console.log("skillsObject", skillsObject);
+
   return (
     <View className="flex flex-1 gap-4 bg-background px-4 dark:bg-background-dark">
       <View className="flex-row justify-between px-2 pt-12">
@@ -57,17 +60,35 @@ export default function SkillsScreen() {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerClassName="px-2">
-        <View className="flex gap-2">
-          <Text className="font-inter-semi-bold text-2xl text-fontDefault dark:text-fontDefault-dark">
-            Resumo de habilidades para
-          </Text>
+        {skillsObject.length > 0 ? (
+          <View>
+            <View className="flex gap-2">
+              <Text className="font-inter-semi-bold text-2xl text-fontDefault dark:text-fontDefault-dark">
+                Resumo de habilidades para
+              </Text>
 
-          <Text className="font-inter-medium text-xl text-fontDefault dark:text-fontDefault-dark">
-            {vacantionRequired}
-          </Text>
-        </View>
+              <Text className="font-inter-medium text-xl text-fontDefault dark:text-fontDefault-dark">
+                {vacantionRequired}
+              </Text>
+            </View>
 
-        <PieChartSkills dataToChart={skillsObject} />
+            <PieChartSkills dataToChart={skillsObject} />
+          </View>
+        ) : (
+          <View className="items-center pb-4 pt-2">
+            <View>
+              <Text className="font-inter-medium text-2xl text-fontDefault dark:text-fontDefault-dark">
+                Nenhuma oportunidade buscada
+              </Text>
+
+              <Text className="font-inter-regular text-base text-fontDefault dark:text-fontDefault-dark">
+                Faça uma busca por oportunidades, para ter um resumo de soft skills mais buscadas
+              </Text>
+            </View>
+
+            <EmptySkills width={200} height={200} />
+          </View>
+        )}
 
         <View className="flex-1 gap-2">
           {SOFTS_SKILLS_TOPIC.map((topic, index) => (
