@@ -1,5 +1,5 @@
 import Feather from "@expo/vector-icons/Feather";
-import { useNavigation, usePathname } from "expo-router";
+import { usePathname } from "expo-router";
 import { useMemo } from "react";
 import { TouchableOpacity, View } from "react-native";
 
@@ -18,8 +18,6 @@ export function Header() {
   const {
     actions: { handleOpenModalVacantion },
   } = useModalVacation();
-
-  const { navigate } = useNavigation();
 
   const pathname = usePathname();
 

@@ -90,7 +90,6 @@ export function PieChart({
 
           return (
             <G key={index} onPressIn={() => onPressSlice(index)}>
-              {" "}
               <Path
                 d={pathData}
                 fill={selected === index || selected === null ? item.color : item.color + "50"}
