@@ -4,7 +4,7 @@ import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
-import { CustomPieChart } from "~/src/shared/components/PieChart";
+import { PieChartSkills } from "~/src/shared/components/PieChartSkills";
 import { RankedSkillProps } from "~/src/shared/queries/useQueryGetVacantionsAddRecently/types";
 import useTheme from "~/src/shared/store/useTheme";
 import { SOFTS_SKILLS_TOPIC } from "~/src/shared/utils/softs_topics";
@@ -64,7 +64,7 @@ export default function SkillsScreen() {
           </Text>
         </View>
 
-        <CustomPieChart dataToChart={skillsObject} />
+        <PieChartSkills dataToChart={skillsObject} />
 
         <View className="flex-1 gap-2">
           {SOFTS_SKILLS_TOPIC.map((topic, index) => (
