@@ -1,5 +1,5 @@
 import Feather from "@expo/vector-icons/Feather";
-import { usePathname } from "expo-router";
+import { useNavigation, usePathname } from "expo-router";
 import { useMemo } from "react";
 import { TouchableOpacity, View } from "react-native";
 
@@ -19,6 +19,8 @@ export function Header() {
     actions: { handleOpenModalVacantion },
   } = useModalVacation();
 
+  const { navigate } = useNavigation();
+
   const pathname = usePathname();
 
   const logoToRender = useMemo(() => {
@@ -31,7 +33,7 @@ export function Header() {
 
   return (
     <View className="flex flex-row items-center justify-between bg-background px-4 pb-8 pt-6 dark:bg-background-dark">
-      {logoToRender}
+      <TouchableOpacity onPress={() => navigate("splash")}>{logoToRender}</TouchableOpacity>
 
       <View className="flex flex-row items-center gap-4">
         {pathname === "/" && (

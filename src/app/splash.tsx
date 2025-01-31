@@ -17,14 +17,14 @@ export default function SplashScreen() {
   };
 
   return (
-    <View className="flex flex-1 items-center justify-center bg-foreground-dark">
+    <View className="flex flex-1 items-center justify-center bg-background">
       <LottieView
         source={splashScreen}
         style={{ width: "40%", height: "40%" }}
         autoPlay
         loop={false}
         onAnimationFinish={finishAnimation}
-        duration={5000}
+        duration={4100}
       />
     </View>
   );
