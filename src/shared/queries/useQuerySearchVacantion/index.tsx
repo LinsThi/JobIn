@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
-import { IResponseGetVacation } from "~/src/shared/queries/useQueryGetVacations/types";
+import { IResponseGetVacation } from "~/src/shared/queries/useQueryGetVacantionsAddRecently/types";
 import { apiServe } from "~/src/shared/services/api";
 import { PlataformProps } from "~/src/shared/utils/platforms";
 
@@ -42,5 +42,6 @@ export const useQuerySearchVacantion = (
   return useQuery({
     queryKey: ["searchVacantions", vacantionName, plataformsToSearch],
     queryFn: () => handleGetVacantions(vacantionName, plataformsToSearch),
+    enabled: vacantionName.length > 0 && plataformsToSearch.length > 0,
   });
 };

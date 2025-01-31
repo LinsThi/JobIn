@@ -7,7 +7,7 @@ import { apiServe } from "~/src/shared/services/api";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 
 async function handleGetVacantions(vacantionName: string, plataformsToSearch: string[]) {
-  if (!plataformsToSearch.length) return [];
+  if (!plataformsToSearch.length) return { data: [], rankedSkills: [] } as IResponseGetVacation;
 
   try {
     const querySearch = vacantionName.toLowerCase().replace(" ", "-");
@@ -21,11 +21,11 @@ async function handleGetVacantions(vacantionName: string, plataformsToSearch: st
 
     const { data } = await apiServe.get<IResponseGetVacation>(`/jobSearch?${params.toString()}`);
 
-    return data.data;
+    return data;
   } catch (err: AxiosError | any) {
     console.log("Error useQueryGetVacantions", err);
 
-    return [];
+    return { data: [], rankedSkills: [] } as IResponseGetVacation;
   }
 }
 

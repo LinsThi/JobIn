@@ -39,5 +39,5 @@ export default function App() {
     return null;
   }
 
-  return <Redirect href="splash" />;
+  return <Redirect href="/splash" />;
 }

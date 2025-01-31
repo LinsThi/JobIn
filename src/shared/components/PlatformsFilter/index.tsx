@@ -8,13 +8,14 @@ import { PlataformProps } from "~/src/shared/utils/platforms";
 
 type Props = {
   platformsToShow?: PlataformProps[];
+  handleUnfollowPlatformShowed?: (platform: PlataformProps) => void;
 };
 
 type RenderItemProps = {
   item: PlataformProps;
 };
 
-export function PlatformsFilter({ platformsToShow }: Props) {
+export function PlatformsFilter({ platformsToShow, handleUnfollowPlatformShowed }: Props) {
   const {
     state: { theme },
   } = useTheme();
@@ -34,7 +35,12 @@ export function PlatformsFilter({ platformsToShow }: Props) {
     return (
       <TouchableOpacity
         className="flex-row items-center gap-2 rounded-xl bg-platformLabel px-4 py-2 dark:bg-platformLabel-dark"
-        onPress={() => handleUnfollowPlatform(item)}>
+        // onPress={() => handleUnfollowPlatform(item)}>
+        onPress={
+          handleUnfollowPlatformShowed
+            ? () => handleUnfollowPlatformShowed(item)
+            : () => handleUnfollowPlatform(item)
+        }>
         <Text className="font-roboto-medium text-base text-fontDefault dark:text-fontDefault-dark">
           {item.name}
         </Text>

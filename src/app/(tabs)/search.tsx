@@ -69,6 +69,10 @@ export default function SearchScreen() {
     }
   }, [vacantionData, page]);
 
+  useEffect(() => {
+    setSelectedPlatforms(platformsFollowed);
+  }, [platformsFollowed]);
+
   const loadMoreData = () => {
     if (!loadingMore && vacantionData?.length > displayedData.length) {
       setLoadingMore(true);
@@ -113,6 +117,7 @@ export default function SearchScreen() {
                 functionToClear={handleClearSearch}
                 functionToSearch={handleSearch}
                 placeholder="Buscar..."
+                customStyle="py-3"
               />
             </View>
 
@@ -121,7 +126,10 @@ export default function SearchScreen() {
             </TouchableOpacity>
           </View>
 
-          <PlatformsFilter platformsToShow={selectedPlatforms} />
+          <PlatformsFilter
+            platformsToShow={selectedPlatforms}
+            handleUnfollowPlatformShowed={handleChangeFollowPlatform}
+          />
         </View>
 
         <View className="flex-1">

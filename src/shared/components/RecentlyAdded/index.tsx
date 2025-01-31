@@ -1,5 +1,6 @@
+import { useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 import ListEmptySVG from "~/src/assets/svg/images/list_empty.svg";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
@@ -20,6 +21,8 @@ export function RecentlyAdded() {
     actions: { handleChangeHaveALoading },
   } = useBottomPlatform();
 
+  const { push } = useRouter();
+
   const {
     isLoading,
     data: vacantionData,
@@ -36,14 +39,14 @@ export function RecentlyAdded() {
   }, [isLoading, isRefetching]);
 
   useEffect(() => {
-    if (vacantionData) {
-      const newData = vacantionData.slice(0, page * QUANTITY_PER_PAGE);
+    if (vacantionData && vacantionData) {
+      const newData = vacantionData.data.slice(0, page * QUANTITY_PER_PAGE);
       setDisplayedData(newData);
     }
   }, [vacantionData, page]);
 
   const loadMoreData = () => {
-    if (!loadingMore && (vacantionData?.length ?? 0) > displayedData.length) {
+    if (!loadingMore && (vacantionData?.data.length ?? 0) > displayedData.length) {
       setLoadingMore(true);
       setTimeout(() => {
         setPage((prev) => prev + 1);
@@ -107,6 +110,22 @@ export function RecentlyAdded() {
         <Text className="font-inter-semi-bold text-lg text-fontDefault dark:text-fontDefault-dark">
           Adicionados recentemente
         </Text>
+
+        <TouchableOpacity
+          disabled={isLoading}
+          onPress={() =>
+            push({
+              pathname: "/skills",
+              params: {
+                skills: JSON.stringify(vacantionData?.rankedSkills),
+              },
+            })
+          }>
+          <Text
+            className={`font-inter-semi-bold text-lg ${isLoading ? "text-slate-200 opacity-50" : "text-fontLink dark:text-fontLink-dark"}`}>
+            Ver detalhes
+          </Text>
+        </TouchableOpacity>
       </View>
 
       {renderContent}

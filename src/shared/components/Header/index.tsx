@@ -9,7 +9,6 @@ import IconEditDarkSVG from "~/src/assets/svg/icon/edit_dark.svg";
 import IconEditLightSVG from "~/src/assets/svg/icon/edit_light.svg";
 import { useModalVacation } from "~/src/shared/components/ModalVacantion/store/useModalVacantion";
 import useTheme from "~/src/shared/store/useTheme";
-import { showCustomToast } from "~/src/shared/utils/toast";
 
 export function Header() {
   const {
@@ -31,10 +30,8 @@ export function Header() {
   }, [theme]);
 
   return (
-    <View className="flex flex-row items-center justify-between bg-background px-4 pb-8 dark:bg-background-dark">
-      <TouchableOpacity onPress={() => showCustomToast("Mayh te amo")}>
-        {logoToRender}
-      </TouchableOpacity>
+    <View className="flex flex-row items-center justify-between bg-background px-4 pb-8 pt-6 dark:bg-background-dark">
+      {logoToRender}
 
       <View className="flex flex-row items-center gap-4">
         {pathname === "/" && (

@@ -63,6 +63,7 @@ export default function RootLayout() {
           screenOptions={{ headerShown: false }}>
           <Screen name="(tabs)" />
           <Screen name="welcome" />
+          <Screen name="skills" />
           <Screen name="splash" />
         </Stack>
       </SafeAreaView>

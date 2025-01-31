@@ -6,6 +6,7 @@ type Props = {
   showClearButton?: boolean;
   functionToClear?: () => void;
   functionToSearch: () => void;
+  customStyle?: string;
 } & ComponentProps<typeof TextInput>;
 
 export default function SearchInput({
@@ -21,7 +22,8 @@ export default function SearchInput({
       </TouchableOpacity>
 
       <TextInput
-        className="flex-1 px-4 text-black dark:text-white"
+        // className="flex-1 px-4 text-black dark:text-white"
+        className={`flex-1 px-4 text-black dark:text-white ${props.customStyle}`}
         numberOfLines={1}
         onEndEditing={functionToSearch}
         {...props}
