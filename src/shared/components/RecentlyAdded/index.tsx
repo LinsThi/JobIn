@@ -123,7 +123,7 @@ export function RecentlyAdded() {
           }>
           <Text
             className={`font-inter-semi-bold text-lg ${isLoading ? "text-slate-200 opacity-50" : "text-fontLink dark:text-fontLink-dark"}`}>
-            Ver detalhes
+            Ver resumo
           </Text>
         </TouchableOpacity>
       </View>

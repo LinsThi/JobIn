@@ -7,6 +7,7 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { PieChartSkills } from "~/src/shared/components/PieChartSkills";
 import { RankedSkillProps } from "~/src/shared/queries/useQueryGetVacantionsAddRecently/types";
 import useTheme from "~/src/shared/store/useTheme";
+import useUserDetails from "~/src/shared/store/useUserDetails";
 import { SOFTS_SKILLS_TOPIC } from "~/src/shared/utils/softs_topics";
 
 export default function SkillsScreen() {
@@ -14,12 +15,14 @@ export default function SkillsScreen() {
     state: { theme },
     actions: { handleToggleTheme },
   } = useTheme();
+  const {
+    state: { vacantionRequired },
+  } = useUserDetails();
 
   const { goBack } = useNavigation();
 
   const params = useLocalSearchParams();
   const skillsObject: RankedSkillProps[] = JSON.parse(params.skills as never);
-  console.log("skillsObject", skillsObject);
 
   const [topicExpanded, setTopicExpanded] = useState<null | number>(null);
 
@@ -56,11 +59,11 @@ export default function SkillsScreen() {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerClassName="px-2">
         <View className="flex gap-2">
           <Text className="font-inter-semi-bold text-2xl text-fontDefault dark:text-fontDefault-dark">
-            Resumo oportunidades
+            Resumo de habilidades para
           </Text>
 
           <Text className="font-inter-medium text-xl text-fontDefault dark:text-fontDefault-dark">
-            Desenvolvedor Mobile
+            {vacantionRequired}
           </Text>
         </View>
 
