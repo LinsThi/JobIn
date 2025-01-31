@@ -33,7 +33,7 @@ export function Header() {
 
   return (
     <View className="flex flex-row items-center justify-between bg-background px-4 pb-8 pt-6 dark:bg-background-dark">
-      <TouchableOpacity onPress={() => navigate("splash")}>{logoToRender}</TouchableOpacity>
+      {logoToRender}
 
       <View className="flex flex-row items-center gap-4">
         {pathname === "/" && (
