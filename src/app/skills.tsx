@@ -35,8 +35,6 @@ export default function SkillsScreen() {
     return topicExpanded === index;
   }
 
-  console.log("skillsObject", skillsObject);
-
   return (
     <View className="flex flex-1 gap-4 bg-background px-4 dark:bg-background-dark">
       <View className="flex-row justify-between px-2 pt-12">
@@ -78,11 +76,11 @@ export default function SkillsScreen() {
           <View className="items-center pb-4 pt-2">
             <View>
               <Text className="font-inter-medium text-2xl text-fontDefault dark:text-fontDefault-dark">
-                Nenhuma oportunidade buscada
+                Nenhuma habilidade encontrada
               </Text>
 
               <Text className="font-inter-regular text-base text-fontDefault dark:text-fontDefault-dark">
-                Faça uma busca por oportunidades, para ter um resumo de soft skills mais buscadas
+                Infelizmente, as oportunidades encontradas não informa as soft skills necessárias.
               </Text>
             </View>
 

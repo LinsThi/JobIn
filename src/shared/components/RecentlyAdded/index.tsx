@@ -112,7 +112,7 @@ export function RecentlyAdded() {
         </Text>
 
         <TouchableOpacity
-          disabled={isLoading}
+          disabled={vacantionData?.data.length === 0 || isLoading}
           onPress={() =>
             push({
               pathname: "/skills",
@@ -122,7 +122,7 @@ export function RecentlyAdded() {
             })
           }>
           <Text
-            className={`font-inter-semi-bold text-lg ${isLoading ? "text-slate-200 opacity-50" : "text-fontLink dark:text-fontLink-dark"}`}>
+            className={`font-inter-semi-bold text-lg ${vacantionData?.data.length === 0 || isLoading ? "text-slate-200 opacity-50" : "text-fontLink dark:text-fontLink-dark"}`}>
             Ver resumo
           </Text>
         </TouchableOpacity>

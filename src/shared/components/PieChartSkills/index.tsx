@@ -33,7 +33,9 @@ export function PieChartSkills({ dataToChart }: Props) {
               {dataToChart.map((item, index) => (
                 <View key={index} className="w-32 flex-row items-center gap-1">
                   <View style={{ backgroundColor: item.color }} className="h-4 w-4 rounded-full" />
-                  <Text className="font-inter-extra-light text-sm" numberOfLines={2}>
+                  <Text
+                    className="font-inter-extra-light text-sm text-fontDefault dark:text-fontDefault-dark"
+                    numberOfLines={2}>
                     {item.skill}
                   </Text>
                 </View>
@@ -71,7 +73,9 @@ export function PieChartSkills({ dataToChart }: Props) {
             {dataToChart.map((item, index) => (
               <View key={index} className="w-[7.2rem] flex-row items-center gap-1">
                 <View style={{ backgroundColor: item.color }} className="h-4 w-4 rounded-full" />
-                <Text className="font-inter-extra-light text-sm" numberOfLines={2}>
+                <Text
+                  className="font-inter-extra-light text-sm text-fontDefault dark:text-fontDefault-dark"
+                  numberOfLines={2}>
                   {item.skill}
                 </Text>
               </View>
