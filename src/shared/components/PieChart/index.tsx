@@ -1,5 +1,6 @@
 import React from "react";
 import { G, Path, Svg, Text as SvgText, TSpan } from "react-native-svg";
+
 import useTheme from "~/src/shared/store/useTheme";
 
 const calculateAngle = (value: number, total: number) => (value / total) * 360;
@@ -7,15 +8,15 @@ const calculateAngle = (value: number, total: number) => (value / total) * 360;
 const indexAdjustment = (index: number) => {
   switch (index) {
     case 1:
-      return 3;
+      return 4;
     case 2:
-      return 7;
-    case 3:
-      return 10;
-    case 4:
       return 5;
+    case 3:
+      return 5;
+    case 4:
+      return 2;
     default:
-      return 0;
+      return 5;
   }
 };
 
@@ -104,7 +105,7 @@ export function PieChart({
                     textAnchor="middle"
                     alignmentBaseline="middle"
                     fontSize={12}
-                    fill={theme === "dark" ? "#FFFFFF" : "#000000"}
+                    fill="#FFFFFF"
                     fontWeight="bold">
                     {parts.map((part, idx) => (
                       <TSpan key={idx} x={0} dy={idx > 0 ? 14 : 0}>
@@ -119,7 +120,7 @@ export function PieChart({
                     textAnchor="middle"
                     alignmentBaseline="middle"
                     fontSize={14}
-                    fill={theme === "dark" ? "#FFFFFF" : "#000000"}
+                    fill="#FFFFFF"
                     fontWeight="bold">
                     {`${Number(item.count).toFixed(0)}%`}
                   </SvgText>

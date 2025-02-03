@@ -6,9 +6,9 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import EmptySkills from "~/src/assets/svg/images/list_skills.svg";
 import { PieChartSkills } from "~/src/shared/components/PieChartSkills";
-import { RankedSkillProps } from "~/src/shared/queries/useQueryGetVacantionsAddRecently/types";
 import useTheme from "~/src/shared/store/useTheme";
 import useUserDetails from "~/src/shared/store/useUserDetails";
+import { useFormattedSkillsWithColors } from "~/src/shared/utils/chart_colors";
 import { SOFTS_SKILLS_TOPIC } from "~/src/shared/utils/softs_topics";
 
 export default function SkillsScreen() {
@@ -23,7 +23,7 @@ export default function SkillsScreen() {
   const { goBack } = useNavigation();
 
   const params = useLocalSearchParams();
-  const skillsObject: RankedSkillProps[] = JSON.parse(params.skills as never);
+  const skillsObject = useFormattedSkillsWithColors(JSON.parse(params.skills as never), theme);
 
   const [topicExpanded, setTopicExpanded] = useState<null | number>(null);
 
