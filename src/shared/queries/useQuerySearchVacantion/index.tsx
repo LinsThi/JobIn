@@ -25,7 +25,6 @@ async function handleGetVacantions(vacantionName: string, plataformsToSearch: st
     return data.data;
   } catch (err: AxiosError | any) {
     console.log("Error useQuerySearchVacantion", err);
-    console.log(JSON.stringify(err));
 
     return [];
   }

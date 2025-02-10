@@ -26,7 +26,7 @@ export default function SearchScreen() {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const [searchValue, setSearchValue] = useState("");
-  const [selectedPlatforms, setSelectedPlatforms] = useState<PlataformProps[]>(platformsFollowed);
+  const [selectedPlatforms, setSelectedPlatforms] = useState<PlataformProps[]>([]);
   const [displayedData, setDisplayedData] = useState<IVacationProps[]>([]);
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -63,15 +63,13 @@ export default function SearchScreen() {
   };
 
   useEffect(() => {
-    if (vacantionData) {
+    if (searchValue.length === 0) return setDisplayedData([]);
+
+    if (vacantionData && searchValue.length > 0) {
       const newData = vacantionData.slice(0, page * QUANTITY_PER_PAGE);
       setDisplayedData(newData);
     }
   }, [vacantionData, page]);
-
-  useEffect(() => {
-    setSelectedPlatforms(platformsFollowed);
-  }, [platformsFollowed]);
 
   const loadMoreData = () => {
     if (!loadingMore && vacantionData?.length > displayedData.length) {

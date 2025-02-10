@@ -65,7 +65,6 @@ export function PieChart({
           // const labelRadius =
           //   innerRadius + (expandedRadius - innerRadius) * Math.max((item.count / total) * 2, 0.4); // Define a distância do centro ao texto
           const labelRadius = radius - 10;
-          console.log(item.skill, (item.count / total) * 2);
           const labelX = labelRadius * Math.cos((Math.PI * centralAngle) / 180); // Calcula a coordenada X para a label
           const labelY = labelRadius * Math.sin((Math.PI * centralAngle) / 180); // Calcula a coordenada Y para a label
 
