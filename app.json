@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "JobIn",
-    "slug": "JobIn",
+    "slug": "linsdevjobin",
     "version": "1.0.0",
     "scheme": "jobin",
     "web": {
@@ -31,9 +31,15 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.linsdev.JobIn",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -48,8 +54,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "1f223b13-a5d1-43d6-9de7-e433a2912cdd"
+        "projectId": "a1fc5c8f-e2d7-431c-9b4e-74ddbd6946f9"
       }
-    }
+    },
+    "owner": "linsdev"
   }
 }

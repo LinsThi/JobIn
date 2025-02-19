@@ -37,7 +37,7 @@ export default function SkillsScreen() {
 
   return (
     <View className="flex flex-1 gap-4 bg-background px-4 dark:bg-background-dark">
-      <View className="flex-row justify-between px-2 pt-12">
+      <View className="flex-row justify-between border-b border-borderForeground px-2 pb-4 pt-12">
         <TouchableOpacity onPress={goBack}>
           <MaterialIcons
             name="arrow-back-ios"
@@ -61,11 +61,11 @@ export default function SkillsScreen() {
         {skillsObject.length > 0 ? (
           <View>
             <View className="flex gap-2">
-              <Text className="font-inter-semi-bold text-2xl text-fontDefault dark:text-fontDefault-dark">
+              <Text className="font-inter-bold text-2xl text-fontDefault dark:text-fontDefault-dark">
                 Resumo de habilidades para
               </Text>
 
-              <Text className="font-inter-medium text-xl text-fontDefault dark:text-fontDefault-dark">
+              <Text className="font-inter-semi-bold text-xl text-fontDefault dark:text-fontDefault-dark">
                 {vacantionRequired}
               </Text>
             </View>
@@ -75,12 +75,13 @@ export default function SkillsScreen() {
         ) : (
           <View className="items-center pb-4 pt-2">
             <View>
-              <Text className="font-inter-medium text-2xl text-fontDefault dark:text-fontDefault-dark">
-                Nenhuma habilidade encontrada
+              <Text className="font-inter-bold text-2xl text-fontDefault dark:text-fontDefault-dark">
+                Nenhum resumo disponível
               </Text>
 
-              <Text className="font-inter-regular text-base text-fontDefault dark:text-fontDefault-dark">
-                Infelizmente, as oportunidades encontradas não informa as soft skills necessárias.
+              <Text className="font-inter-semi-bold text-base text-fontDefault dark:text-fontDefault-dark">
+                As preferências selecionadas não trouxeram informações sobe as Soft Skills
+                necessárias
               </Text>
             </View>
 
@@ -92,7 +93,7 @@ export default function SkillsScreen() {
           {SOFTS_SKILLS_TOPIC.map((topic, index) => (
             <TouchableOpacity
               key={index}
-              className="rounded-2xl bg-backgroundPlatformSelected px-5 py-4 shadow-md dark:bg-backgroundPlatformSelected-dark"
+              className="rounded-2xl bg-backgroundPlatformSelected p-5 shadow-md dark:bg-backgroundPlatformSelected-dark"
               onPress={() => handleExpandTopic(index)}>
               <View className="flex flex-row items-center justify-between">
                 <Text className="flex-1  font-inter-medium text-lg text-fontDefault dark:text-fontDefault-dark">
