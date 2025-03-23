@@ -17,6 +17,14 @@ const useAppStatus = create<StoreProps>()(
             },
           }));
         },
+        handleChangeShowUpdates: (status) => {
+          set((state) => ({
+            state: {
+              ...state.state,
+              showChangesUpdates: status,
+            },
+          }));
+        },
       },
     }),
     {
@@ -24,12 +32,13 @@ const useAppStatus = create<StoreProps>()(
       storage: createJSONStorage(() => AsyncStorage),
       merge: (persistedState, currentState) => {
         const {
-          state: { alreadyOpenedApp },
+          state: { alreadyOpenedApp, showChangesUpdates },
         } = persistedState as StoreProps;
 
         return {
           state: {
             alreadyOpenedApp,
+            showChangesUpdates: showChangesUpdates ?? false,
           },
           actions: currentState.actions,
         };

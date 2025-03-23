@@ -31,9 +31,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.linsdev.JobIn",
@@ -57,6 +55,14 @@
         "projectId": "a1fc5c8f-e2d7-431c-9b4e-74ddbd6946f9"
       }
     },
-    "owner": "linsdev"
+    "owner": "linsdev",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a1fc5c8f-e2d7-431c-9b4e-74ddbd6946f9",
+      "fallbackToCacheTimeout": 0,
+      "launchWait": 5000
+    }
   }
 }

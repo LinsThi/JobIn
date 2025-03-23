@@ -13,6 +13,7 @@ import Toast from "react-native-toast-message";
 import { BottomPlatform } from "~/src/shared/components/BottomPlatform";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import { ModalRemove } from "~/src/shared/components/ModalRemove";
+import UpdatesDemo from "~/src/shared/components/ModalUpdates";
 import { ModalVacantion } from "~/src/shared/components/ModalVacantion";
 import useAppStatus from "~/src/shared/store/useAppStatus";
 import useTheme from "~/src/shared/store/useTheme";
@@ -69,6 +70,8 @@ export default function RootLayout() {
       </SafeAreaView>
 
       <Toast config={toastConfig} />
+
+      <UpdatesDemo />
     </QueryClientProvider>
   );
 }

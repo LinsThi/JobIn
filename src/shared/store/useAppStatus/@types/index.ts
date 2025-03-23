@@ -1,9 +1,11 @@
 export type StateProps = {
   alreadyOpenedApp: boolean;
+  showChangesUpdates: boolean;
 };
 
 export type ActionProps = {
   handleChangeFirstOpenedApp: () => void;
+  handleChangeShowUpdates: (status: boolean) => void;
 };
 
 export type StoreProps = {
@@ -13,4 +15,5 @@ export type StoreProps = {
 
 export const initialStateAppStatus: StateProps = {
   alreadyOpenedApp: false,
+  showChangesUpdates: false,
 };
