@@ -17,7 +17,8 @@
           "launchMode": "most-recent"
         }
       ],
-      "expo-font"
+      "expo-font",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,
@@ -31,9 +32,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.linsdev.JobIn",
@@ -48,7 +47,6 @@
       },
       "package": "com.linsdev.JobIn"
     },
-    "newArchEnabled": true,
     "extra": {
       "router": {
         "origin": false
