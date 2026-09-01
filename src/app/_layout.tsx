@@ -14,6 +14,7 @@ import { BottomPlatform } from "~/src/shared/components/BottomPlatform";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import { ModalRemove } from "~/src/shared/components/ModalRemove";
 import { ModalVacantion } from "~/src/shared/components/ModalVacantion";
+import TamaguiProvider from "~/src/shared/components/TamaguiProvider";
 import useAppStatus from "~/src/shared/store/useAppStatus";
 import useTheme from "~/src/shared/store/useTheme";
 import { toastConfig } from "~/src/shared/utils/toast";
@@ -49,26 +50,28 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SafeAreaView
-        style={{ flex: 1, paddingTop: 10 }}
-        className="bg-background dark:bg-background-dark">
-        <StatusBar backgroundColor={theme === "dark" ? "#181829" : "#FFFFFF"} translucent />
+      <TamaguiProvider>
+        <SafeAreaView
+          style={{ flex: 1, paddingTop: 10 }}
+          className="bg-background dark:bg-background-dark">
+          <StatusBar backgroundColor={theme === "dark" ? "#181829" : "#FFFFFF"} translucent />
 
-        <ModalVacantion />
-        <ModalRemove />
-        <BottomPlatform ref={bottomSheetRef} />
+          <ModalVacantion />
+          <ModalRemove />
+          <BottomPlatform ref={bottomSheetRef} />
 
-        <Stack
-          initialRouteName={alreadyOpenedApp ? "(tabs)" : "welcome"}
-          screenOptions={{ headerShown: false }}>
-          <Screen name="(tabs)" />
-          <Screen name="welcome" />
-          <Screen name="skills" />
-          <Screen name="splash" />
-        </Stack>
-      </SafeAreaView>
+          <Stack
+            initialRouteName={alreadyOpenedApp ? "(tabs)" : "welcome"}
+            screenOptions={{ headerShown: false }}>
+            <Screen name="(tabs)" />
+            <Screen name="welcome" />
+            <Screen name="skills" />
+            <Screen name="splash" />
+          </Stack>
+        </SafeAreaView>
 
-      <Toast config={toastConfig} />
+        <Toast config={toastConfig} />
+      </TamaguiProvider>
     </QueryClientProvider>
   );
 }
