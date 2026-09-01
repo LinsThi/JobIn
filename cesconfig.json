@@ -8,10 +8,6 @@
       "options": {
         "type": "tabs"
       }
-    },
-    {
-      "name": "nativewind",
-      "type": "styling"
     }
   ],
   "flags": {

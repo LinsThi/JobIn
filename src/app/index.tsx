@@ -1,20 +1,9 @@
 import {
-  Inter_100Thin,
-  Inter_200ExtraLight,
-  Inter_300Light,
-  Inter_400Regular,
-  Inter_500Medium,
-  Inter_600SemiBold,
-  Inter_700Bold,
-  Inter_800ExtraBold,
-  Inter_900Black,
-  useFonts,
-} from "@expo-google-fonts/inter";
-import {
   Poppins_400Regular,
   Poppins_500Medium,
   Poppins_600SemiBold,
   Poppins_700Bold,
+  useFonts,
 } from "@expo-google-fonts/poppins";
 import { Redirect } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -29,16 +18,6 @@ export default function App() {
     Poppins_600SemiBold,
     Poppins_700Bold,
 
-    Inter_100Thin,
-    Inter_200ExtraLight,
-    Inter_300Light,
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-    Inter_700Bold,
-    Inter_800ExtraBold,
-    Inter_900Black,
-
     unset: Poppins_400Regular,
   });
 
@@ -52,5 +31,5 @@ export default function App() {
     return null;
   }
 
-  return <Redirect href="/splash" />;
+  return <Redirect href="/(tabs)" />;
 }

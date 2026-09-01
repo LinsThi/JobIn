@@ -3,9 +3,15 @@ import { TamaguiProvider } from "tamagui";
 
 import config from "~/src/tamagui.config";
 
-export default function AppProvider({ children }: { children: ReactNode }) {
+export default function AppProvider({
+  children,
+  defaultTheme = "light",
+}: {
+  children: ReactNode;
+  defaultTheme?: "light" | "dark";
+}) {
   return (
-    <TamaguiProvider config={config} defaultTheme="light">
+    <TamaguiProvider config={config} defaultTheme={defaultTheme}>
       {children}
     </TamaguiProvider>
   );

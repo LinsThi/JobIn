@@ -5,9 +5,25 @@ import CheckSVG from "~/src/assets/svg/icon/check.svg";
 
 export const toastConfig = {
   customToast: ({ text1 }: { text1?: string }) => (
-    <View className="flex flex-row items-center justify-center gap-2 rounded-full border-[0.1px] border-black bg-white p-4 shadow-2xl">
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 8,
+        borderRadius: 999,
+        borderWidth: 0.1,
+        borderColor: "#000000",
+        backgroundColor: "#FFFFFF",
+        padding: 16,
+        shadowColor: "#000000",
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.2,
+        shadowRadius: 20,
+        elevation: 8,
+      }}>
       <CheckSVG />
-      <Text className="font-regular text-base">{text1 ?? ""}</Text>
+      <Text style={{ fontSize: 16 }}>{text1 ?? ""}</Text>
     </View>
   ),
 } satisfies ToastConfig;

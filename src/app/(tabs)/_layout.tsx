@@ -1,8 +1,6 @@
 import { Tabs } from "expo-router";
 
-import { Header } from "~/src/shared/components/Header";
 import { TabBarIcon } from "~/src/shared/components/TabBarIcon";
-import useTheme from "~/src/shared/store/useTheme";
 
 export const unstable_tabs_settings = {
   initialRouteName: "home/index",
@@ -11,24 +9,16 @@ export const unstable_tabs_settings = {
 const { Screen } = Tabs;
 
 export default function TabLayout() {
-  const {
-    state: { theme },
-  } = useTheme();
-
-  const ACTIVE_TINT_COLOR = theme === "dark" ? "#CDAEF5" : "#007AFF";
-  const INACTIVE_TINT_COLOR = theme === "dark" ? "#515151" : "#787880";
-
   return (
     <Tabs
       initialRouteName="index"
       screenOptions={{
-        header: () => <Header />,
         tabBarStyle: {
-          backgroundColor: theme === "dark" ? "#222232" : "#F8F8F8",
+          backgroundColor: "#F8F8F8",
           borderTopWidth: 0,
         },
-        tabBarActiveTintColor: ACTIVE_TINT_COLOR,
-        tabBarInactiveTintColor: INACTIVE_TINT_COLOR,
+        tabBarActiveTintColor: "#007AFF",
+        tabBarInactiveTintColor: "#787880",
       }}>
       <Screen
         name="index"
@@ -37,7 +27,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
               name="home"
-              color={focused ? ACTIVE_TINT_COLOR : INACTIVE_TINT_COLOR}
+              color={focused ? "#007AFF" : "#787880"}
               focused={focused}
             />
           ),
@@ -49,21 +39,7 @@ export default function TabLayout() {
         options={{
           title: "Buscar",
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon name="search" color={focused ? ACTIVE_TINT_COLOR : INACTIVE_TINT_COLOR} />
-          ),
-        }}
-      />
-
-      <Screen
-        name="saved"
-        options={{
-          title: "Salvos",
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon
-              name="bookmark"
-              color={focused ? ACTIVE_TINT_COLOR : INACTIVE_TINT_COLOR}
-              focused={focused}
-            />
+            <TabBarIcon name="search" color={focused ? "#007AFF" : "#787880"} />
           ),
         }}
       />
