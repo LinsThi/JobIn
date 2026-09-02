@@ -56,8 +56,16 @@ export interface EnqueuedSearchDTO {
 
 export type SearchJobStatus = "queued" | "processing" | "completed" | "failed";
 
+export type ProviderOutcome = "success" | "error";
+
+/** Which sources have answered so far while the job is still processing. */
+export interface SearchProgress {
+  platforms: Record<string, ProviderOutcome>;
+}
+
 export interface SearchStatusDTO {
   jobId: string;
   status: SearchJobStatus;
+  progress?: SearchProgress;
   error?: string;
 }

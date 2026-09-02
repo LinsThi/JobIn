@@ -1,15 +1,18 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 
-import { EnqueuedSearchDTO, NormalizedJobDTO, SearchPageDTO, SearchStatusDTO } from "./types";
+import {
+  EnqueuedSearchDTO,
+  NormalizedJobDTO,
+  SearchPageDTO,
+  SearchProgress,
+  SearchStatusDTO,
+} from "./types";
 
 import { apiServe } from "~/src/shared/services/api";
 
 const PAGE_SIZE = 20;
-const POLL_INTERVAL_MS = 2500;
-/** Give up polling a job that never finishes and surface it as a failure. */
-const MAX_WAIT_MS = 90_000;
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const POLL_INTERVAL_MS = 2000;
 
 interface SearchPage {
   jobs: NormalizedJobDTO[];
@@ -18,10 +21,43 @@ interface SearchPage {
   hasMore: boolean;
 }
 
-interface FetchArgs {
-  term: string;
-  platforms: string[];
-  page: number;
+function platformParams(platforms: string[]) {
+  return platforms.length ? { platforms: platforms.join(",") } : {};
+}
+
+/**
+ * Hits `GET /jobs/search?page=1`. A cache hit (`200`) means the search is ready;
+ * a miss (`202`) hands back a `jobId` to poll.
+ */
+async function startSearch(
+  term: string,
+  platforms: string[],
+  signal?: AbortSignal
+): Promise<{ ready: boolean; jobId?: string }> {
+  const response = await apiServe.get<SearchPageDTO | EnqueuedSearchDTO>("/jobs/search", {
+    signal,
+    params: { query: term, page: 1, pageSize: PAGE_SIZE, ...platformParams(platforms) },
+  });
+
+  if (response.status === 202) {
+    return { ready: false, jobId: (response.data as EnqueuedSearchDTO).jobId };
+  }
+  return { ready: true };
+}
+
+async function fetchSearchPage(
+  term: string,
+  platforms: string[],
+  page: number,
+  signal?: AbortSignal
+): Promise<SearchPage> {
+  const { data } = await apiServe.get<SearchPageDTO>("/jobs/search", {
+    signal,
+    params: { query: term, page, pageSize: PAGE_SIZE, ...platformParams(platforms) },
+  });
+
+  const total = data.meta?.total ?? data.data.length;
+  return { jobs: data.data ?? [], page, total, hasMore: page * PAGE_SIZE < total };
 }
 
 async function getSearchStatus(jobId: string, signal?: AbortSignal): Promise<SearchStatusDTO> {
@@ -29,103 +65,92 @@ async function getSearchStatus(jobId: string, signal?: AbortSignal): Promise<Sea
   return data;
 }
 
-/** Polls a queued job until the worker finishes scraping (or it fails / times out). */
-async function waitForJob(jobId: string, signal?: AbortSignal): Promise<void> {
-  const deadline = Date.now() + MAX_WAIT_MS;
-
-  while (Date.now() < deadline) {
-    if (signal?.aborted) throw new Error("aborted");
-
-    const status = await getSearchStatus(jobId, signal);
-    if (status.status === "completed") return;
-    if (status.status === "failed") throw new Error(status.error ?? "A busca falhou");
-
-    await sleep(POLL_INTERVAL_MS);
-  }
-
-  throw new Error("A busca demorou mais do que o esperado");
-}
-
-/**
- * Fetches one page of a search. On a cache miss the first call returns `202`, so
- * we wait for the worker and retry the same page (now a cache hit).
- */
-async function fetchSearchPage(
-  { term, platforms, page }: FetchArgs,
-  signal?: AbortSignal
-): Promise<SearchPage> {
-  const response = await apiServe.get<SearchPageDTO | EnqueuedSearchDTO>("/jobs/search", {
-    signal,
-    params: {
-      query: term,
-      page,
-      pageSize: PAGE_SIZE,
-      ...(platforms.length ? { platforms: platforms.join(",") } : {}),
-    },
-  });
-
-  if (response.status === 202) {
-    await waitForJob((response.data as EnqueuedSearchDTO).jobId, signal);
-    return fetchSearchPage({ term, platforms, page }, signal);
-  }
-
-  const body = response.data as SearchPageDTO;
-  const total = body.meta?.total ?? body.data.length;
-
-  return {
-    jobs: body.data ?? [],
-    page,
-    total,
-    hasMore: page * PAGE_SIZE < total,
-  };
-}
-
 export interface UseSearchJobs {
   jobs: NormalizedJobDTO[];
   total: number;
-  /** The initial search (scrape + first page) is running. */
+  /** The initial search (scrape + first page) is still running. */
   pending: boolean;
   failed: boolean;
+  /** Live per-platform progress while the worker scrapes. */
+  progress?: SearchProgress;
   hasMore: boolean;
   loadingMore: boolean;
   loadMore: () => void;
 }
 
 /**
- * Async job search with infinite pagination. `GET /jobs/search?page=N` returns a
- * page immediately on a cache hit; on a miss it returns a `jobId` that we poll on
- * `GET /jobs/search/status/:jobId` before retrying. `platforms` scopes which
- * sources are scraped; changing the term or platforms starts a fresh search.
+ * Async job search with infinite pagination and live progress.
+ *
+ * 1. `startSearch` fires the search — ready now (cache hit) or a `jobId` to poll.
+ * 2. While queued, `statusQuery` polls `/jobs/search/status/:id` on an interval,
+ *    surfacing `progress` (which platforms have answered) on every tick.
+ * 3. Once the job completes, the results are paged in via `pagesQuery`.
  */
 export function useSearchJobs(term: string, platforms: string[] = []): UseSearchJobs {
   const query = term.trim();
   const enabled = query.length > 0;
   const platformKey = [...platforms].sort().join(",");
+  const queryClient = useQueryClient();
 
-  const infiniteQuery = useInfiniteQuery({
-    queryKey: ["searchJobs", query, platformKey],
-    queryFn: ({ pageParam, signal }) =>
-      fetchSearchPage({ term: query, platforms, page: pageParam }, signal),
-    initialPageParam: 1,
-    getNextPageParam: (last) => (last.hasMore ? last.page + 1 : undefined),
+  const startKey = ["searchJobs", "start", query, platformKey];
+
+  const startQuery = useQuery({
+    queryKey: startKey,
+    queryFn: ({ signal }) => startSearch(query, platforms, signal),
     enabled,
-    retry: (count, error) => count < 1 && error.message !== "aborted",
+    retry: 1,
     staleTime: 60_000,
     gcTime: 0,
   });
 
-  const pages = infiniteQuery.data?.pages ?? [];
+  const jobId = startQuery.data?.jobId;
+  const ready = startQuery.data?.ready === true;
+
+  const statusQuery = useQuery({
+    queryKey: ["searchJobs", "status", jobId],
+    queryFn: ({ signal }) => getSearchStatus(jobId as string, signal),
+    enabled: !!jobId && !ready,
+    gcTime: 0,
+    refetchInterval: (q) => {
+      const status = q.state.data?.status;
+      return status === "completed" || status === "failed" ? false : POLL_INTERVAL_MS;
+    },
+  });
+
+  const jobStatus = statusQuery.data?.status;
+
+  // Once the worker finishes, re-run `startSearch` so it now gets the cached 200.
+  useEffect(() => {
+    if (jobStatus === "completed") {
+      queryClient.invalidateQueries({ queryKey: startKey });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jobStatus, query, platformKey]);
+
+  const pagesQuery = useInfiniteQuery({
+    queryKey: ["searchJobs", "pages", query, platformKey],
+    queryFn: ({ pageParam, signal }) => fetchSearchPage(query, platforms, pageParam, signal),
+    initialPageParam: 1,
+    getNextPageParam: (last) => (last.hasMore ? last.page + 1 : undefined),
+    enabled: enabled && ready,
+    staleTime: 60_000,
+    gcTime: 0,
+  });
+
+  const pages = pagesQuery.data?.pages ?? [];
+  const failed = startQuery.isError || statusQuery.isError || jobStatus === "failed";
 
   return {
     jobs: pages.flatMap((page) => page.jobs),
     total: pages[0]?.total ?? 0,
-    pending: enabled && infiniteQuery.isPending,
-    failed: infiniteQuery.isError,
-    hasMore: !!infiniteQuery.hasNextPage,
-    loadingMore: infiniteQuery.isFetchingNextPage,
+    pending: enabled && !failed && !ready,
+    failed,
+    progress: statusQuery.data?.progress,
+    hasMore: !!pagesQuery.hasNextPage,
+    loadingMore: pagesQuery.isFetchingNextPage,
     loadMore: () => {
-      if (infiniteQuery.hasNextPage && !infiniteQuery.isFetchingNextPage) {
-        infiniteQuery.fetchNextPage();
+      if (pagesQuery.hasNextPage && !pagesQuery.isFetchingNextPage) {
+        pagesQuery.fetchNextPage();
       }
     },
   };

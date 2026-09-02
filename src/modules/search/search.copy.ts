@@ -6,6 +6,7 @@ export const searchCopy = {
   consultingTitle: "Consultando plataformas…",
   statusSearching: "buscando…",
   statusDone: "concluído",
+  statusError: "sem retorno",
   resultsCount: (count: number) =>
     `${count} ${count === 1 ? "vaga encontrada" : "vagas encontradas"}`,
   activeFiltersSummary: (count: number) =>

@@ -8,9 +8,10 @@ import { JobPlatformId, getPlatformMeta } from "~/src/shared/domain/job";
 
 type Props = {
   completed: JobPlatformId[];
+  errored?: JobPlatformId[];
 };
 
-export function PlatformSearchStatus({ completed }: Props) {
+export function PlatformSearchStatus({ completed, errored = [] }: Props) {
   return (
     <YStack bg="$ji-white" borderWidth={1} borderColor="$ji-border-1" rounded={22} p={16} gap={14}>
       <Text variant="cardMeta" fontFamily="$semibold" color="$ji-navy-900">
@@ -20,7 +21,15 @@ export function PlatformSearchStatus({ completed }: Props) {
       <YStack gap={12}>
         {SEARCH_PLATFORMS.map(({ id }) => {
           const meta = getPlatformMeta(id);
-          const done = completed.includes(id);
+          const isError = errored.includes(id);
+          const isDone = completed.includes(id);
+
+          const label = isError
+            ? searchCopy.statusError
+            : isDone
+              ? searchCopy.statusDone
+              : searchCopy.statusSearching;
+          const color = isError ? "$ji-ink-4" : isDone ? "$ji-teal-500" : "$ji-ink-5";
 
           return (
             <XStack key={id} items="center" gap={10}>
@@ -40,8 +49,8 @@ export function PlatformSearchStatus({ completed }: Props) {
                 {meta.name}
               </Text>
 
-              <Text variant="tag" fontSize={11} color={done ? "$ji-teal-500" : "$ji-ink-5"}>
-                {done ? searchCopy.statusDone : searchCopy.statusSearching}
+              <Text variant="tag" fontSize={11} color={color}>
+                {label}
               </Text>
             </XStack>
           );

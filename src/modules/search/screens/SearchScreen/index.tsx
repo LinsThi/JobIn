@@ -1,6 +1,7 @@
 import { ScrollView } from "react-native";
 import { YStack } from "tamagui";
 
+import { useSearchScreen } from "./useSearchScreen";
 import { PlatformSearchStatus } from "../../components/PlatformSearchStatus";
 import { SearchBar } from "../../components/SearchBar";
 import { SearchFilterSheet } from "../../components/SearchFilterSheet";
@@ -10,7 +11,6 @@ import { SearchResults } from "../../components/SearchResults";
 import { SearchResultsHeader } from "../../components/SearchResultsHeader";
 import { SEARCH_H_PADDING, SEARCH_TAB_BAR_CLEARANCE } from "../../search.constants";
 import { searchCopy } from "../../search.copy";
-import { useSearchScreen } from "./useSearchScreen";
 
 export function SearchScreen() {
   const search = useSearchScreen();
@@ -48,7 +48,10 @@ export function SearchScreen() {
               paddingHorizontal: SEARCH_H_PADDING,
               paddingBottom: SEARCH_TAB_BAR_CLEARANCE,
             }}>
-            <PlatformSearchStatus completed={search.completedPlatforms} />
+            <PlatformSearchStatus
+              completed={search.completedPlatforms}
+              errored={search.erroredPlatforms}
+            />
           </ScrollView>
         ) : (
           <SearchResults

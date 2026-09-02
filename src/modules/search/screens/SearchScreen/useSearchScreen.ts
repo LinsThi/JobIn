@@ -72,6 +72,7 @@ export function useSearchScreen() {
     submitted: search.submitted,
     phase: search.phase,
     completedPlatforms: search.completedPlatforms,
+    erroredPlatforms: search.erroredPlatforms,
     results: search.results,
     resultCount: search.resultCount,
     hasMore: search.hasMore,
