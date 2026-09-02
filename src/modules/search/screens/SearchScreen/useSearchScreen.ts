@@ -7,14 +7,12 @@ import { SearchFilters, countActiveFilters } from "../../search.constants";
 import { Job } from "~/src/shared/domain/job";
 import { jobDetailHref } from "~/src/shared/navigation/jobRoute";
 import useRecentSearches from "~/src/shared/store/useRecentSearches";
-import useUserDetails from "~/src/shared/store/useUserDetails";
 
 export function useSearchScreen() {
   const router = useRouter();
 
   const { q } = useLocalSearchParams<{ q?: string }>();
 
-  const setVacantion = useUserDetails((store) => store.actions.handleChangeVacantion);
   const addRecentSearch = useRecentSearches((store) => store.actions.addSearch);
 
   const search = useJobSearch();
@@ -25,13 +23,13 @@ export function useSearchScreen() {
       const trimmed = term.trim();
 
       search.setQuery(trimmed);
-      if (trimmed) {
-        addRecentSearch(trimmed);
-        setVacantion(trimmed);
-      }
+      // Note: this screen deliberately does not write `vacantionRequired` — that
+      // store value drives the Home tab's legacy `/jobSearch` query, and typing
+      // here should not trigger a Home refetch.
+      if (trimmed) addRecentSearch(trimmed);
       search.runSearch(trimmed);
     },
-    [search, addRecentSearch, setVacantion]
+    [search, addRecentSearch]
   );
 
   // Run a search only when Home hands us an explicit `q` (a tapped recent
@@ -75,6 +73,10 @@ export function useSearchScreen() {
     phase: search.phase,
     completedPlatforms: search.completedPlatforms,
     results: search.results,
+    resultCount: search.resultCount,
+    hasMore: search.hasMore,
+    loadingMore: search.loadingMore,
+    loadMore: search.loadMore,
     filters: search.filters,
     activeFilterCount: countActiveFilters(search.filters),
     filtersOpen,

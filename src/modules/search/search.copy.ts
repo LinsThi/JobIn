@@ -13,6 +13,8 @@ export const searchCopy = {
   allPlatformsSummary: "Várias plataformas",
   emptyTitle: "Nenhuma vaga com esses filtros",
   emptyBody: "Tente ampliar a faixa salarial ou incluir mais plataformas.",
+  idleTitle: "Busque uma oportunidade agora",
+  idleBody: "Escolha os filtros da maneira que você quiser e encontre a oportunidade perfeita.",
   speedLabel: {
     fast: "Resposta rápida",
     mid: "Tempo médio",

@@ -4,6 +4,7 @@
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start --dev-client",
+    "start:usb": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:3333 tcp:3333 && cross-env REACT_NATIVE_PACKAGER_HOSTNAME=localhost expo start --dev-client",
     "ios": "expo run:ios",
     "android": "expo run:android",
     "build:dev": "eas build --profile development",
@@ -51,6 +52,7 @@
     "@types/react": "~19.2.10",
     "@typescript-eslint/eslint-plugin": "^7.7.0",
     "@typescript-eslint/parser": "^7.7.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-config-universe": "^12.0.1",
     "prettier": "^3.2.5",

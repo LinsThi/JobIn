@@ -1,35 +1,43 @@
+import { ActivityIndicator, FlatList } from "react-native";
 import { YStack } from "tamagui";
 
+import { SEARCH_H_PADDING, SEARCH_TAB_BAR_CLEARANCE } from "../../search.constants";
 import { searchCopy } from "../../search.copy";
+import { SearchPlaceholder } from "../SearchPlaceholder";
 
 import { JobCard } from "~/src/shared/components/JobCard";
-import { Text } from "~/src/shared/components/ui/Text";
 import { Job } from "~/src/shared/domain/job";
 
 type Props = {
   results: Job[];
   onPressJob: (job: Job) => void;
+  onEndReached: () => void;
+  loadingMore: boolean;
 };
 
-export function SearchResults({ results, onPressJob }: Props) {
-  if (results.length === 0) {
-    return (
-      <YStack items="center" py={44} px={20} gap={6}>
-        <Text variant="section" style={{ textAlign: "center" }}>
-          {searchCopy.emptyTitle}
-        </Text>
-        <Text variant="subtitle" style={{ textAlign: "center" }}>
-          {searchCopy.emptyBody}
-        </Text>
-      </YStack>
-    );
-  }
-
+export function SearchResults({ results, onPressJob, onEndReached, loadingMore }: Props) {
   return (
-    <YStack gap={11}>
-      {results.map((job) => (
-        <JobCard key={job.id} job={job} onPress={onPressJob} />
-      ))}
-    </YStack>
+    <FlatList
+      data={results}
+      style={{ flex: 1 }}
+      keyExtractor={(job) => job.id}
+      renderItem={({ item }) => <JobCard job={item} onPress={onPressJob} />}
+      ItemSeparatorComponent={() => <YStack height={11} />}
+      contentContainerStyle={{
+        paddingHorizontal: SEARCH_H_PADDING,
+        paddingBottom: SEARCH_TAB_BAR_CLEARANCE,
+        flexGrow: 1,
+      }}
+      showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
+      onEndReached={onEndReached}
+      onEndReachedThreshold={0.6}
+      ListEmptyComponent={
+        <SearchPlaceholder title={searchCopy.emptyTitle} body={searchCopy.emptyBody} />
+      }
+      ListFooterComponent={
+        loadingMore ? <ActivityIndicator style={{ marginTop: 18 }} color="#219EBC" /> : null
+      }
+    />
   );
 }

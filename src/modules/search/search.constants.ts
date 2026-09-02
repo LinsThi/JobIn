@@ -1,4 +1,7 @@
-import { JobPlatformId } from "~/src/shared/domain/job";
+import { Job, JobPlatformId } from "~/src/shared/domain/job";
+
+/** A search result carries its UF so the location filter can match it. */
+export type SearchJob = Job & { state: string };
 
 export const WORK_MODELS = ["Remoto", "Híbrido", "Presencial"] as const;
 export const CONTRACT_TYPES = ["CLT", "PJ"] as const;
@@ -34,8 +37,15 @@ export const SEARCH_PLATFORMS: { id: JobPlatformId; speed: PlatformSpeed }[] = [
   { id: "trabalhabrasil", speed: "slow" },
 ];
 
+/** All platform ids, in query order. */
+export const ALL_PLATFORM_IDS: JobPlatformId[] = SEARCH_PLATFORMS.map((platform) => platform.id);
+
 /** Stagger between platform "concluído" ticks while a search runs. */
 export const SEARCH_STEP_MS = 380;
+
+/** Screen layout. */
+export const SEARCH_H_PADDING = 20;
+export const SEARCH_TAB_BAR_CLEARANCE = 120;
 
 export type SearchFilters = {
   workModels: string[];
@@ -48,16 +58,20 @@ export type SearchFilters = {
 export const EMPTY_FILTERS: SearchFilters = {
   workModels: [],
   contracts: [],
-  platforms: [],
+  platforms: [...ALL_PLATFORM_IDS],
   states: [],
   salaryMin: 0,
 };
 
 export function countActiveFilters(filters: SearchFilters): number {
+  // Every platform selected is the default, so it doesn't count as an active filter.
+  const platformCount =
+    filters.platforms.length === ALL_PLATFORM_IDS.length ? 0 : filters.platforms.length;
+
   return (
     filters.workModels.length +
     filters.contracts.length +
-    filters.platforms.length +
+    platformCount +
     filters.states.length +
     (filters.salaryMin > 0 ? 1 : 0)
   );
