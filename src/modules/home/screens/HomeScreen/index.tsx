@@ -1,10 +1,10 @@
+import { useHomeScreen } from "./useHomeScreen";
 import { HomeGreeting } from "../../components/HomeGreeting";
 import { HomeHeader } from "../../components/HomeHeader";
 import { NewJobsFound } from "../../components/NewJobsFound";
 import { RecentSearches } from "../../components/RecentSearches";
 import { RecommendedJobs } from "../../components/RecommendedJobs";
 import { SearchJobsButton } from "../../components/SearchJobsButton";
-import { useHomeScreen } from "./useHomeScreen";
 
 import { Screen } from "~/src/shared/components/ui/Screen";
 

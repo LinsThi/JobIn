@@ -6,6 +6,7 @@ import { DEFAULT_USER_NAME, NEW_JOBS_PREVIEW_COUNT } from "../../home.constants"
 import { useRecommendedJobs } from "../../hooks/useRecommendedJobs";
 
 import { Job, toJob } from "~/src/shared/domain/job";
+import { jobDetailHref } from "~/src/shared/navigation/jobRoute";
 import { useQueryGetVacantionsAddRecently } from "~/src/shared/queries/useQueryGetVacantionsAddRecently";
 import useRecentSearches from "~/src/shared/store/useRecentSearches";
 import useUserDetails from "~/src/shared/store/useUserDetails";
@@ -44,10 +45,12 @@ export function useHomeScreen() {
     [addSearch, changeVacantion, router]
   );
 
-  const openJob = useCallback((job: Job) => {
-    // TODO: navigate to the job detail screen once it exists.
-    if (__DEV__) console.log("[home] open job", job.id);
-  }, []);
+  const openJob = useCallback(
+    (job: Job) => {
+      router.push(jobDetailHref(job));
+    },
+    [router]
+  );
 
   const onPressBell = useCallback(() => {
     // TODO: open the notifications screen once it exists.

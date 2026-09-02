@@ -63,7 +63,7 @@ const useUserDetails = create<StoreProps>()(
             },
           }));
 
-          showCustomToast(alreadySaved ? "Vaga removida das salvas" : "Vaga salva em Vagas salvas");
+          showCustomToast(alreadySaved ? "Vaga removida das salvas" : "Vaga salva com sucesso");
         },
         isJobSaved: (jobId: string) => {
           return get().state.savedJobs.some((savedJob) => savedJob.id === jobId);

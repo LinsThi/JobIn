@@ -33,6 +33,19 @@ export const Text = styled(TamaguiText, {
         lineHeight: lineHeight.display,
         letterSpacing: letterSpacing.display,
       },
+      titleLg: {
+        fontFamily: "$semibold",
+        fontSize: size["title-lg"],
+        lineHeight: lineHeight["title-lg"],
+        letterSpacing: letterSpacing["title-lg"],
+      },
+      money: {
+        fontFamily: "$bold",
+        fontSize: size.money,
+        lineHeight: lineHeight.money,
+        letterSpacing: letterSpacing.money,
+        color: "$ji-navy-700",
+      },
       subtitle: {
         fontFamily: "$regular",
         fontSize: size.body,

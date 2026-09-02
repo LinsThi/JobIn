@@ -34,13 +34,13 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <TamaguiProvider defaultTheme="light">
           <SafeAreaView
-            style={{ flex: 1, backgroundColor: theme.colors.background, }}
-
+            style={{ flex: 1, backgroundColor: theme.colors.background }}
             edges={["top"]}>
             <BottomPlatform ref={bottomSheetRef} />
 
             <Stack initialRouteName="(tabs)" screenOptions={{ headerShown: false }}>
               <Screen name="(tabs)" />
+              <Screen name="job/[id]" options={{ animation: "slide_from_right" }} />
             </Stack>
           </SafeAreaView>
 

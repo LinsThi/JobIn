@@ -1,4 +1,4 @@
-import Feather from "@expo/vector-icons/Feather";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "react-native";
 import { XStack, YStack } from "tamagui";
 
@@ -77,7 +77,11 @@ export function JobCard({ job, onPress, showSave = true }: Props) {
 
         {showSave ? (
           <IconButton size={34} tone={saved ? "fill" : "surface"} onPress={() => onToggleSave()}>
-            <Feather name="bookmark" size={14} color={saved ? "#219EBC" : "#4A7C90"} />
+            <Ionicons
+              name={saved ? "bookmark" : "bookmark-outline"}
+              size={14}
+              color={saved ? "#219EBC" : "#4A7C90"}
+            />
           </IconButton>
         ) : null}
       </XStack>
