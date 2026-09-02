@@ -50,6 +50,20 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      <Screen
+        name="saved"
+        options={{
+          title: "Vagas salvas",
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon
+              name="saved"
+              color={focused ? TAB_ACTIVE : TAB_INACTIVE}
+              focused={focused}
+            />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
