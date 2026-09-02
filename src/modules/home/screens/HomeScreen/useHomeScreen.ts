@@ -40,7 +40,7 @@ export function useHomeScreen() {
     (term: string) => {
       addSearch(term);
       changeVacantion(term);
-      router.push("/search");
+      router.push({ pathname: "/search", params: { q: term } });
     },
     [addSearch, changeVacantion, router]
   );
