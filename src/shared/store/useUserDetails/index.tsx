@@ -2,6 +2,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { Job } from "~/src/shared/domain/job";
 import { PlataformProps } from "~/src/shared/utils/platforms";
 import { showCustomToast } from "~/src/shared/utils/toast";
 import { StoreProps, initialStateUserDetails } from "./@types";
@@ -49,41 +50,23 @@ const useUserDetails = create<StoreProps>()(
 
           showCustomToast("Plataformas atualizadas");
         },
-        handleSaveVacantion: (vacantion) => {
-          const vacantionSaved = get().state.vacantionSaved;
-
-          if (
-            !vacantionSaved.find(
-              (currentVacantion) =>
-                currentVacantion.vacationTitle === vacantion.vacationTitle &&
-                currentVacantion.companyName === vacantion.companyName
-            )
-          ) {
-            set((prevState) => ({
-              state: {
-                ...prevState.state,
-                vacantionSaved: [...vacantionSaved, vacantion],
-              },
-            }));
-
-            showCustomToast("Oportunidade salva");
-          }
-        },
-        handleUnsaveVacantion: (vacantion) => {
-          const vacantionSaved = get().state.vacantionSaved;
+        toggleSavedJob: (job: Job) => {
+          const savedJobs = get().state.savedJobs;
+          const alreadySaved = savedJobs.some((savedJob) => savedJob.id === job.id);
 
           set((prevState) => ({
             state: {
               ...prevState.state,
-              vacantionSaved: vacantionSaved.filter(
-                (vacantionSaved) =>
-                  vacantionSaved.vacationTitle !== vacantion.vacationTitle &&
-                  vacantionSaved.companyName !== vacantion.companyName
-              ),
+              savedJobs: alreadySaved
+                ? savedJobs.filter((savedJob) => savedJob.id !== job.id)
+                : [job, ...savedJobs],
             },
           }));
 
-          showCustomToast("Oportunidade removida dos salvos");
+          showCustomToast(alreadySaved ? "Vaga removida das salvas" : "Vaga salva em Vagas salvas");
+        },
+        isJobSaved: (jobId: string) => {
+          return get().state.savedJobs.some((savedJob) => savedJob.id === jobId);
         },
         verifyIfPlatformIsFollowed: (platform: PlataformProps) => {
           const followedPlatforms = get().state.platformsFollowed;
@@ -92,25 +75,21 @@ const useUserDetails = create<StoreProps>()(
             (followedPlatform) => followedPlatform.name === platform.name
           );
         },
-        verifyIfVacantionIsSaved: (vacantion) => {
-          const vacantionSaved = get().state.vacantionSaved;
-
-          return !!vacantionSaved.find(
-            (vacantionSaved) =>
-              vacantionSaved.vacationTitle === vacantion.vacationTitle &&
-              vacantionSaved.companyName === vacantion.companyName
-          );
-        },
       },
     }),
     {
       name: "@JobIn:userDetails",
       storage: createJSONStorage(() => AsyncStorage),
       merge: (persistedState, currentState) => {
-        const { state } = persistedState as StoreProps;
+        const persisted = (persistedState as Partial<StoreProps> | undefined) ?? {};
+        const state = persisted.state ?? initialStateUserDetails;
 
         return {
-          state,
+          state: {
+            vacantionRequired: state.vacantionRequired ?? "",
+            platformsFollowed: state.platformsFollowed ?? [],
+            savedJobs: state.savedJobs ?? [],
+          },
           actions: currentState.actions,
         };
       },

@@ -51,30 +51,42 @@ const bold = createFont({
   },
 });
 
+const { colors } = theme;
+
 export const config = createTamagui({
   ...defaultConfig,
-  themeClassName: "tamagui",
   themes: {
     ...defaultConfig.themes,
+    // Theme values are raw hex on purpose: `"$token"` references inside a theme
+    // are resolved against other *theme* keys, not the color tokens, so they
+    // would silently fail to dereference here.
     light: {
       ...defaultConfig.themes.light,
-      background: "$ji-bg-app",
-      color: "$ji-navy-900",
-      text: "$ji-navy-900",
-      card: "$ji-white",
-      borderColor: "$ji-border-1",
-      primary: "$ji-teal-500",
-      primaryStrong: "$ji-teal-700",
+      background: colors["ji-bg-app"],
+      backgroundStrong: colors["ji-bg-page"],
+      color: colors["ji-navy-900"],
+      colorPress: colors["ji-navy-700"],
+      text: colors["ji-navy-900"],
+      textMuted: colors["ji-ink-4"],
+      card: colors["ji-white"],
+      borderColor: colors["ji-border-1"],
+      borderColorHover: colors["ji-border-2"],
+      primary: colors["ji-teal-500"],
+      primaryStrong: colors["ji-teal-700"],
     },
     dark: {
       ...defaultConfig.themes.dark,
-      background: "$ji-navy-900",
-      color: "$ji-white",
-      text: "$ji-white",
-      card: "$ji-navy-600",
-      borderColor: "$ji-ink-3",
-      primary: "$ji-teal-400",
-      primaryStrong: "$ji-amber-500",
+      background: colors["ji-navy-900"],
+      backgroundStrong: colors["ji-navy-700"],
+      color: colors["ji-white"],
+      colorPress: colors["ji-blue-200"],
+      text: colors["ji-white"],
+      textMuted: colors["ji-ink-on-dark-muted"],
+      card: colors["ji-navy-600"],
+      borderColor: colors["ji-ink-3"],
+      borderColorHover: colors["ji-ink-4"],
+      primary: colors["ji-teal-400"],
+      primaryStrong: colors["ji-amber-500"],
     },
   },
   tokens: {
@@ -90,6 +102,7 @@ export const config = createTamagui({
     },
 
     size: {
+      ...defaultConfig.tokens.size,
       ...theme.sizes.space,
     },
 

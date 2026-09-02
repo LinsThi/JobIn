@@ -31,6 +31,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "backgroundColor": "#F5FAFC",
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,

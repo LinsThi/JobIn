@@ -1,10 +1,10 @@
 import { PlataformProps } from "../../../utils/platforms";
 
-import { IVacationProps } from "~/src/shared/types/vacantion";
+import { Job } from "~/src/shared/domain/job";
 
 export type StateProps = {
   vacantionRequired: string;
-  vacantionSaved: IVacationProps[];
+  savedJobs: Job[];
   platformsFollowed: PlataformProps[];
 };
 
@@ -12,10 +12,9 @@ export type ActionProps = {
   handleChangeVacantion: (vacantion: string) => void;
   handleFollowPlatform: (platform: PlataformProps) => void;
   handleUnfollowPlatform: (platform: PlataformProps) => void;
-  handleSaveVacantion: (vacantion: IVacationProps) => void;
-  handleUnsaveVacantion: (vacantion: IVacationProps) => void;
+  toggleSavedJob: (job: Job) => void;
+  isJobSaved: (jobId: string) => boolean;
   verifyIfPlatformIsFollowed: (platform: PlataformProps) => boolean;
-  verifyIfVacantionIsSaved: (vacantion: IVacationProps) => boolean;
 };
 
 export type StoreProps = {
@@ -26,5 +25,5 @@ export type StoreProps = {
 export const initialStateUserDetails: StateProps = {
   vacantionRequired: "",
   platformsFollowed: [],
-  vacantionSaved: [],
+  savedJobs: [],
 };
