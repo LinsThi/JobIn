@@ -44,7 +44,7 @@ export function toJob(vacation: IVacationProps): Job {
     platformId,
     platformMono: platform.mono,
     platformColor: platform.color,
-    postedAtLabel: vacation.createdAt || "",
+    postedAtLabel: postedAtLabel(vacation.createdAt),
     description: vacation.vacantionDescription || undefined,
     requirements: vacation.vacantionRequirements ?? [],
     benefits: vacation.vacantionBenefits ?? [],

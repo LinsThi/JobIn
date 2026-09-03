@@ -1,35 +1,13 @@
-import {
-  Poppins_400Regular,
-  Poppins_500Medium,
-  Poppins_600SemiBold,
-  Poppins_700Bold,
-  useFonts,
-} from "@expo-google-fonts/poppins";
 import { Redirect } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
 
-SplashScreen.preventAutoHideAsync();
+import useAuth from "~/src/shared/store/useAuth";
 
-export default function App() {
-  const [fontsLoaded, error] = useFonts({
-    Poppins_400Regular,
-    Poppins_500Medium,
-    Poppins_600SemiBold,
-    Poppins_700Bold,
+export default function Index() {
+  const status = useAuth((store) => store.state.status);
 
-    unset: Poppins_400Regular,
-  });
+  if (status === "signedOut") return <Redirect href="/(auth)/sign-in" />;
+  if (status === "needsProfile") return <Redirect href="/profile" />;
+  if (status === "ready") return <Redirect href="/(tabs)" />;
 
-  useEffect(() => {
-    if (fontsLoaded || error) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, error]);
-
-  if (!fontsLoaded && !error) {
-    return null;
-  }
-
-  return <Redirect href="/(tabs)" />;
+  return null;
 }

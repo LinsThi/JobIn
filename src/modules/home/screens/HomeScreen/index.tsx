@@ -13,7 +13,11 @@ export function HomeScreen() {
 
   return (
     <Screen scrollRef={home.scrollRef}>
-      <HomeHeader onPressBell={home.onPressBell} hasNotifications={home.hasNotifications} />
+      <HomeHeader
+        onPressBell={home.onPressBell}
+        onPressProfile={home.onPressProfile}
+        hasNotifications={home.hasNotifications}
+      />
 
       <HomeGreeting />
 

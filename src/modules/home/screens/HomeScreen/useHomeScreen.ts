@@ -56,6 +56,10 @@ export function useHomeScreen() {
     // TODO: open the notifications screen once it exists.
   }, []);
 
+  const onPressProfile = useCallback(() => {
+    router.push("/profile");
+  }, [router]);
+
   return {
     scrollRef,
     userName: DEFAULT_USER_NAME,
@@ -69,5 +73,6 @@ export function useHomeScreen() {
     clearRecent: clearSearches,
     openJob,
     onPressBell,
+    onPressProfile,
   };
 }

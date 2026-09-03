@@ -8,10 +8,11 @@ import { Text } from "~/src/shared/components/ui/Text";
 
 type Props = {
   onPressBell: () => void;
+  onPressProfile: () => void;
   hasNotifications?: boolean;
 };
 
-export function HomeHeader({ onPressBell, hasNotifications = false }: Props) {
+export function HomeHeader({ onPressBell, onPressProfile, hasNotifications = false }: Props) {
   return (
     <XStack items="center" justify="space-between">
       <XStack items="center" gap={10}>
@@ -25,9 +26,15 @@ export function HomeHeader({ onPressBell, hasNotifications = false }: Props) {
         </YStack>
       </XStack>
 
-      <IconButton onPress={onPressBell} badge={hasNotifications}>
-        <Feather name="bell" size={17} color="#023047" />
-      </IconButton>
+      <XStack items="center" gap={10}>
+        <IconButton onPress={onPressBell} badge={hasNotifications}>
+          <Feather name="bell" size={17} color="#023047" />
+        </IconButton>
+
+        <IconButton onPress={onPressProfile}>
+          <Feather name="user" size={17} color="#023047" />
+        </IconButton>
+      </XStack>
     </XStack>
   );
 }
