@@ -79,5 +79,7 @@ export function normalizedJobToJob(dto: NormalizedJobDTO): Job {
     benefits: dto.benefits ?? [],
     url: dto.url || undefined,
     accent: platform.accent,
+    matchScore: dto.match?.score,
+    matchedSkills: dto.match?.matchedSkills,
   };
 }

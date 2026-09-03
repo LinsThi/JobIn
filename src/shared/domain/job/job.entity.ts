@@ -29,6 +29,10 @@ export interface Job {
   url?: string;
   /** Hero-card colors, derived from the platform. */
   accent: JobAccent;
+  /** Skill-match score (0–100) when the search factored in the user's skills. */
+  matchScore?: number;
+  /** Which of the user's skills this job mentions. */
+  matchedSkills?: string[];
 }
 
 export function getJobInitial(job: Pick<Job, "company" | "title">): string {

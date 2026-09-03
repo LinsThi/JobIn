@@ -22,7 +22,6 @@ export const homeCopy = {
   recentTitle: "Pesquisas recentes",
   recentClear: "Limpar",
   recommendedTitle: "Recomendados para você",
-  recommendedAction: "Ver todos",
   newJobsTitle: "Novos empregos encontrados",
   newJobsAction: "Ver mais",
 };

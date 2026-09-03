@@ -9,6 +9,15 @@
  * `Job` before handing anything to the UI.
  */
 
+/** Skill-match summary, present only when the request carried a `skills` param. */
+export interface JobMatchDTO {
+  /** 0–100. With only desired skills it lands in 70–100 (70 = no skill hit). */
+  score: number;
+  matchedSkills: string[];
+  missingRequiredSkills: string[];
+  explanation: string;
+}
+
 export interface NormalizedJobDTO {
   id: string;
   title: string;
@@ -33,6 +42,7 @@ export interface NormalizedJobDTO {
   url: string;
   platform: string;
   publishedAt?: string;
+  match?: JobMatchDTO;
 }
 
 export type SearchSourceStatus = {

@@ -31,8 +31,8 @@ export function HomeScreen() {
 
       <RecommendedJobs
         jobs={home.recommendedJobs}
+        loading={home.newJobsLoading}
         onPressJob={home.openJob}
-        onSeeAll={home.goToSearch}
       />
 
       <NewJobsFound
