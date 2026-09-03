@@ -9,6 +9,7 @@ import {
 } from "../search.constants";
 
 import { JobPlatformId, normalizePlatformId, normalizedJobToJob } from "~/src/shared/domain/job";
+import { useProfile } from "~/src/shared/queries/useProfile";
 import { useSearchJobs } from "~/src/shared/queries/useSearchJobs";
 import { NormalizedJobDTO, SearchProgress } from "~/src/shared/queries/useSearchJobs/types";
 import { showCustomToast } from "~/src/shared/utils/toast";
@@ -69,6 +70,8 @@ export function useJobSearch() {
     [filters.platforms]
   );
 
+  const { profile } = useProfile();
+
   const {
     jobs: rawJobs,
     total,
@@ -78,7 +81,7 @@ export function useJobSearch() {
     hasMore,
     loadingMore,
     loadMore,
-  } = useSearchJobs(submitted, platformScope);
+  } = useSearchJobs(submitted, platformScope, profile.skills);
 
   const { done: completedPlatforms, errored: erroredPlatforms } = useMemo(
     () => splitProgress(progress),

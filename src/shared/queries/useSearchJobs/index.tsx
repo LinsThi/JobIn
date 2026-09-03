@@ -21,8 +21,15 @@ interface SearchPage {
   hasMore: boolean;
 }
 
-function platformParams(platforms: string[]) {
-  return platforms.length ? { platforms: platforms.join(",") } : {};
+function searchParams(term: string, platforms: string[], skills: string[]) {
+  return {
+    query: term,
+    pageSize: PAGE_SIZE,
+    ...(platforms.length ? { platforms: platforms.join(",") } : {}),
+    // Sent so a search for a tracked category shares its result cache with the
+    // Home feed (which always scores by skills).
+    ...(skills.length ? { skills: skills.join(",") } : {}),
+  };
 }
 
 /**
@@ -32,11 +39,12 @@ function platformParams(platforms: string[]) {
 async function startSearch(
   term: string,
   platforms: string[],
+  skills: string[],
   signal?: AbortSignal
 ): Promise<{ ready: boolean; jobId?: string }> {
   const response = await apiServe.get<SearchPageDTO | EnqueuedSearchDTO>("/jobs/search", {
     signal,
-    params: { query: term, page: 1, pageSize: PAGE_SIZE, ...platformParams(platforms) },
+    params: { ...searchParams(term, platforms, skills), page: 1 },
   });
 
   if (response.status === 202) {
@@ -48,12 +56,13 @@ async function startSearch(
 async function fetchSearchPage(
   term: string,
   platforms: string[],
+  skills: string[],
   page: number,
   signal?: AbortSignal
 ): Promise<SearchPage> {
   const { data } = await apiServe.get<SearchPageDTO>("/jobs/search", {
     signal,
-    params: { query: term, page, pageSize: PAGE_SIZE, ...platformParams(platforms) },
+    params: { ...searchParams(term, platforms, skills), page },
   });
 
   const total = data.meta?.total ?? data.data.length;
@@ -86,17 +95,26 @@ export interface UseSearchJobs {
  *    surfacing `progress` (which platforms have answered) on every tick.
  * 3. Once the job completes, the results are paged in via `pagesQuery`.
  */
-export function useSearchJobs(term: string, platforms: string[] = []): UseSearchJobs {
+export function useSearchJobs(
+  term: string,
+  platforms: string[] = [],
+  skills: string[] = []
+): UseSearchJobs {
   const query = term.trim();
   const enabled = query.length > 0;
   const platformKey = [...platforms].sort().join(",");
+  const skillKey = [...skills]
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean)
+    .sort()
+    .join(",");
   const queryClient = useQueryClient();
 
-  const startKey = ["searchJobs", "start", query, platformKey];
+  const startKey = ["searchJobs", "start", query, platformKey, skillKey];
 
   const startQuery = useQuery({
     queryKey: startKey,
-    queryFn: ({ signal }) => startSearch(query, platforms, signal),
+    queryFn: ({ signal }) => startSearch(query, platforms, skills, signal),
     enabled,
     retry: 1,
     staleTime: 60_000,
@@ -125,11 +143,12 @@ export function useSearchJobs(term: string, platforms: string[] = []): UseSearch
       queryClient.invalidateQueries({ queryKey: startKey });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jobStatus, query, platformKey]);
+  }, [jobStatus, query, platformKey, skillKey]);
 
   const pagesQuery = useInfiniteQuery({
-    queryKey: ["searchJobs", "pages", query, platformKey],
-    queryFn: ({ pageParam, signal }) => fetchSearchPage(query, platforms, pageParam, signal),
+    queryKey: ["searchJobs", "pages", query, platformKey, skillKey],
+    queryFn: ({ pageParam, signal }) =>
+      fetchSearchPage(query, platforms, skills, pageParam, signal),
     initialPageParam: 1,
     getNextPageParam: (last) => (last.hasMore ? last.page + 1 : undefined),
     enabled: enabled && ready,
