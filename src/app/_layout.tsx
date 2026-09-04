@@ -22,6 +22,7 @@ import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/
 import TamaguiProvider from "~/src/shared/components/TamaguiProvider";
 import { useProfile } from "~/src/shared/queries/useProfile";
 import useAuth from "~/src/shared/store/useAuth";
+import { useSafeAreaBackground } from "~/src/shared/store/useSafeAreaBackground";
 import theme from "~/src/shared/theme";
 import { toastConfig } from "~/src/shared/utils/toast";
 
@@ -77,6 +78,7 @@ export default function RootLayout() {
   } = useBottomPlatform();
 
   const authStatus = useAuth((store) => store.state.status);
+  const safeAreaBackground = useSafeAreaBackground((store) => store.state.backgroundColor);
   const bottomSheetRef = useRef(null);
 
   const [fontsLoaded, fontError] = useFonts({
@@ -110,9 +112,7 @@ export default function RootLayout() {
         <TamaguiProvider defaultTheme="light">
           <AuthGate />
 
-          <SafeAreaView
-            style={{ flex: 1, backgroundColor: theme.colors.background }}
-            edges={["top"]}>
+          <SafeAreaView style={{ flex: 1, backgroundColor: safeAreaBackground }} edges={["top"]}>
             <BottomPlatform ref={bottomSheetRef} />
 
             <RootNavigator />

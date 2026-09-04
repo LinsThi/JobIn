@@ -1,60 +1,45 @@
-import { TextInput } from "react-native";
+import Feather from "@expo/vector-icons/Feather";
 import { YStack } from "tamagui";
 
 import { useSignInScreen } from "./useSignInScreen";
 import { authCopy } from "../../auth.copy";
-import { AuthLayout } from "../../components/AuthLayout";
+import { AuthLegalNotice } from "../../components/AuthLegalNotice";
+import { EmailField } from "../../components/EmailField";
+import { SignInHero } from "../../components/SignInHero";
+import { SignInLayout } from "../../components/SignInLayout";
 
 import { Button } from "~/src/shared/components/ui/Button";
-import { Text } from "~/src/shared/components/ui/Text";
+import { useScreenBackground } from "~/src/shared/hooks/useScreenBackground";
 import colors from "~/src/shared/theme/colors";
 
 export function SignInScreen() {
   const { email, onChangeEmail, error, loading, canSubmit, onSubmit } = useSignInScreen();
 
+  // The rest of the app sits on `$ji-bg-app`; this screen is the white hero,
+  // so the status-bar strip above it needs to match while it's focused.
+  useScreenBackground(colors["ji-navy-700"]);
+
   return (
-    <AuthLayout title={authCopy.signIn.title} subtitle={authCopy.signIn.subtitle}>
-      <YStack gap={10}>
-        <Text variant="eyebrow">{authCopy.signIn.emailLabel}</Text>
+    <SignInLayout>
+      <SignInHero />
 
-        <TextInput
-          value={email}
-          onChangeText={onChangeEmail}
-          onSubmitEditing={onSubmit}
-          placeholder={authCopy.signIn.emailPlaceholder}
-          placeholderTextColor={colors["ji-ink-5"]}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-          autoComplete="email"
-          returnKeyType="send"
-          style={{
-            height: 48,
-            borderRadius: 14,
-            borderWidth: 1,
-            borderColor: error ? colors["ji-orange-500"] : colors["ji-border-2"],
-            backgroundColor: colors["ji-white"],
-            paddingHorizontal: 14,
-            fontFamily: "Poppins_500Medium",
-            fontSize: 14,
-            color: colors["ji-navy-900"],
-          }}
-        />
+      <YStack style={{ flex: 1, justifyContent: "center" }}>
+        <EmailField value={email} onChangeText={onChangeEmail} onSubmit={onSubmit} error={error} />
 
-        {error ? (
-          <Text variant="cardMeta" color="$ji-orange-500">
-            {error}
-          </Text>
-        ) : null}
+        <YStack style={{ marginTop: 20, marginBottom: 20 }}>
+          <Button
+            label={loading ? authCopy.signIn.submitting : authCopy.signIn.submit}
+            onPress={onSubmit}
+            disabled={!canSubmit}
+            loading={loading}
+            iconPosition="end"
+            icon={<Feather name="arrow-right" size={16} color={colors["ji-white"]} />}
+          />
+        </YStack>
       </YStack>
 
-      <Button
-        label={loading ? authCopy.signIn.submitting : authCopy.signIn.submit}
-        onPress={onSubmit}
-        disabled={!canSubmit}
-        loading={loading}
-      />
-    </AuthLayout>
+      <AuthLegalNotice />
+    </SignInLayout>
   );
 }
 

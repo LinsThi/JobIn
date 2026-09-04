@@ -27,9 +27,9 @@ export function HomeHeader({ onPressBell, onPressProfile, hasNotifications = fal
       </XStack>
 
       <XStack items="center" gap={10}>
-        <IconButton onPress={onPressBell} badge={hasNotifications}>
+        {/* <IconButton onPress={onPressBell} badge={hasNotifications}>
           <Feather name="bell" size={17} color="#023047" />
-        </IconButton>
+        </IconButton> */}
 
         <IconButton onPress={onPressProfile}>
           <Feather name="user" size={17} color="#023047" />

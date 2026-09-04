@@ -11,6 +11,8 @@ type Props = {
   loading?: boolean;
   variant?: "primary" | "ghost";
   icon?: ReactNode;
+  /** Which side `icon` renders on. Defaults to before the label. */
+  iconPosition?: "start" | "end";
 };
 
 /** Full-width pill action. `primary` = teal fill, `ghost` = text only. */
@@ -21,6 +23,7 @@ export function Button({
   loading = false,
   variant = "primary",
   icon,
+  iconPosition = "start",
 }: Props) {
   const inert = disabled || loading;
   const isGhost = variant === "ghost";
@@ -40,10 +43,11 @@ export function Button({
         <ActivityIndicator color={isGhost ? "#219EBC" : "#FFFFFF"} />
       ) : (
         <>
-          {icon}
+          {icon && iconPosition === "start" ? icon : null}
           <Text variant="button" color={isGhost ? "$ji-teal-500" : "$ji-white"}>
             {label}
           </Text>
+          {icon && iconPosition === "end" ? icon : null}
         </>
       )}
     </XStack>

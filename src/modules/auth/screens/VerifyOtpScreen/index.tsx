@@ -1,11 +1,9 @@
-import { YStack } from "tamagui";
-
 import { useVerifyOtpScreen } from "./useVerifyOtpScreen";
 import { authCopy } from "../../auth.copy";
 import { AuthLayout } from "../../components/AuthLayout";
-import { OtpInput } from "../../components/OtpInput";
+import { OtpField } from "../../components/OtpField";
+import { VerifyOtpActions } from "../../components/VerifyOtpActions";
 
-import { Button } from "~/src/shared/components/ui/Button";
 import { Text } from "~/src/shared/components/ui/Text";
 
 export function VerifyOtpScreen() {
@@ -26,32 +24,31 @@ export function VerifyOtpScreen() {
   return (
     <AuthLayout
       title={authCopy.verify.title}
-      subtitle={authCopy.verify.subtitle(email)}
-      onBack={goBack}>
-      <YStack gap={12}>
-        <OtpInput value={code} onChange={onChangeCode} onComplete={onComplete} disabled={loading} />
-
-        {error ? (
-          <Text variant="cardMeta" color="$ji-orange-500">
-            {error}
+      subtitle={
+        <>
+          {authCopy.verify.subtitlePrefix}
+          <Text variant="subtitle" fontFamily="$semibold" color="$ji-navy-600">
+            {email}
           </Text>
-        ) : null}
-      </YStack>
+          {authCopy.verify.subtitleSuffix}
+        </>
+      }
+      onBack={goBack}>
+      <OtpField
+        value={code}
+        onChange={onChangeCode}
+        onComplete={onComplete}
+        disabled={loading}
+        error={error}
+      />
 
-      <YStack gap={8}>
-        <Button
-          label={loading ? authCopy.verify.submitting : authCopy.verify.submit}
-          onPress={onSubmit}
-          disabled={!canSubmit}
-          loading={loading}
-        />
-        <Button
-          label={cooldown > 0 ? authCopy.verify.resendIn(cooldown) : authCopy.verify.resend}
-          onPress={onResend}
-          disabled={cooldown > 0}
-          variant="ghost"
-        />
-      </YStack>
+      <VerifyOtpActions
+        loading={loading}
+        canSubmit={canSubmit}
+        onSubmit={onSubmit}
+        cooldown={cooldown}
+        onResend={onResend}
+      />
     </AuthLayout>
   );
 }

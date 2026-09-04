@@ -8,7 +8,7 @@ import { Text } from "~/src/shared/components/ui/Text";
 
 type Props = {
   title: string;
-  subtitle: string;
+  subtitle: ReactNode;
   children: ReactNode;
   onBack?: () => void;
 };
@@ -20,7 +20,7 @@ export function AuthLayout({ title, subtitle, children, onBack }: Props) {
       behavior={Platform.OS === "ios" ? "padding" : undefined}>
       <YStack flex={1} px={24} pt={16} gap={28}>
         {onBack ? (
-          <IconButton tone="fill" onPress={onBack}>
+          <IconButton onPress={onBack}>
             <Feather name="chevron-left" size={16} color="#023047" />
           </IconButton>
         ) : null}

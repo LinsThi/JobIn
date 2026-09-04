@@ -1,7 +1,6 @@
 import { ScrollView } from "react-native";
 import { YStack } from "tamagui";
 
-import { useJobDetailScreen } from "./useJobDetailScreen";
 import { JobApplyBar } from "../../components/JobApplyBar";
 import { JobBenefitList } from "../../components/JobBenefitList";
 import { JobDetailAbout } from "../../components/JobDetailAbout";
@@ -9,6 +8,7 @@ import { JobDetailHeader } from "../../components/JobDetailHeader";
 import { JobDetailTabs } from "../../components/JobDetailTabs";
 import { JobRequirementList } from "../../components/JobRequirementList";
 import { jobDetailCopy } from "../../job-detail.constants";
+import { useJobDetailScreen } from "./useJobDetailScreen";
 
 import { Text } from "~/src/shared/components/ui/Text";
 

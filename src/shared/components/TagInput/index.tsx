@@ -1,5 +1,5 @@
 import Feather from "@expo/vector-icons/Feather";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { TextInput } from "react-native";
 import { XStack, YStack } from "tamagui";
 
@@ -12,15 +12,19 @@ type Props = {
   placeholder?: string;
   /** When set and reached, the input is hidden and a hint is shown. */
   maxTags?: number;
+  /** Leading glyph inside the input row, e.g. a section-specific Feather icon. */
+  icon?: ReactNode;
+  /** Tappable suggestions shown under the input; already-added ones are hidden. */
+  suggestions?: string[];
 };
 
-export function TagInput({ value, onChange, placeholder, maxTags }: Props) {
+export function TagInput({ value, onChange, placeholder, maxTags, icon, suggestions }: Props) {
   const [draft, setDraft] = useState("");
 
   const atLimit = maxTags !== undefined && value.length >= maxTags;
 
-  const addTag = () => {
-    const tag = draft.trim();
+  const addTag = (raw?: string) => {
+    const tag = (raw ?? draft).trim();
     if (!tag || atLimit) return;
 
     const exists = value.some((item) => item.toLowerCase() === tag.toLowerCase());
@@ -32,73 +36,120 @@ export function TagInput({ value, onChange, placeholder, maxTags }: Props) {
     onChange(value.filter((item) => item !== tag));
   };
 
+  const visibleSuggestions = suggestions?.filter(
+    (label) => !value.some((item) => item.toLowerCase() === label.toLowerCase())
+  );
+
   return (
-    <YStack gap={10}>
+    <YStack gap={12}>
+      {atLimit ? (
+        <Text variant="cardMeta" color="$ji-orange-500">
+          Limite de {maxTags} atingido. Remova uma para trocar.
+        </Text>
+      ) : (
+        <XStack gap={9}>
+          <XStack
+            flex={1}
+            items="center"
+            gap={9}
+            height={50}
+            px={14}
+            rounded={16}
+            bg="$ji-white"
+            borderWidth={1.5}
+            borderColor={draft ? "$ji-blue-300" : "$ji-border-2"}>
+            {icon}
+            <TextInput
+              value={draft}
+              onChangeText={setDraft}
+              onSubmitEditing={() => addTag()}
+              placeholder={placeholder}
+              placeholderTextColor={colors["ji-ink-5"]}
+              returnKeyType="done"
+              blurOnSubmit={false}
+              autoCapitalize="words"
+              numberOfLines={1}
+              style={{
+                flex: 1,
+                minWidth: 0,
+                fontFamily: "Poppins_500Medium",
+                fontSize: 13,
+                color: colors["ji-navy-900"],
+                padding: 0,
+              }}
+            />
+          </XStack>
+
+          <XStack
+            width={50}
+            height={50}
+            rounded={16}
+            items="center"
+            justify="center"
+            bg={draft.trim() ? "$ji-teal-500" : "$ji-blue-300"}
+            pressStyle={{ scale: 0.94 }}
+            onPress={() => addTag()}>
+            <Feather name="plus" size={18} color={colors["ji-white"]} />
+          </XStack>
+        </XStack>
+      )}
+
+      {!atLimit && visibleSuggestions && visibleSuggestions.length > 0 ? (
+        <YStack gap={8}>
+          <Text variant="cardMeta">Sugestões</Text>
+          <XStack gap={8} flexWrap="wrap">
+            {visibleSuggestions.map((label) => (
+              <XStack
+                key={label}
+                pressStyle={{ scale: 0.95 }}
+                onPress={() => addTag(label)}
+                px={14}
+                py={9}
+                rounded={999}
+                bg="$ji-white"
+                borderWidth={1}
+                borderColor="$ji-border-2">
+                <Text variant="tag" color="$ji-navy-600">
+                  {label}
+                </Text>
+              </XStack>
+            ))}
+          </XStack>
+        </YStack>
+      ) : null}
+
       {value.length > 0 ? (
         <XStack gap={8} flexWrap="wrap">
           {value.map((tag) => (
             <XStack
               key={tag}
               items="center"
-              gap={6}
-              pl={12}
-              pr={8}
-              py={7}
+              gap={8}
+              pl={14}
+              pr={10}
+              py={10}
               rounded={999}
-              bg="$ji-fill-1"
+              bg="$ji-fill-accent"
               borderWidth={1}
-              borderColor="$ji-fill-1">
-              <Text variant="tag">{tag}</Text>
-              <Feather
-                name="x"
-                size={13}
-                color={colors["ji-navy-600"]}
-                onPress={() => removeTag(tag)}
-                suppressHighlighting
-              />
+              borderColor="$ji-teal-500">
+              <Text variant="tag" color="$ji-navy-700">
+                {tag}
+              </Text>
+              <XStack
+                width={16}
+                height={16}
+                rounded={999}
+                items="center"
+                justify="center"
+                bg="$ji-teal-500"
+                pressStyle={{ scale: 0.85 }}
+                onPress={() => removeTag(tag)}>
+                <Feather name="x" size={9} color={colors["ji-white"]} />
+              </XStack>
             </XStack>
           ))}
         </XStack>
       ) : null}
-
-      {atLimit ? (
-        <Text variant="cardMeta">Limite de {maxTags} atingido. Remova uma para trocar.</Text>
-      ) : (
-        <XStack
-          items="center"
-          gap={8}
-          height={48}
-          px={14}
-          rounded={14}
-          bg="$ji-white"
-          borderWidth={1}
-          borderColor="$ji-border-2">
-          <TextInput
-            value={draft}
-            onChangeText={setDraft}
-            onSubmitEditing={addTag}
-            placeholder={placeholder}
-            placeholderTextColor={colors["ji-ink-5"]}
-            returnKeyType="done"
-            blurOnSubmit={false}
-            autoCapitalize="words"
-            style={{
-              flex: 1,
-              fontFamily: "Poppins_500Medium",
-              fontSize: 14,
-              color: colors["ji-navy-900"],
-              padding: 0,
-            }}
-          />
-          <Feather
-            name="plus"
-            size={18}
-            color={draft.trim() ? colors["ji-teal-500"] : colors["ji-ink-5"]}
-            onPress={addTag}
-            suppressHighlighting
-          />
-        </XStack>
-      )}
     </YStack>
   );
 }

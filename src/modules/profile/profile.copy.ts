@@ -5,11 +5,17 @@ export const profileCopy = {
   editTitle: "Seu perfil",
   editSubtitle: "Atualize suas habilidades e áreas quando quiser.",
 
-  skillsLabel: "Suas habilidades",
-  skillsPlaceholder: "Ex.: React Native, SQL, Comunicação",
+  accountLabel: "Conta",
 
-  categoriesLabel: "Áreas para acompanhar (até 3)",
+  skillsLabel: "Habilidades",
+  skillsHelper: "Digite e pressione Enter. Adicione quantas quiser.",
+  skillsPlaceholder: "Ex.: React Native, SQL",
+  skillsCount: (count: number) => (count === 1 ? "1 habilidade" : `${count} habilidades`),
+
+  categoriesLabel: "Áreas para acompanhar",
+  categoriesHelper: "Digite o cargo que quer acompanhar.",
   categoriesPlaceholder: "Ex.: Desenvolvedor Mobile",
+  categoriesCount: (count: number, max: number) => `${count} de ${max}`,
 
   save: "Salvar",
   saveAndContinue: "Salvar e continuar",

@@ -12,9 +12,10 @@ type Props = {
   onChange: (next: string) => void;
   onComplete?: (code: string) => void;
   disabled?: boolean;
+  error?: boolean;
 };
 
-export function OtpInput({ value, onChange, onComplete, disabled = false }: Props) {
+export function OtpInput({ value, onChange, onComplete, disabled = false, error = false }: Props) {
   const inputRef = useRef<TextInput>(null);
   const cells = Array.from({ length: OTP_LENGTH });
 
@@ -30,18 +31,25 @@ export function OtpInput({ value, onChange, onComplete, disabled = false }: Prop
         {cells.map((_, index) => {
           const char = value[index] ?? "";
           const active = index === value.length;
+          const borderColor = error
+            ? "$ji-orange-500"
+            : active && !disabled
+              ? "$ji-teal-500"
+              : char
+                ? "$ji-blue-300"
+                : "$ji-border-2";
 
           return (
             <YStack
               key={index}
               flex={1}
-              height={56}
+              height={58}
               rounded={14}
               items="center"
               justify="center"
-              bg="$ji-white"
-              borderWidth={active && !disabled ? 2 : 1}
-              borderColor={active && !disabled ? "$ji-teal-500" : "$ji-border-2"}>
+              bg={char ? "$ji-fill-accent" : "$ji-white"}
+              borderWidth={1.5}
+              borderColor={borderColor}>
               <Text variant="titleLg">{char}</Text>
             </YStack>
           );
