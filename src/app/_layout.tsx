@@ -22,6 +22,7 @@ import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/
 import TamaguiProvider from "~/src/shared/components/TamaguiProvider";
 import { useProfile } from "~/src/shared/queries/useProfile";
 import useAuth from "~/src/shared/store/useAuth";
+import { useBootSplash } from "~/src/shared/store/useBootSplash";
 import { useSafeAreaBackground } from "~/src/shared/store/useSafeAreaBackground";
 import theme from "~/src/shared/theme";
 import { toastConfig } from "~/src/shared/utils/toast";
@@ -78,8 +79,9 @@ export default function RootLayout() {
   } = useBottomPlatform();
 
   const authStatus = useAuth((store) => store.state.status);
-  const safeAreaBackground = useSafeAreaBackground((store) => store.state.backgroundColor);
+  const { isDisabled, backgroundColor } = useSafeAreaBackground((store) => store.state);
   const bottomSheetRef = useRef(null);
+  const { done: videoDone } = useBootSplash((store) => store.state);
 
   const [fontsLoaded, fontError] = useFonts({
     Poppins_400Regular,
@@ -91,10 +93,10 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    if (fontsLoaded || fontError) {
+    if ((fontsLoaded || fontError) && videoDone) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, fontError]);
+  }, [fontsLoaded, fontError, videoDone]);
 
   useEffect(() => {
     if (bottomSheetRef.current) {
@@ -112,12 +114,14 @@ export default function RootLayout() {
         <TamaguiProvider defaultTheme="light">
           <AuthGate />
 
-          <SafeAreaView style={{ flex: 1, backgroundColor: safeAreaBackground }} edges={["top"]}>
+          <SafeAreaView
+            style={{ flex: 1, backgroundColor, overflow: "hidden" }}
+            edges={isDisabled ? [] : ["top"]}>
             <BottomPlatform ref={bottomSheetRef} />
 
             <RootNavigator />
 
-            {authStatus === "loading" ? <LoadingOverlay /> : null}
+            {authStatus === "loading" && videoDone ? <LoadingOverlay /> : null}
           </SafeAreaView>
 
           <Toast config={toastConfig} />

@@ -32,5 +32,21 @@ export const useSafeAreaBackground = create<StorePropsSafeAreaBackground>((set) 
         },
       }));
     },
+    activeSafeArea: () => {
+      set((prevState) => ({
+        state: {
+          ...prevState.state,
+          isDisabled: false,
+        },
+      }));
+    },
+    desactiveSafeArea: () => {
+      set((prevState) => ({
+        state: {
+          ...prevState.state,
+          isDisabled: true,
+        },
+      }));
+    },
   },
 }));

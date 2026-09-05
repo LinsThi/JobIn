@@ -13,16 +13,16 @@
       "expo-router",
       "expo-font",
       "expo-web-browser",
-      "expo-splash-screen",
       "expo-status-bar",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/splash.png",
+          "image": "./assets/icon.png",
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true,
@@ -43,6 +43,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
+        "monochromeImage": "./assets/adaptive-icon-monochrome.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.linsdev.JobIn"
@@ -58,3 +59,4 @@
     "owner": "linsdev"
   }
 }
+
