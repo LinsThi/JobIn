@@ -1,7 +1,7 @@
 import axios from "axios";
 import Constants from "expo-constants";
 
-const PROD_API_URL = "https://api-jobin.onrender.com";
+const PROD_API_URL = "https://jobin-app.onrender.com";
 const DEV_API_PORT = 3333;
 
 /**
