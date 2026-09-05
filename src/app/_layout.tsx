@@ -16,6 +16,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { YStack } from "tamagui";
 
+import { AppUpdateModal } from "~/src/shared/components/AppUpdateModal";
 import { BottomPlatform } from "~/src/shared/components/BottomPlatform";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import TamaguiProvider from "~/src/shared/components/TamaguiProvider";
@@ -119,6 +120,7 @@ export default function RootLayout() {
           </SafeAreaView>
 
           <Toast config={toastConfig} />
+          <AppUpdateModal />
         </TamaguiProvider>
       </QueryClientProvider>
     </SafeAreaProvider>
