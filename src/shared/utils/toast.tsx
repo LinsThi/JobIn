@@ -1,30 +1,71 @@
+import Feather from "@expo/vector-icons/Feather";
+import { ReactNode } from "react";
 import { Text, View } from "react-native";
 import Toast, { ToastConfig } from "react-native-toast-message";
 
-import CheckSVG from "~/src/assets/svg/icon/check.svg";
+import colors from "~/src/shared/theme/colors";
 
-export const toastConfig = {
-  customToast: ({ text1 }: { text1?: string }) => (
+type ToastProps = { text1?: string };
+
+function ToastPill({ tone, icon, text1 }: { tone: string; icon: ReactNode; text1?: string }) {
+  return (
     <View
       style={{
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "center",
-        gap: 8,
+        gap: 10,
+        maxWidth: "88%",
         borderRadius: 999,
-        borderWidth: 0.1,
-        borderColor: "#000000",
-        backgroundColor: "#FFFFFF",
-        padding: 16,
-        shadowColor: "#000000",
+        borderWidth: 1,
+        borderColor: colors["ji-border-2"],
+        backgroundColor: colors["ji-white"],
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        shadowColor: colors["ji-navy-900"],
         shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.2,
+        shadowOpacity: 0.16,
         shadowRadius: 20,
         elevation: 8,
       }}>
-      <CheckSVG />
-      <Text style={{ fontSize: 16 }}>{text1 ?? ""}</Text>
+      <View
+        style={{
+          width: 26,
+          height: 26,
+          borderRadius: 13,
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: tone,
+        }}>
+        {icon}
+      </View>
+      <Text
+        style={{
+          flexShrink: 1,
+          fontFamily: "Poppins_500Medium",
+          fontSize: 13,
+          lineHeight: 18,
+          color: colors["ji-navy-900"],
+        }}>
+        {text1 ?? ""}
+      </Text>
     </View>
+  );
+}
+
+export const toastConfig = {
+  customToast: ({ text1 }: ToastProps) => (
+    <ToastPill
+      tone={colors["ji-teal-500"]}
+      icon={<Feather name="check" size={14} color={colors["ji-white"]} />}
+      text1={text1}
+    />
+  ),
+  error: ({ text1 }: ToastProps) => (
+    <ToastPill
+      tone={colors["ji-orange-500"]}
+      icon={<Feather name="alert-circle" size={14} color={colors["ji-white"]} />}
+      text1={text1}
+    />
   ),
 } satisfies ToastConfig;
 
