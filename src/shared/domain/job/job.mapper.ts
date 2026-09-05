@@ -11,7 +11,7 @@ function firstSegment(value: string | null | undefined): string | undefined {
   return segment ? segment : undefined;
 }
 
-/** ISO date -> short pt-BR "posted at" label, e.g. "há 3 h", "há 2 d". */
+/** ISO date -> short pt-BR "posted at" label, e.g. "há 3 h", "há 2 sem". */
 function postedAtLabel(iso: string | null | undefined): string {
   if (!iso) return "";
 
@@ -22,7 +22,12 @@ function postedAtLabel(iso: string | null | undefined): string {
 
   if (minutes < 60) return "agora há pouco";
   if (minutes < 60 * 24) return `há ${Math.floor(minutes / 60)} h`;
-  return `há ${Math.floor(minutes / (60 * 24))} d`;
+
+  const days = Math.floor(minutes / (60 * 24));
+  if (days < 7) return `há ${days} d`;
+  if (days < 30) return `há ${Math.floor(days / 7)} sem`;
+  if (days < 365) return `há ${Math.floor(days / 30)} mês`;
+  return `há ${Math.floor(days / 365)} ano`;
 }
 
 /** Maps the raw job-search API shape into the domain `Job`. */

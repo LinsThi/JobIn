@@ -62,6 +62,7 @@ export function RecommendedJobCard({ job, onPress }: Props) {
         mb={18}>
         {job.salaryLabel}
         {job.workModel ? ` · ${job.workModel}` : ""}
+        {job.postedAtLabel ? ` · ${job.postedAtLabel}` : ""}
       </Text>
 
       <XStack items="center" gap={9}>
