@@ -2,7 +2,7 @@
   "expo": {
     "name": "JobIn",
     "slug": "linsdevjobin",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "scheme": "jobin",
     "web": {
       "bundler": "metro",
@@ -22,7 +22,14 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-video"
+      "expo-video",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#F5F5F5"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
@@ -59,4 +66,3 @@
     "owner": "linsdev"
   }
 }
-

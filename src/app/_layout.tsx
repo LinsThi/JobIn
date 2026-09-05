@@ -20,6 +20,7 @@ import { AuthGate } from "~/src/shared/auth/AuthGate";
 import { BottomPlatform } from "~/src/shared/components/BottomPlatform";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import TamaguiProvider from "~/src/shared/components/TamaguiProvider";
+import { useNotificationsWatcher } from "~/src/shared/queries/useNotifications";
 import { useProfile } from "~/src/shared/queries/useProfile";
 import useAuth from "~/src/shared/store/useAuth";
 import { useBootSplash } from "~/src/shared/store/useBootSplash";
@@ -52,6 +53,7 @@ function LoadingOverlay() {
 function RootNavigator() {
   const status = useAuth((store) => store.state.status);
   useProfile();
+  useNotificationsWatcher();
 
   return (
     <Stack initialRouteName="index" screenOptions={{ headerShown: false }}>
@@ -68,6 +70,7 @@ function RootNavigator() {
       <Stack.Protected guard={status === "ready"}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="job/[id]" options={{ animation: "slide_from_right" }} />
+        <Stack.Screen name="notifications" options={{ animation: "slide_from_right" }} />
       </Stack.Protected>
     </Stack>
   );

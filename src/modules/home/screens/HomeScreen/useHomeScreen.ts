@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { ScrollView } from "react-native";
 
 import { DEFAULT_USER_NAME } from "../../home.constants";
@@ -7,7 +7,9 @@ import { useHomeJobFeed } from "../../hooks/useHomeJobFeed";
 
 import { Job } from "~/src/shared/domain/job";
 import { jobDetailHref } from "~/src/shared/navigation/jobRoute";
+import { useNotifications } from "~/src/shared/queries/useNotifications";
 import { useProfile } from "~/src/shared/queries/useProfile";
+import { ensureNotificationPermission } from "~/src/shared/services/localNotifications";
 import useRecentSearches from "~/src/shared/store/useRecentSearches";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 
@@ -22,6 +24,11 @@ export function useHomeScreen() {
   const clearSearches = useRecentSearches((store) => store.actions.clearSearches);
 
   const { profile, isLoading: profileLoading } = useProfile();
+  const { unreadCount } = useNotifications();
+
+  useEffect(() => {
+    ensureNotificationPermission().catch(() => undefined);
+  }, []);
 
   const {
     recommended: recommendedJobs,
@@ -51,8 +58,8 @@ export function useHomeScreen() {
   );
 
   const onPressBell = useCallback(() => {
-    // TODO: open the notifications screen once it exists.
-  }, []);
+    router.push("/notifications");
+  }, [router]);
 
   const onPressProfile = useCallback(() => {
     router.push("/profile");
@@ -61,7 +68,7 @@ export function useHomeScreen() {
   return {
     scrollRef,
     userName: DEFAULT_USER_NAME,
-    hasNotifications: true,
+    hasNotifications: unreadCount > 0,
     recentSearches,
     recommendedJobs,
     newJobs,
