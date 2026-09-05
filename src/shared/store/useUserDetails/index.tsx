@@ -1,8 +1,8 @@
 /* eslint-disable import/order */
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { Job } from "~/src/shared/domain/job";
+import { zustandMMKVStorage } from "~/src/shared/services/mmkvStorage";
 import { PlataformProps } from "~/src/shared/utils/platforms";
 import { showCustomToast } from "~/src/shared/utils/toast";
 import { StoreProps, initialStateUserDetails } from "./@types";
@@ -79,7 +79,7 @@ const useUserDetails = create<StoreProps>()(
     }),
     {
       name: "@JobIn:userDetails",
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => zustandMMKVStorage),
       merge: (persistedState, currentState) => {
         const persisted = (persistedState as Partial<StoreProps> | undefined) ?? {};
         const state = persisted.state ?? initialStateUserDetails;

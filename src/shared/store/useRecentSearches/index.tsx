@@ -1,7 +1,7 @@
 /* eslint-disable import/order */
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { zustandMMKVStorage } from "~/src/shared/services/mmkvStorage";
 import { RECENT_SEARCHES_LIMIT, StoreProps, initialStateRecentSearches } from "./@types";
 
 const useRecentSearches = create<StoreProps>()(
@@ -37,7 +37,7 @@ const useRecentSearches = create<StoreProps>()(
     }),
     {
       name: "@JobIn:recentSearches",
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => zustandMMKVStorage),
       merge: (persistedState, currentState) => {
         const persisted = (persistedState as Partial<StoreProps> | undefined) ?? {};
         const state = persisted.state ?? initialStateRecentSearches;

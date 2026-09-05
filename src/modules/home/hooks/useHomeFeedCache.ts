@@ -1,10 +1,10 @@
 /* eslint-disable import/order */
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import { NormalizedJobDTO } from "~/src/shared/queries/useSearchJobs/types";
+import { zustandMMKVStorage } from "~/src/shared/services/mmkvStorage";
 
 export interface HomeFeedSnapshot {
   /** `categoriesKey|skillsKey` the jobs were fetched for. */
@@ -31,7 +31,7 @@ const useHomeFeedCache = create<HomeFeedCacheStore>()(
     }),
     {
       name: "@JobIn:homeFeedCache",
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => zustandMMKVStorage),
     }
   )
 );
@@ -39,7 +39,7 @@ const useHomeFeedCache = create<HomeFeedCacheStore>()(
 export default useHomeFeedCache;
 
 /**
- * Whether the persisted snapshot has finished loading from AsyncStorage. The
+ * Whether the persisted snapshot has finished loading from MMKV. The
  * feed query waits on this so it can seed itself with the cached jobs before the
  * first fetch instead of racing hydration.
  */

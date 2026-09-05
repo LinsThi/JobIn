@@ -1,7 +1,8 @@
 import "react-native-url-polyfill/auto";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
+
+import { supabaseMMKVStorage } from "./mmkvStorage";
 
 /**
  * Supabase is used for two things only: email-OTP auth and the `profiles` table
@@ -38,7 +39,7 @@ if (supabaseKey.startsWith("sb_secret_") || supabaseKey.startsWith("service_role
 
 export const supabase = createClient(supabaseUrl, supabaseKey, {
   auth: {
-    storage: AsyncStorage,
+    storage: supabaseMMKVStorage,
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: false,

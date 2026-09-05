@@ -5,8 +5,8 @@ import { StoreProps, initialStateAuth } from "./@types";
 
 /**
  * Session state mirrored from supabase-js. Not persisted — supabase-js already
- * persists the session in AsyncStorage; this store just makes it reactive and
- * layers in the "needs profile" gate (set by `useProfile`).
+ * persists the session via MMKV (see `supabase.ts`); this store just makes it
+ * reactive and layers in the "needs profile" gate (set by `useProfile`).
  */
 const useAuth = create<StoreProps>()((set, get) => ({
   state: initialStateAuth,
