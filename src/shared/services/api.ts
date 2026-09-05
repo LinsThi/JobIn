@@ -30,18 +30,6 @@ function devApiUrl(): string | null {
  */
 const baseURL = process.env.EXPO_PUBLIC_API_URL ?? (__DEV__ ? devApiUrl() : null) ?? PROD_API_URL;
 
-if (__DEV__) {
-  console.log(`[api] baseURL: ${baseURL}`);
-}
-
 export const apiServe = axios.create({
   baseURL,
 });
-
-if (__DEV__) {
-  apiServe.interceptors.request.use((config) => {
-    const method = (config.method ?? "get").toUpperCase();
-    console.log(`[api] ${method} ${apiServe.getUri(config)}`);
-    return config;
-  });
-}

@@ -6,6 +6,8 @@ export type StateProps = {
   vacantionRequired: string;
   savedJobs: Job[];
   platformsFollowed: PlataformProps[];
+  skills: string[];
+  trackedCategories: string[];
 };
 
 export type ActionProps = {
@@ -15,6 +17,7 @@ export type ActionProps = {
   toggleSavedJob: (job: Job) => void;
   isJobSaved: (jobId: string) => boolean;
   verifyIfPlatformIsFollowed: (platform: PlataformProps) => boolean;
+  saveProfile: (skills: string[], trackedCategories: string[]) => void;
 };
 
 export type StoreProps = {
@@ -26,4 +29,18 @@ export const initialStateUserDetails: StateProps = {
   vacantionRequired: "",
   platformsFollowed: [],
   savedJobs: [],
+  skills: [],
+  trackedCategories: [],
 };
+
+/** On-device profile — replaces the old Supabase `profiles` table row. */
+export type Profile = {
+  skills: string[];
+  trackedCategories: string[];
+};
+
+export const MAX_TRACKED_CATEGORIES = 3;
+
+export function isProfileComplete(profile: Profile): boolean {
+  return profile.skills.length > 0 && profile.trackedCategories.length > 0;
+}

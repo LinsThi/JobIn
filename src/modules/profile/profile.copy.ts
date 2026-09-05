@@ -1,11 +1,9 @@
 export const profileCopy = {
   setupTitle: "Complete seu perfil",
   setupSubtitle:
-    "Adicione suas habilidades e até 3 áreas que você quer acompanhar. Isso fica salvo na sua conta.",
+    "Adicione suas habilidades e até 3 áreas que você quer acompanhar. Isso fica salvo no seu dispositivo.",
   editTitle: "Seu perfil",
   editSubtitle: "Atualize suas habilidades e áreas quando quiser.",
-
-  accountLabel: "Conta",
 
   skillsLabel: "Habilidades",
   skillsHelper: "Digite e pressione Enter. Adicione quantas quiser.",
@@ -19,9 +17,6 @@ export const profileCopy = {
 
   save: "Salvar",
   saveAndContinue: "Salvar e continuar",
-  saving: "Salvando...",
   saved: "Perfil atualizado",
   saveError: "Não foi possível salvar. Tente novamente.",
-
-  signOut: "Sair da conta",
 };

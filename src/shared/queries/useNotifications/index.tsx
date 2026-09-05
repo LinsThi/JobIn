@@ -5,18 +5,18 @@ import Toast from "react-native-toast-message";
 import { NotificationsResponse } from "./types";
 
 import { apiServe } from "~/src/shared/services/api";
+import { getDeviceId } from "~/src/shared/services/deviceId";
 import { presentLocalNotification } from "~/src/shared/services/localNotifications";
-import useAuth from "~/src/shared/store/useAuth";
 import { showCustomToast } from "~/src/shared/utils/toast";
 
 /** How often to re-poll while the tab/screen is mounted (30s — not urgent). */
 const NOTIFICATIONS_POLL_MS = 30_000;
 
-const notificationsKey = (userId: string | null) => ["notifications", userId] as const;
+const notificationsKey = (deviceId: string) => ["notifications", deviceId] as const;
 
-async function fetchNotifications(userId: string): Promise<NotificationsResponse> {
+async function fetchNotifications(deviceId: string): Promise<NotificationsResponse> {
   const { data } = await apiServe.get<NotificationsResponse>("/notifications", {
-    params: { userId },
+    params: { userId: deviceId },
   });
   return data;
 }
@@ -27,12 +27,11 @@ async function fetchNotifications(userId: string): Promise<NotificationsResponse
  * keeping the fetch options in one place avoids the two hooks drifting apart.
  */
 function useNotificationsQuery() {
-  const userId = useAuth((store) => store.state.userId);
+  const deviceId = getDeviceId();
 
   return useQuery({
-    queryKey: notificationsKey(userId),
-    queryFn: () => fetchNotifications(userId as string),
-    enabled: !!userId,
+    queryKey: notificationsKey(deviceId),
+    queryFn: () => fetchNotifications(deviceId),
     staleTime: 10_000,
     refetchInterval: NOTIFICATIONS_POLL_MS,
   });
@@ -40,9 +39,9 @@ function useNotificationsQuery() {
 
 /**
  * Polls the backend-triggered notifications list (e.g. an async search that
- * found new matches — see `SearchCompletionNotifier` on the backend). `userId`
- * is sent unauthenticated, same pattern as `skills`/`categories` on the home
- * feed — see docs/SUPABASE_AUTH.md for why this backend has no auth yet.
+ * found new matches — see `SearchCompletionNotifier` on the backend). The
+ * device id is sent unauthenticated, same pattern as `skills`/`categories`
+ * on the home feed — there is no account/login in this app.
  */
 export function useNotifications() {
   const query = useNotificationsQuery();
@@ -56,18 +55,17 @@ export function useNotifications() {
 
 /** Marks one notification read and optimistically drops the unread count. */
 export function useMarkNotificationRead() {
-  const userId = useAuth((store) => store.state.userId);
+  const deviceId = getDeviceId();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (id: string) => {
-      if (!userId) throw new Error("Not signed in");
-      await apiServe.patch(`/notifications/${id}/read`, {}, { params: { userId } });
+      await apiServe.patch(`/notifications/${id}/read`, {}, { params: { userId: deviceId } });
       return id;
     },
     onSuccess: (id) => {
       queryClient.setQueryData<NotificationsResponse | undefined>(
-        notificationsKey(userId),
+        notificationsKey(deviceId),
         (prev) => {
           if (!prev) return prev;
           const notification = prev.data.find((n) => n.id === id);
@@ -84,18 +82,17 @@ export function useMarkNotificationRead() {
   });
 }
 
-/** Deletes every notification for the signed-in user and clears the cached list/count. */
+/** Deletes every notification for this device and clears the cached list/count. */
 export function useClearAllNotifications() {
-  const userId = useAuth((store) => store.state.userId);
+  const deviceId = getDeviceId();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async () => {
-      if (!userId) throw new Error("Not signed in");
-      await apiServe.delete("/notifications", { params: { userId } });
+      await apiServe.delete("/notifications", { params: { userId: deviceId } });
     },
     onSuccess: () => {
-      queryClient.setQueryData<NotificationsResponse>(notificationsKey(userId), {
+      queryClient.setQueryData<NotificationsResponse>(notificationsKey(deviceId), {
         data: [],
         unreadCount: 0,
       });
@@ -107,18 +104,17 @@ export function useClearAllNotifications() {
   });
 }
 
-/** Fires `/notifications/test` for the signed-in user — dev-only test trigger. */
+/** Fires `/notifications/test` for this device — dev-only test trigger. */
 export function useSendTestNotification() {
-  const userId = useAuth((store) => store.state.userId);
+  const deviceId = getDeviceId();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async () => {
-      if (!userId) throw new Error("Not signed in");
-      await apiServe.post("/notifications/test", {}, { params: { userId } });
+      await apiServe.post("/notifications/test", {}, { params: { userId: deviceId } });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: notificationsKey(userId) });
+      queryClient.invalidateQueries({ queryKey: notificationsKey(deviceId) });
       showCustomToast("Notificação de teste enviada");
     },
     // A failed request here previously failed silently — the button's loading

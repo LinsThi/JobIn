@@ -15,7 +15,7 @@ import useHomeFeedCache, { useHomeFeedCacheHydrated } from "./useHomeFeedCache";
 import { Job, normalizedJobToJob } from "~/src/shared/domain/job";
 import { NormalizedJobDTO } from "~/src/shared/queries/useSearchJobs/types";
 import { apiServe } from "~/src/shared/services/api";
-import useAuth from "~/src/shared/store/useAuth";
+import { getDeviceId } from "~/src/shared/services/deviceId";
 
 const MAX_CATEGORIES = 3;
 const EMPTY: NormalizedJobDTO[] = [];
@@ -47,7 +47,7 @@ interface HomeFeedResult {
 async function fetchHomeFeed(
   categories: string[],
   skills: string[],
-  userId: string | null,
+  userId: string,
   signal?: AbortSignal
 ): Promise<HomeFeedResult> {
   const { data } = await apiServe.get<HomeFeedResponse>("/home/feed", {
@@ -55,7 +55,7 @@ async function fetchHomeFeed(
     params: {
       categories: categories.join(","),
       ...(skills.length ? { skills: skills.join(",") } : {}),
-      ...(userId ? { userId } : {}),
+      userId,
     },
   });
 
@@ -88,7 +88,7 @@ export function useHomeJobFeed(categories: string[], skills: string[]): UseHomeJ
   const categoriesKey = useMemo(() => listKey(trackedCategories), [trackedCategories]);
   const skillsKey = useMemo(() => listKey(skills), [skills]);
   const feedKey = `${categoriesKey}|${skillsKey}`;
-  const userId = useAuth((store) => store.state.userId);
+  const userId = getDeviceId();
 
   const hydrated = useHomeFeedCacheHydrated();
   const snapshot = useHomeFeedCache((store) => store.snapshot);

@@ -16,15 +16,14 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { YStack } from "tamagui";
 
-import { AuthGate } from "~/src/shared/auth/AuthGate";
 import { BottomPlatform } from "~/src/shared/components/BottomPlatform";
 import { useBottomPlatform } from "~/src/shared/components/BottomPlatform/store/useBottomPlatform";
 import TamaguiProvider from "~/src/shared/components/TamaguiProvider";
 import { useNotificationsWatcher } from "~/src/shared/queries/useNotifications";
-import { useProfile } from "~/src/shared/queries/useProfile";
-import useAuth from "~/src/shared/store/useAuth";
 import { useBootSplash } from "~/src/shared/store/useBootSplash";
 import { useSafeAreaBackground } from "~/src/shared/store/useSafeAreaBackground";
+import useUserDetails, { useUserDetailsHydrated } from "~/src/shared/store/useUserDetails";
+import { isProfileComplete } from "~/src/shared/store/useUserDetails/@types";
 import theme from "~/src/shared/theme";
 import { toastConfig } from "~/src/shared/utils/toast";
 
@@ -45,29 +44,23 @@ function LoadingOverlay() {
 }
 
 /**
- * Auth-aware navigator. `useProfile` runs here (inside the query provider) so its
- * effect can report profile completeness to `useAuth`, which drives these guards.
- * The navigator stays mounted at all times (expo-router requirement); the
- * `loading` state is covered by an overlay in `RootLayout`.
+ * There is no login — everything is local. The navigator stays mounted at
+ * all times (expo-router requirement); the brief window before MMKV finishes
+ * hydrating `useUserDetails` is covered by an overlay in `RootLayout`.
  */
 function RootNavigator() {
-  const status = useAuth((store) => store.state.status);
-  useProfile();
+  const skills = useUserDetails((store) => store.state.skills);
+  const trackedCategories = useUserDetails((store) => store.state.trackedCategories);
+  const profileComplete = isProfileComplete({ skills, trackedCategories });
   useNotificationsWatcher();
 
   return (
     <Stack initialRouteName="index" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />
 
-      <Stack.Protected guard={status === "signedOut"}>
-        <Stack.Screen name="(auth)" />
-      </Stack.Protected>
+      <Stack.Screen name="profile" options={{ animation: "slide_from_right" }} />
 
-      <Stack.Protected guard={status === "needsProfile" || status === "ready"}>
-        <Stack.Screen name="profile" options={{ animation: "slide_from_right" }} />
-      </Stack.Protected>
-
-      <Stack.Protected guard={status === "ready"}>
+      <Stack.Protected guard={profileComplete}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="job/[id]" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="notifications" options={{ animation: "slide_from_right" }} />
@@ -81,7 +74,7 @@ export default function RootLayout() {
     actions: { addBottomSheetRef },
   } = useBottomPlatform();
 
-  const authStatus = useAuth((store) => store.state.status);
+  const hydrated = useUserDetailsHydrated();
   const { isDisabled, backgroundColor } = useSafeAreaBackground((store) => store.state);
   const bottomSheetRef = useRef(null);
   const { done: videoDone } = useBootSplash((store) => store.state);
@@ -115,8 +108,6 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         <TamaguiProvider defaultTheme="light">
-          <AuthGate />
-
           <SafeAreaView
             style={{ flex: 1, backgroundColor, overflow: "hidden" }}
             edges={isDisabled ? [] : ["top"]}>
@@ -124,7 +115,7 @@ export default function RootLayout() {
 
             <RootNavigator />
 
-            {authStatus === "loading" && videoDone ? <LoadingOverlay /> : null}
+            {!hydrated && videoDone ? <LoadingOverlay /> : null}
           </SafeAreaView>
 
           <Toast config={toastConfig} />

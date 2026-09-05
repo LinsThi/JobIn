@@ -1,11 +1,12 @@
 /* eslint-disable import/order */
+import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { Job } from "~/src/shared/domain/job";
 import { zustandMMKVStorage } from "~/src/shared/services/mmkvStorage";
 import { PlataformProps } from "~/src/shared/utils/platforms";
 import { showCustomToast } from "~/src/shared/utils/toast";
-import { StoreProps, initialStateUserDetails } from "./@types";
+import { MAX_TRACKED_CATEGORIES, StoreProps, initialStateUserDetails } from "./@types";
 
 const useUserDetails = create<StoreProps>()(
   persist(
@@ -75,6 +76,19 @@ const useUserDetails = create<StoreProps>()(
             (followedPlatform) => followedPlatform.name === platform.name
           );
         },
+        saveProfile: (skills: string[], trackedCategories: string[]) => {
+          if (trackedCategories.length > MAX_TRACKED_CATEGORIES) {
+            throw new Error(`No máximo ${MAX_TRACKED_CATEGORIES} áreas para acompanhar`);
+          }
+
+          set((prevState) => ({
+            state: {
+              ...prevState.state,
+              skills,
+              trackedCategories,
+            },
+          }));
+        },
       },
     }),
     {
@@ -89,6 +103,8 @@ const useUserDetails = create<StoreProps>()(
             vacantionRequired: state.vacantionRequired ?? "",
             platformsFollowed: state.platformsFollowed ?? [],
             savedJobs: state.savedJobs ?? [],
+            skills: state.skills ?? [],
+            trackedCategories: state.trackedCategories ?? [],
           },
           actions: currentState.actions,
         };
@@ -98,3 +114,20 @@ const useUserDetails = create<StoreProps>()(
 );
 
 export default useUserDetails;
+
+/**
+ * Whether the persisted state has finished loading from MMKV. Navigation
+ * guards wait on this before reading `skills`/`trackedCategories` so a cold
+ * app open doesn't briefly think the profile is incomplete.
+ */
+export function useUserDetailsHydrated() {
+  const [hydrated, setHydrated] = useState(() => useUserDetails.persist.hasHydrated());
+
+  useEffect(() => {
+    const unsub = useUserDetails.persist.onFinishHydration(() => setHydrated(true));
+    setHydrated(useUserDetails.persist.hasHydrated());
+    return unsub;
+  }, []);
+
+  return hydrated;
+}

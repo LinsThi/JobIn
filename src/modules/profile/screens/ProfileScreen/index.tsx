@@ -2,16 +2,16 @@ import Feather from "@expo/vector-icons/Feather";
 import { ActivityIndicator } from "react-native";
 import { XStack, YStack } from "tamagui";
 
+import { useProfileScreen } from "./useProfileScreen";
 import { CATEGORY_SUGGESTIONS, SKILL_SUGGESTIONS } from "../../profile.constants";
 import { profileCopy } from "../../profile.copy";
-import { useProfileScreen } from "./useProfileScreen";
 
 import { TagInput } from "~/src/shared/components/TagInput";
 import { Button } from "~/src/shared/components/ui/Button";
 import { IconButton } from "~/src/shared/components/ui/IconButton";
 import { Screen } from "~/src/shared/components/ui/Screen";
 import { Text } from "~/src/shared/components/ui/Text";
-import { MAX_TRACKED_CATEGORIES } from "~/src/shared/queries/useProfile/types";
+import { MAX_TRACKED_CATEGORIES } from "~/src/shared/store/useUserDetails/@types";
 import colors from "~/src/shared/theme/colors";
 
 /** Rough visual read on how "done" the setup step feels — doesn't gate saving. */
@@ -29,9 +29,7 @@ export function ProfileScreen() {
     categories,
     setCategories,
     canSave,
-    saving,
     onSave,
-    onSignOut,
     goBack,
   } = useProfileScreen();
 
@@ -103,21 +101,10 @@ export function ProfileScreen() {
 
           <YStack gap={10}>
             <Button
-              label={
-                saving
-                  ? profileCopy.saving
-                  : isSetup
-                    ? profileCopy.saveAndContinue
-                    : profileCopy.save
-              }
+              label={isSetup ? profileCopy.saveAndContinue : profileCopy.save}
               onPress={onSave}
               disabled={!canSave}
-              loading={saving}
             />
-
-            {!isSetup ? (
-              <Button label={profileCopy.signOut} onPress={onSignOut} variant="ghost" />
-            ) : null}
           </YStack>
         </>
       )}

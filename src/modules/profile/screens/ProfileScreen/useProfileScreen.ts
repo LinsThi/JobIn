@@ -1,13 +1,13 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { profileCopy } from "../../profile.copy";
 
-import { useProfile, useSaveProfile } from "~/src/shared/queries/useProfile";
-import { MAX_TRACKED_CATEGORIES } from "~/src/shared/queries/useProfile/types";
-import { supabase } from "~/src/shared/services/supabase";
-import useAuth from "~/src/shared/store/useAuth";
+import useUserDetails, { useUserDetailsHydrated } from "~/src/shared/store/useUserDetails";
+import {
+  isProfileComplete,
+  MAX_TRACKED_CATEGORIES,
+} from "~/src/shared/store/useUserDetails/@types";
 import { showCustomToast } from "~/src/shared/utils/toast";
 
 const sameSet = (a: string[], b: string[]) =>
@@ -15,83 +15,62 @@ const sameSet = (a: string[], b: string[]) =>
 
 export function useProfileScreen() {
   const router = useRouter();
-  const queryClient = useQueryClient();
 
-  const status = useAuth((store) => store.state.status);
-  const email = useAuth((store) => store.state.session?.user.email ?? "");
-
-  const { profile, isLoading } = useProfile();
-  const saveProfile = useSaveProfile();
-
-  const isSetup = status === "needsProfile";
+  const savedSkills = useUserDetails((store) => store.state.skills);
+  const savedCategories = useUserDetails((store) => store.state.trackedCategories);
+  const saveProfileAction = useUserDetails((store) => store.actions.saveProfile);
+  const hydrated = useUserDetailsHydrated();
 
   const [skills, setSkills] = useState<string[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
-  const [hydrated, setHydrated] = useState(false);
-  const leaveSetupOnReady = useRef(false);
+  const [seeded, setSeeded] = useState(false);
+  const isSetup = useRef(false);
 
   useEffect(() => {
-    if (!hydrated && !isLoading) {
-      setSkills(profile.skills);
-      setCategories(profile.trackedCategories);
-      setHydrated(true);
+    if (!seeded && hydrated) {
+      setSkills(savedSkills);
+      setCategories(savedCategories);
+      isSetup.current = !isProfileComplete({
+        skills: savedSkills,
+        trackedCategories: savedCategories,
+      });
+      setSeeded(true);
     }
-  }, [hydrated, isLoading, profile]);
-
-  // After the setup save, the profile query flips auth status to "ready"; wait
-  // for that so the (tabs) guard exists before navigating there.
-  useEffect(() => {
-    if (leaveSetupOnReady.current && status === "ready") {
-      leaveSetupOnReady.current = false;
-      router.replace("/(tabs)");
-    }
-  }, [status, router]);
+  }, [seeded, hydrated, savedSkills, savedCategories]);
 
   const dirty = useMemo(
-    () => !sameSet(skills, profile.skills) || !sameSet(categories, profile.trackedCategories),
-    [skills, categories, profile]
+    () => !sameSet(skills, savedSkills) || !sameSet(categories, savedCategories),
+    [skills, categories, savedSkills, savedCategories]
   );
 
   const meetsMinimum = skills.length > 0 && categories.length > 0;
   const canSave =
-    !saveProfile.isPending &&
-    (isSetup ? meetsMinimum : dirty) &&
-    categories.length <= MAX_TRACKED_CATEGORIES;
+    (isSetup.current ? meetsMinimum : dirty) && categories.length <= MAX_TRACKED_CATEGORIES;
 
   const onSave = () => {
     if (!canSave) return;
-    saveProfile.mutate(
-      { skills, trackedCategories: categories },
-      {
-        onSuccess: () => {
-          if (isSetup) {
-            leaveSetupOnReady.current = true;
-          } else {
-            showCustomToast(profileCopy.saved);
-          }
-        },
-        onError: () => showCustomToast(profileCopy.saveError),
-      }
-    );
-  };
 
-  const onSignOut = async () => {
-    await supabase.auth.signOut();
-    queryClient.clear();
+    try {
+      saveProfileAction(skills, categories);
+      if (isSetup.current) {
+        router.replace("/(tabs)");
+      } else {
+        showCustomToast(profileCopy.saved);
+      }
+    } catch {
+      showCustomToast(profileCopy.saveError);
+    }
   };
 
   return {
-    isSetup,
-    email,
-    loadingProfile: isLoading || !hydrated,
+    isSetup: isSetup.current,
+    loadingProfile: !seeded,
     skills,
     setSkills,
     categories,
     setCategories,
     canSave,
-    saving: saveProfile.isPending,
     onSave,
-    onSignOut,
     goBack: () => router.back(),
   };
 }

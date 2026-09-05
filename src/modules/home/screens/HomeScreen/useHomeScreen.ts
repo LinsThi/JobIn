@@ -8,7 +8,6 @@ import { useHomeJobFeed } from "../../hooks/useHomeJobFeed";
 import { Job } from "~/src/shared/domain/job";
 import { jobDetailHref } from "~/src/shared/navigation/jobRoute";
 import { useNotifications } from "~/src/shared/queries/useNotifications";
-import { useProfile } from "~/src/shared/queries/useProfile";
 import { ensureNotificationPermission } from "~/src/shared/services/localNotifications";
 import useRecentSearches from "~/src/shared/store/useRecentSearches";
 import useUserDetails from "~/src/shared/store/useUserDetails";
@@ -23,7 +22,8 @@ export function useHomeScreen() {
   const addSearch = useRecentSearches((store) => store.actions.addSearch);
   const clearSearches = useRecentSearches((store) => store.actions.clearSearches);
 
-  const { profile, isLoading: profileLoading } = useProfile();
+  const skills = useUserDetails((store) => store.state.skills);
+  const trackedCategories = useUserDetails((store) => store.state.trackedCategories);
   const { unreadCount } = useNotifications();
 
   useEffect(() => {
@@ -33,9 +33,8 @@ export function useHomeScreen() {
   const {
     recommended: recommendedJobs,
     newest: newJobs,
-    loading: feedLoading,
-  } = useHomeJobFeed(profile.trackedCategories, profile.skills);
-  const newJobsLoading = profileLoading || feedLoading;
+    loading: newJobsLoading,
+  } = useHomeJobFeed(trackedCategories, skills);
 
   const goToSearch = useCallback(() => {
     router.push("/search");
