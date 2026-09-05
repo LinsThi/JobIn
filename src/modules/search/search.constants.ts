@@ -31,10 +31,10 @@ export type PlatformSpeed = "fast" | "mid" | "slow";
 /** Platforms queried on every search, ordered by how fast they usually answer. */
 export const SEARCH_PLATFORMS: { id: JobPlatformId; speed: PlatformSpeed }[] = [
   { id: "linkedin", speed: "fast" },
-  { id: "gupy", speed: "fast" },
-  { id: "infojobs", speed: "mid" },
-  { id: "catho", speed: "mid" },
-  { id: "trabalhabrasil", speed: "slow" },
+  { id: "infojobs", speed: "fast" },
+  { id: "catho", speed: "fast" },
+  { id: "trabalhabrasil", speed: "fast" },
+  { id: "gupy", speed: "mid" },
 ];
 
 /** All platform ids, in query order. */
