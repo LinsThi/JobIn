@@ -1,13 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
-import Toast from "react-native-toast-message";
 
 import { NotificationsResponse } from "./types";
 
 import { apiServe } from "~/src/shared/services/api";
 import { getDeviceId } from "~/src/shared/services/deviceId";
 import { presentLocalNotification } from "~/src/shared/services/localNotifications";
-import { showCustomToast } from "~/src/shared/utils/toast";
+import { showToast } from "~/src/shared/utils/toast";
 
 /** How often to re-poll while the tab/screen is mounted (30s — not urgent). */
 const NOTIFICATIONS_POLL_MS = 30_000;
@@ -98,7 +97,7 @@ export function useClearAllNotifications() {
       });
     },
     onError: (error) => {
-      Toast.show({ type: "error", text1: "Não foi possível limpar as notificações" });
+      showToast({ type: "error", text: "Não foi possível limpar as notificações" });
       console.log("Failed to clear notifications", error);
     },
   });
@@ -115,12 +114,12 @@ export function useSendTestNotification() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: notificationsKey(deviceId) });
-      showCustomToast("Notificação de teste enviada");
+      showToast({ type: "success", text: "Notificação de teste enviada" });
     },
     // A failed request here previously failed silently — the button's loading
     // spinner would just stop with no feedback at all.
     onError: (error) => {
-      Toast.show({ type: "error", text1: "Não foi possível enviar a notificação" });
+      showToast({ type: "error", text: "Não foi possível enviar a notificação" });
       console.log("Failed to send test notification", error);
     },
   });

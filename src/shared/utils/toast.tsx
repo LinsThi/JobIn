@@ -1,11 +1,21 @@
 import Feather from "@expo/vector-icons/Feather";
-import { ReactNode } from "react";
+import { ComponentProps, ReactNode } from "react";
 import { Text, View } from "react-native";
 import Toast, { ToastConfig } from "react-native-toast-message";
 
 import colors from "~/src/shared/theme/colors";
 
 type ToastProps = { text1?: string };
+type FeatherName = ComponentProps<typeof Feather>["name"];
+
+export type ToastTone = "success" | "error" | "warning" | "info";
+
+const TONES: Record<ToastTone, { color: string; icon: FeatherName }> = {
+  success: { color: colors["ji-teal-500"], icon: "check" },
+  error: { color: colors["ji-orange-500"], icon: "alert-circle" },
+  warning: { color: colors["ji-amber-500"], icon: "alert-triangle" },
+  info: { color: colors["ji-blue-800"], icon: "info" },
+};
 
 function ToastPill({ tone, icon, text1 }: { tone: string; icon: ReactNode; text1?: string }) {
   return (
@@ -52,26 +62,31 @@ function ToastPill({ tone, icon, text1 }: { tone: string; icon: ReactNode; text1
   );
 }
 
+function toneRenderer(tone: ToastTone) {
+  const { color, icon } = TONES[tone];
+  return ({ text1 }: ToastProps) => (
+    <ToastPill
+      tone={color}
+      icon={<Feather name={icon} size={14} color={colors["ji-white"]} />}
+      text1={text1}
+    />
+  );
+}
+
 export const toastConfig = {
-  customToast: ({ text1 }: ToastProps) => (
-    <ToastPill
-      tone={colors["ji-teal-500"]}
-      icon={<Feather name="check" size={14} color={colors["ji-white"]} />}
-      text1={text1}
-    />
-  ),
-  error: ({ text1 }: ToastProps) => (
-    <ToastPill
-      tone={colors["ji-orange-500"]}
-      icon={<Feather name="alert-circle" size={14} color={colors["ji-white"]} />}
-      text1={text1}
-    />
-  ),
+  success: toneRenderer("success"),
+  error: toneRenderer("error"),
+  warning: toneRenderer("warning"),
+  info: toneRenderer("info"),
 } satisfies ToastConfig;
 
-export const showCustomToast = (text: string) => {
-  Toast.show({
-    type: "customToast",
-    text1: text,
-  });
+type ShowToastArgs = {
+  text: string;
+  /** Circle color + icon. Defaults to `"success"`. */
+  type?: ToastTone;
+};
+
+/** Single entry point for every toast: `showToast({ type: "error", text: "..." })`. */
+export const showToast = ({ text, type = "success" }: ShowToastArgs) => {
+  Toast.show({ type, text1: text });
 };

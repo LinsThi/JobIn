@@ -5,7 +5,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { Job } from "~/src/shared/domain/job";
 import { zustandMMKVStorage } from "~/src/shared/services/mmkvStorage";
 import { PlataformProps } from "~/src/shared/utils/platforms";
-import { showCustomToast } from "~/src/shared/utils/toast";
+import { showToast } from "~/src/shared/utils/toast";
 import { MAX_TRACKED_CATEGORIES, StoreProps, initialStateUserDetails } from "./@types";
 
 const useUserDetails = create<StoreProps>()(
@@ -35,7 +35,7 @@ const useUserDetails = create<StoreProps>()(
             }));
           }
 
-          showCustomToast("Plataformas atualizadas");
+          showToast({ type: "success", text: "Plataformas atualizadas" });
         },
         handleUnfollowPlatform: (platform: PlataformProps) => {
           const followedPlatforms = get().state.platformsFollowed;
@@ -49,7 +49,7 @@ const useUserDetails = create<StoreProps>()(
             },
           }));
 
-          showCustomToast("Plataformas atualizadas");
+          showToast({ type: "success", text: "Plataformas atualizadas" });
         },
         toggleSavedJob: (job: Job) => {
           const savedJobs = get().state.savedJobs;
@@ -64,7 +64,10 @@ const useUserDetails = create<StoreProps>()(
             },
           }));
 
-          showCustomToast(alreadySaved ? "Vaga removida das salvas" : "Vaga salva com sucesso");
+          showToast({
+            type: "success",
+            text: alreadySaved ? "Vaga removida das salvas" : "Vaga salva com sucesso",
+          });
         },
         isJobSaved: (jobId: string) => {
           return get().state.savedJobs.some((savedJob) => savedJob.id === jobId);

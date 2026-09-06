@@ -6,7 +6,7 @@ import { JobPlatformId, normalizePlatformId, normalizedJobToJob } from "~/src/sh
 import { useSearchJobs } from "~/src/shared/queries/useSearchJobs";
 import { NormalizedJobDTO, SearchProgress } from "~/src/shared/queries/useSearchJobs/types";
 import useUserDetails from "~/src/shared/store/useUserDetails";
-import { showCustomToast } from "~/src/shared/utils/toast";
+import { showToast } from "~/src/shared/utils/toast";
 
 export type SearchPhase = "idle" | "searching" | "done";
 
@@ -84,7 +84,7 @@ export function useJobSearch() {
   );
 
   useEffect(() => {
-    if (failed) showCustomToast("Não foi possível buscar vagas agora");
+    if (failed) showToast({ type: "error", text: "Não foi possível buscar vagas agora" });
   }, [failed]);
 
   const runSearch = useCallback((term: string) => {

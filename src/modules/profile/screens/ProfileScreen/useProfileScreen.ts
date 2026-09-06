@@ -8,7 +8,7 @@ import {
   isProfileComplete,
   MAX_TRACKED_CATEGORIES,
 } from "~/src/shared/store/useUserDetails/@types";
-import { showCustomToast } from "~/src/shared/utils/toast";
+import { showToast } from "~/src/shared/utils/toast";
 
 const sameSet = (a: string[], b: string[]) =>
   a.length === b.length && a.every((item, index) => item === b[index]);
@@ -55,10 +55,10 @@ export function useProfileScreen() {
       if (isSetup.current) {
         router.replace("/(tabs)");
       } else {
-        showCustomToast(profileCopy.saved);
+        showToast({ type: "success", text: profileCopy.saved });
       }
     } catch {
-      showCustomToast(profileCopy.saveError);
+      showToast({ type: "error", text: profileCopy.saveError });
     }
   };
 
