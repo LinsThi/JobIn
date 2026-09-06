@@ -18,8 +18,8 @@ export function RecommendedJobCard({ job, onPress }: Props) {
       style={{ backgroundColor: job.accent.background }}
       pressStyle={{ scale: 0.98 }}
       onPress={() => onPress(job)}>
-      <XStack items="center" justify="space-between" mb={26}>
-        <XStack items="center" gap={9}>
+      <XStack items="center" gap={9} mb={26}>
+        <XStack flex={1} items="center" gap={9} style={{ minWidth: 0 }}>
           <YStack
             width={32}
             height={32}
@@ -31,12 +31,20 @@ export function RecommendedJobCard({ job, onPress }: Props) {
               {getJobInitial(job)}
             </Text>
           </YStack>
-          <Text fontFamily="$semibold" fontSize={12.5} style={{ color: "rgba(255,255,255,0.92)" }}>
+          <Text
+            fontFamily="$semibold"
+            fontSize={12.5}
+            numberOfLines={1}
+            style={{ color: "rgba(255,255,255,0.92)", flexShrink: 1 }}>
             {job.company}
           </Text>
         </XStack>
 
-        <YStack px={9} py={5} rounded={8} style={{ backgroundColor: "rgba(255,255,255,0.14)" }}>
+        <YStack
+          px={9}
+          py={5}
+          rounded={8}
+          style={{ backgroundColor: "rgba(255,255,255,0.14)", flexShrink: 0 }}>
           <Text fontFamily="$bold" fontSize={9.5} color="$ji-white" letterSpacing={0.4}>
             {job.platform.toUpperCase()}
           </Text>
