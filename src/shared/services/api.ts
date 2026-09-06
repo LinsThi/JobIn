@@ -33,3 +33,27 @@ const baseURL = process.env.EXPO_PUBLIC_API_URL ?? (__DEV__ ? devApiUrl() : null
 export const apiServe = axios.create({
   baseURL,
 });
+
+// Surface why a request failed in the Metro console — otherwise a network error
+// on a physical device (wrong LAN host, firewall blocking :3333) only shows up
+// as a generic "Não foi possível..." toast with no trace.
+apiServe.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const { config, response, message, code } = error ?? {};
+    const url = `${config?.baseURL ?? ""}${config?.url ?? ""}`;
+
+    if (response) {
+      console.warn(
+        `[api] ${config?.method?.toUpperCase()} ${url} -> ${response.status}`,
+        response.data
+      );
+    } else {
+      console.warn(
+        `[api] ${config?.method?.toUpperCase()} ${url} failed: ${code ?? ""} ${message ?? ""}`.trim()
+      );
+    }
+
+    return Promise.reject(error);
+  }
+);

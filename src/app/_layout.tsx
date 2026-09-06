@@ -78,7 +78,7 @@ export default function RootLayout() {
   const hydrated = useUserDetailsHydrated();
   const { isDisabled, backgroundColor } = useSafeAreaBackground((store) => store.state);
   const bottomSheetRef = useRef(null);
-  const { done: videoDone } = useBootSplash((store) => store.state);
+  const { ready: videoReady, done: videoDone } = useBootSplash((store) => store.state);
 
   const [fontsLoaded, fontError] = useFonts({
     Poppins_400Regular,
@@ -89,11 +89,15 @@ export default function RootLayout() {
     unset: Poppins_400Regular,
   });
 
+  // Hand off from the native (icon) splash to the video as soon as the video has
+  // a frame ready — NOT when it finishes, otherwise the native splash covers the
+  // whole video and it's never seen (most visible in a release build, where the
+  // native splash stays rock-solid until `hideAsync`).
   useEffect(() => {
-    if ((fontsLoaded || fontError) && videoDone) {
+    if ((fontsLoaded || fontError) && videoReady) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, fontError, videoDone]);
+  }, [fontsLoaded, fontError, videoReady]);
 
   useEffect(() => {
     if (bottomSheetRef.current) {

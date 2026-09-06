@@ -15,6 +15,7 @@ export function ChoiceChip({
   size = "md",
   variant = "tag",
   fullWidth,
+  disabled = false,
   ...frameProps
 }: ChipProps) {
   // `square` owns its whole box (fixed 50x50) – applying `size` padding on top
@@ -27,7 +28,8 @@ export function ChoiceChip({
       variant={variant}
       size={isSquare ? undefined : size}
       fullWidth={fullWidth}
-      onPress={onPress}
+      disabled={disabled}
+      onPress={disabled ? undefined : onPress}
       {...frameProps}>
       <Text
         variant="tag"

@@ -1,6 +1,8 @@
 export const searchCopy = {
   title: "Buscar vagas",
   inputPlaceholder: "Cargo, empresa ou palavra-chave",
+  searchAction: "Buscar",
+  clearInput: "Limpar busca",
   recentTitle: "Pesquisas recentes",
   recentClear: "Limpar",
   consultingTitle: "Consultando plataformas…",
@@ -26,6 +28,9 @@ export const searchCopy = {
     workModel: "Modelo de trabalho",
     platforms: "Plataformas",
     location: "Localização",
+    locationHint: (count: number, max: number) => `${count}/${max}`,
+    showMoreStates: "Ver mais estados",
+    showLessStates: "Ver menos",
     contract: "Contrato",
     salary: "Salário mínimo",
     anySalary: "Qualquer",

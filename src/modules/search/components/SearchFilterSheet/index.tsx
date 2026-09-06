@@ -6,6 +6,8 @@ import { XStack, YStack } from "tamagui";
 import {
   CONTRACT_TYPES,
   EMPTY_FILTERS,
+  MAX_SEARCH_STATES,
+  POPULAR_SEARCH_STATES,
   SALARY_STEPS,
   SEARCH_PLATFORMS,
   SEARCH_STATES,
@@ -29,10 +31,31 @@ function toggle<T>(list: T[], value: T): T[] {
 
 export function SearchFilterSheet({ open, filters, onClose, onApply }: SearchFilterSheetProps) {
   const [draft, setDraft] = useState<SearchFilters>(filters);
+  const [showAllStates, setShowAllStates] = useState(false);
 
   useEffect(() => {
-    if (open) setDraft(filters);
+    if (open) {
+      setDraft(filters);
+      setShowAllStates(false);
+    }
   }, [open, filters]);
+
+  const atStateLimit = draft.states.length >= MAX_SEARCH_STATES;
+  // Collapsed view: the popular UFs, plus any picked UF that isn't among them so
+  // a selection never hides when the list is folded.
+  const popular: readonly string[] = POPULAR_SEARCH_STATES;
+  const visibleStates = showAllStates
+    ? SEARCH_STATES
+    : [...popular, ...draft.states.filter((uf) => !popular.includes(uf))];
+
+  const toggleState = (uf: string) =>
+    setDraft((prev) => {
+      if (prev.states.includes(uf)) {
+        return { ...prev, states: prev.states.filter((item) => item !== uf) };
+      }
+      if (prev.states.length >= MAX_SEARCH_STATES) return prev;
+      return { ...prev, states: [...prev.states, uf] };
+    });
 
   return (
     <Modal
@@ -107,20 +130,36 @@ export function SearchFilterSheet({ open, filters, onClose, onApply }: SearchFil
               </YStack>
             </FilterSection>
 
-            <FilterSection title={searchCopy.filters.location}>
+            <FilterSection
+              title={searchCopy.filters.location}
+              hint={searchCopy.filters.locationHint(draft.states.length, MAX_SEARCH_STATES)}>
               <XStack flexWrap="wrap" gap={7}>
-                {SEARCH_STATES.map((uf) => (
-                  <ChoiceChip
-                    key={uf}
-                    label={uf}
-                    variant="square"
-                    active={draft.states.includes(uf)}
-                    onPress={() =>
-                      setDraft((prev) => ({ ...prev, states: toggle(prev.states, uf) }))
-                    }
-                  />
-                ))}
+                {visibleStates.map((uf) => {
+                  const selected = draft.states.includes(uf);
+                  return (
+                    <ChoiceChip
+                      key={uf}
+                      label={uf}
+                      variant="square"
+                      active={selected}
+                      disabled={!selected && atStateLimit}
+                      onPress={() => toggleState(uf)}
+                    />
+                  );
+                })}
               </XStack>
+
+              {showAllStates || SEARCH_STATES.length > visibleStates.length ? (
+                <Text
+                  variant="action"
+                  color="$ji-teal-500"
+                  mt={10}
+                  onPress={() => setShowAllStates((value) => !value)}>
+                  {showAllStates
+                    ? searchCopy.filters.showLessStates
+                    : searchCopy.filters.showMoreStates}
+                </Text>
+              ) : null}
             </FilterSection>
 
             <FilterSection title={searchCopy.filters.contract}>
@@ -175,7 +214,10 @@ export function SearchFilterSheet({ open, filters, onClose, onApply }: SearchFil
               borderColor="$ji-border-2"
               bg="$ji-white"
               pressStyle={{ opacity: 0.7 }}
-              onPress={() => setDraft(EMPTY_FILTERS)}>
+              onPress={() => {
+                setDraft(EMPTY_FILTERS);
+                setShowAllStates(false);
+              }}>
               <Text variant="tag" fontSize={13} color="$ji-navy-600">
                 {searchCopy.filters.clear}
               </Text>

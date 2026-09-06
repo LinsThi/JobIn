@@ -13,6 +13,8 @@ export type SearchFilterSheetProps = {
 
 export type FilterSectionProps = {
   title: string;
+  /** Optional right-aligned helper text (e.g. a selection counter). */
+  hint?: ReactNode;
   children: ReactNode;
 };
 

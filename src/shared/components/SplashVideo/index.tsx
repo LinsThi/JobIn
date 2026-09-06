@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { StatusBar } from "react-native";
 import { YStack } from "tamagui";
 
-import splashSource from "~/src/assets/animations/JobIn Splash.mp4";
+import splashSource from "~/src/assets/animations/jobin-splash.mp4";
 import { useSafeAreaBackground } from "~/src/shared/store/useSafeAreaBackground";
 
 type Props = {

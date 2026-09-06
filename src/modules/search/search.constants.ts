@@ -6,35 +6,37 @@ export type SearchJob = Job & { state: string };
 export const WORK_MODELS = ["Remoto", "Híbrido", "Presencial"] as const;
 export const CONTRACT_TYPES = ["CLT", "PJ"] as const;
 
-export const SEARCH_STATES = [
+/** Highest job-volume UFs — shown first; the rest sit behind a "ver mais". */
+export const POPULAR_SEARCH_STATES = ["SP", "RJ", "MG", "RS", "PR", "SC"] as const;
+
+const OTHER_SEARCH_STATES = [
   "AC",
   "AL",
   "AP",
   "AM",
   "BA",
   "CE",
+  "DF",
   "ES",
   "GO",
-  "DF",
   "MA",
   "MT",
   "MS",
-  "MG",
   "PA",
   "PB",
-  "PR",
   "PE",
   "PI",
-  "RJ",
   "RN",
-  "RS",
   "RO",
   "RR",
-  "SC",
-  "SP",
   "SE",
   "TO",
 ];
+
+export const SEARCH_STATES = [...POPULAR_SEARCH_STATES, ...OTHER_SEARCH_STATES];
+
+/** How many locations a user may pick at once. */
+export const MAX_SEARCH_STATES = 3;
 
 /** Salary floors offered in the filter sheet — `0` means "no minimum". */
 export const SALARY_STEPS = [0, 3000, 5000, 8000, 12000, 16000];

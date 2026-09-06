@@ -21,13 +21,16 @@ export function SearchBar({
   onOpenFilters,
   activeFilterCount,
 }: Props) {
+  const hasQuery = value.trim().length > 0;
+
   return (
     <XStack gap={10}>
       <XStack
         flex={1}
         items="center"
-        gap={10}
-        px={15}
+        gap={8}
+        pl={15}
+        pr={6}
         height={50}
         rounded={16}
         bg="$ji-white"
@@ -50,6 +53,36 @@ export function SearchBar({
             color: "#023047",
           }}
         />
+
+        {hasQuery ? (
+          <XStack
+            width={26}
+            height={26}
+            rounded={999}
+            items="center"
+            justify="center"
+            bg="$ji-fill-2"
+            pressStyle={{ scale: 0.9 }}
+            onPress={() => onChangeText("")}
+            accessibilityRole="button"
+            accessibilityLabel={searchCopy.clearInput}>
+            <Feather name="x" size={13} color="#4A7C90" />
+          </XStack>
+        ) : null}
+
+        <XStack
+          width={38}
+          height={38}
+          rounded={12}
+          items="center"
+          justify="center"
+          bg={hasQuery ? "$ji-teal-500" : "$ji-fill-2"}
+          pressStyle={hasQuery ? { scale: 0.94 } : undefined}
+          onPress={hasQuery ? onSubmit : undefined}
+          accessibilityRole="button"
+          accessibilityLabel={searchCopy.searchAction}>
+          <Feather name="arrow-right" size={18} color={hasQuery ? "#FFFFFF" : "#8CA9B4"} />
+        </XStack>
       </XStack>
 
       <YStack

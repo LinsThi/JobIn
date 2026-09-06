@@ -21,7 +21,7 @@ interface SearchPage {
   hasMore: boolean;
 }
 
-function searchParams(term: string, platforms: string[], skills: string[]) {
+function searchParams(term: string, platforms: string[], skills: string[], states: string[]) {
   return {
     query: term,
     pageSize: PAGE_SIZE,
@@ -29,6 +29,10 @@ function searchParams(term: string, platforms: string[], skills: string[]) {
     // Sent so a search for a tracked category shares its result cache with the
     // Home feed (which always scores by skills).
     ...(skills.length ? { skills: skills.join(",") } : {}),
+    // UF codes — filtered server-side (over the full result set, before
+    // pagination). Not part of the scrape cache key, so changing states never
+    // triggers a re-scrape.
+    ...(states.length ? { states: states.join(",") } : {}),
   };
 }
 
@@ -40,11 +44,12 @@ async function startSearch(
   term: string,
   platforms: string[],
   skills: string[],
+  states: string[],
   signal?: AbortSignal
 ): Promise<{ ready: boolean; jobId?: string }> {
   const response = await apiServe.get<SearchPageDTO | EnqueuedSearchDTO>("/jobs/search", {
     signal,
-    params: { ...searchParams(term, platforms, skills), page: 1 },
+    params: { ...searchParams(term, platforms, skills, states), page: 1 },
   });
 
   if (response.status === 202) {
@@ -57,12 +62,13 @@ async function fetchSearchPage(
   term: string,
   platforms: string[],
   skills: string[],
+  states: string[],
   page: number,
   signal?: AbortSignal
 ): Promise<SearchPage> {
   const { data } = await apiServe.get<SearchPageDTO>("/jobs/search", {
     signal,
-    params: { ...searchParams(term, platforms, skills), page },
+    params: { ...searchParams(term, platforms, skills, states), page },
   });
 
   const total = data.meta?.total ?? data.data.length;
@@ -98,7 +104,8 @@ export interface UseSearchJobs {
 export function useSearchJobs(
   term: string,
   platforms: string[] = [],
-  skills: string[] = []
+  skills: string[] = [],
+  states: string[] = []
 ): UseSearchJobs {
   const query = term.trim();
   const enabled = query.length > 0;
@@ -108,13 +115,18 @@ export function useSearchJobs(
     .filter(Boolean)
     .sort()
     .join(",");
+  const stateKey = [...states]
+    .map((s) => s.trim().toUpperCase())
+    .filter(Boolean)
+    .sort()
+    .join(",");
   const queryClient = useQueryClient();
 
-  const startKey = ["searchJobs", "start", query, platformKey, skillKey];
+  const startKey = ["searchJobs", "start", query, platformKey, skillKey, stateKey];
 
   const startQuery = useQuery({
     queryKey: startKey,
-    queryFn: ({ signal }) => startSearch(query, platforms, skills, signal),
+    queryFn: ({ signal }) => startSearch(query, platforms, skills, states, signal),
     enabled,
     retry: 1,
     staleTime: 60_000,
@@ -143,12 +155,12 @@ export function useSearchJobs(
       queryClient.invalidateQueries({ queryKey: startKey });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jobStatus, query, platformKey, skillKey]);
+  }, [jobStatus, query, platformKey, skillKey, stateKey]);
 
   const pagesQuery = useInfiniteQuery({
-    queryKey: ["searchJobs", "pages", query, platformKey, skillKey],
+    queryKey: ["searchJobs", "pages", query, platformKey, skillKey, stateKey],
     queryFn: ({ pageParam, signal }) =>
-      fetchSearchPage(query, platforms, skills, pageParam, signal),
+      fetchSearchPage(query, platforms, skills, states, pageParam, signal),
     initialPageParam: 1,
     getNextPageParam: (last) => (last.hasMore ? last.page + 1 : undefined),
     enabled: enabled && ready,

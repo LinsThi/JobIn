@@ -3,7 +3,10 @@ import type { ChoiceChipFrameProps } from "./styles";
 export type ChoiceChipVariant = "tag" | "pill" | "square";
 export type ChoiceChipSize = "sm" | "md" | "lg";
 
-type FrameStyleProps = Omit<ChoiceChipFrameProps, "active" | "variant" | "size" | "children">;
+type FrameStyleProps = Omit<
+  ChoiceChipFrameProps,
+  "active" | "variant" | "size" | "disabled" | "children"
+>;
 
 export type ChipProps = FrameStyleProps & {
   label: string;
@@ -14,4 +17,6 @@ export type ChipProps = FrameStyleProps & {
   /** spacing/density – ignored by the fixed-size `square` variant */
   size?: ChoiceChipSize;
   fullWidth?: boolean;
+  /** dims the chip and ignores presses */
+  disabled?: boolean;
 };

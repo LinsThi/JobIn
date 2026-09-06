@@ -55,6 +55,13 @@ export const ChoiceChipFrame = styled(XStack, {
       },
       false: {},
     },
+
+    disabled: {
+      true: {
+        opacity: 0.4,
+      },
+      false: {},
+    },
   } as const,
 
   defaultVariants: {

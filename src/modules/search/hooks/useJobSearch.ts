@@ -1,12 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import {
-  ALL_PLATFORM_IDS,
-  EMPTY_FILTERS,
-  SearchFilters,
-  SearchJob,
-  countActiveFilters,
-} from "../search.constants";
+import { ALL_PLATFORM_IDS, EMPTY_FILTERS, SearchFilters, SearchJob } from "../search.constants";
 
 import { JobPlatformId, normalizePlatformId, normalizedJobToJob } from "~/src/shared/domain/job";
 import { useSearchJobs } from "~/src/shared/queries/useSearchJobs";
@@ -35,8 +29,9 @@ function splitProgress(progress: SearchProgress | undefined) {
   return { done, errored };
 }
 
-// The backend already performed the keyword search; this only applies the
-// structured filters from the filter sheet against the returned jobs.
+// The backend performs the keyword search and the location (`states`) filter —
+// the latter over the full result set, before pagination. This only applies the
+// remaining structured filters from the filter sheet against the returned jobs.
 function matchesJob(job: SearchJob, filters: SearchFilters): boolean {
   if (filters.workModels.length && !filters.workModels.includes(job.workModel ?? "")) {
     return false;
@@ -47,7 +42,6 @@ function matchesJob(job: SearchJob, filters: SearchFilters): boolean {
   const platformsNarrowed =
     filters.platforms.length > 0 && filters.platforms.length < ALL_PLATFORM_IDS.length;
   if (platformsNarrowed && !filters.platforms.includes(job.platformId)) return false;
-  if (filters.states.length && !filters.states.includes(job.state)) return false;
   if (filters.salaryMin > 0 && (job.salaryMin ?? 0) < filters.salaryMin) return false;
 
   return true;
@@ -57,8 +51,9 @@ function matchesJob(job: SearchJob, filters: SearchFilters): boolean {
  * Owns the search term and filters. Results come from the async job-search
  * endpoint (`useSearchJobs`): a cache hit resolves immediately, otherwise it
  * polls the worker and reports real per-platform progress. The platform filter
- * scopes which sources the backend scrapes; the remaining filters are applied
- * client-side against the results.
+ * scopes which sources the backend scrapes and the location (`states`) filter
+ * runs server-side over the full result set; the remaining filters (work model,
+ * contract, salary) are applied client-side against the loaded pages.
  */
 export function useJobSearch() {
   const [query, setQuery] = useState("");
@@ -81,7 +76,7 @@ export function useJobSearch() {
     hasMore,
     loadingMore,
     loadMore,
-  } = useSearchJobs(submitted, platformScope, skills);
+  } = useSearchJobs(submitted, platformScope, skills, filters.states);
 
   const { done: completedPlatforms, errored: erroredPlatforms } = useMemo(
     () => splitProgress(progress),
@@ -100,7 +95,13 @@ export function useJobSearch() {
 
   const results = useMemo(() => jobs.filter((job) => matchesJob(job, filters)), [jobs, filters]);
 
-  const hasActiveFilters = countActiveFilters(filters) > 0;
+  // `states` is applied server-side and already reflected in `total`; the rest
+  // are client-side, so once any of them is on we can only count what's loaded.
+  const hasClientFilters =
+    filters.workModels.length > 0 ||
+    filters.contracts.length > 0 ||
+    filters.salaryMin > 0 ||
+    (filters.platforms.length > 0 && filters.platforms.length < ALL_PLATFORM_IDS.length);
 
   const phase: SearchPhase = !submitted ? "idle" : pending ? "searching" : "done";
 
@@ -116,7 +117,7 @@ export function useJobSearch() {
     results,
     // Total matches for the search; while client-side filters narrow the list we
     // can only report what is visible.
-    resultCount: hasActiveFilters ? results.length : total || results.length,
+    resultCount: hasClientFilters ? results.length : total || results.length,
     hasMore,
     loadingMore,
     loadMore,

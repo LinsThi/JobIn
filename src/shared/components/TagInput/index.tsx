@@ -1,6 +1,6 @@
 import Feather from "@expo/vector-icons/Feather";
 import { ReactNode, useState } from "react";
-import { TextInput } from "react-native";
+import { ScrollView, TextInput } from "react-native";
 import { XStack, YStack } from "tamagui";
 
 import { Text } from "~/src/shared/components/ui/Text";
@@ -16,9 +16,22 @@ type Props = {
   icon?: ReactNode;
   /** Tappable suggestions shown under the input; already-added ones are hidden. */
   suggestions?: string[];
+  /**
+   * When set, the picked-tags list scrolls inside its own area capped at this
+   * height (px) instead of growing the parent. Keeps surrounding UI fixed.
+   */
+  tagsMaxHeight?: number;
 };
 
-export function TagInput({ value, onChange, placeholder, maxTags, icon, suggestions }: Props) {
+export function TagInput({
+  value,
+  onChange,
+  placeholder,
+  maxTags,
+  icon,
+  suggestions,
+  tagsMaxHeight,
+}: Props) {
   const [draft, setDraft] = useState("");
 
   const atLimit = maxTags !== undefined && value.length >= maxTags;
@@ -38,6 +51,41 @@ export function TagInput({ value, onChange, placeholder, maxTags, icon, suggesti
 
   const visibleSuggestions = suggestions?.filter(
     (label) => !value.some((item) => item.toLowerCase() === label.toLowerCase())
+  );
+
+  const tagsWrap = (
+    <XStack gap={8} flexWrap="wrap">
+      {value.map((tag) => (
+        <XStack
+          key={tag}
+          items="center"
+          gap={8}
+          pl={14}
+          pr={10}
+          py={10}
+          rounded={999}
+          bg="$ji-fill-accent"
+          borderWidth={1}
+          borderColor="$ji-teal-500"
+          style={{ maxWidth: "100%" }}>
+          <Text variant="tag" color="$ji-navy-700" numberOfLines={1} style={{ flexShrink: 1 }}>
+            {tag}
+          </Text>
+          <XStack
+            width={16}
+            height={16}
+            rounded={999}
+            items="center"
+            justify="center"
+            bg="$ji-teal-500"
+            pressStyle={{ scale: 0.85 }}
+            onPress={() => removeTag(tag)}
+            style={{ flexShrink: 0 }}>
+            <Feather name="x" size={9} color={colors["ji-white"]} />
+          </XStack>
+        </XStack>
+      ))}
+    </XStack>
   );
 
   return (
@@ -108,8 +156,9 @@ export function TagInput({ value, onChange, placeholder, maxTags, icon, suggesti
                 rounded={999}
                 bg="$ji-white"
                 borderWidth={1}
-                borderColor="$ji-border-2">
-                <Text variant="tag" color="$ji-navy-600">
+                borderColor="$ji-border-2"
+                style={{ maxWidth: "100%" }}>
+                <Text variant="tag" color="$ji-navy-600" numberOfLines={1}>
                   {label}
                 </Text>
               </XStack>
@@ -118,38 +167,17 @@ export function TagInput({ value, onChange, placeholder, maxTags, icon, suggesti
         </YStack>
       ) : null}
 
-      {value.length > 0 ? (
-        <XStack gap={8} flexWrap="wrap">
-          {value.map((tag) => (
-            <XStack
-              key={tag}
-              items="center"
-              gap={8}
-              pl={14}
-              pr={10}
-              py={10}
-              rounded={999}
-              bg="$ji-fill-accent"
-              borderWidth={1}
-              borderColor="$ji-teal-500">
-              <Text variant="tag" color="$ji-navy-700">
-                {tag}
-              </Text>
-              <XStack
-                width={16}
-                height={16}
-                rounded={999}
-                items="center"
-                justify="center"
-                bg="$ji-teal-500"
-                pressStyle={{ scale: 0.85 }}
-                onPress={() => removeTag(tag)}>
-                <Feather name="x" size={9} color={colors["ji-white"]} />
-              </XStack>
-            </XStack>
-          ))}
-        </XStack>
-      ) : null}
+      {value.length === 0 ? null : tagsMaxHeight === undefined ? (
+        tagsWrap
+      ) : (
+        <ScrollView
+          style={{ maxHeight: tagsMaxHeight }}
+          showsVerticalScrollIndicator
+          nestedScrollEnabled
+          keyboardShouldPersistTaps="handled">
+          {tagsWrap}
+        </ScrollView>
+      )}
     </YStack>
   );
 }
