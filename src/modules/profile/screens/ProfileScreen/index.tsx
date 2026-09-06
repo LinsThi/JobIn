@@ -12,7 +12,7 @@ import { TagInput } from "~/src/shared/components/TagInput";
 import { Button } from "~/src/shared/components/ui/Button";
 import { IconButton } from "~/src/shared/components/ui/IconButton";
 import { Text } from "~/src/shared/components/ui/Text";
-import { MAX_TRACKED_CATEGORIES } from "~/src/shared/store/useUserDetails/@types";
+import { MAX_TRACKED_CATEGORIES, MIN_SKILLS } from "~/src/shared/store/useUserDetails/@types";
 import colors from "~/src/shared/theme/colors";
 
 export function ProfileScreen() {
@@ -32,6 +32,7 @@ export function ProfileScreen() {
 
   const progressPct = setupProgress(skills.length, categories.length);
   const categoriesAtLimit = categories.length >= MAX_TRACKED_CATEGORIES;
+  const skillsBelowMinimum = skills.length < MIN_SKILLS;
 
   return (
     <YStack flex={1} bg="$background">
@@ -71,8 +72,18 @@ export function ProfileScreen() {
               <YStack gap={10}>
                 <XStack items="baseline" justify="space-between">
                   <Text variant="section">{profileCopy.skillsLabel}</Text>
-                  <Text variant="cardMeta" color={skills.length ? "$ji-navy-700" : "$ji-ink-5"}>
-                    {profileCopy.skillsCount(skills.length)}
+                  <Text
+                    variant="cardMeta"
+                    color={
+                      skillsBelowMinimum
+                        ? "$ji-orange-500"
+                        : skills.length
+                          ? "$ji-navy-700"
+                          : "$ji-ink-5"
+                    }>
+                    {skillsBelowMinimum
+                      ? profileCopy.skillsCountMin(skills.length, MIN_SKILLS)
+                      : profileCopy.skillsCount(skills.length)}
                   </Text>
                 </XStack>
                 <Text variant="cardMeta">{profileCopy.skillsHelper}</Text>

@@ -6,7 +6,13 @@ import { Job } from "~/src/shared/domain/job";
 import { zustandMMKVStorage } from "~/src/shared/services/mmkvStorage";
 import { PlataformProps } from "~/src/shared/utils/platforms";
 import { showToast } from "~/src/shared/utils/toast";
-import { MAX_TRACKED_CATEGORIES, StoreProps, initialStateUserDetails } from "./@types";
+import {
+  MAX_TRACKED_CATEGORIES,
+  MIN_SKILLS,
+  MIN_TRACKED_CATEGORIES,
+  StoreProps,
+  initialStateUserDetails,
+} from "./@types";
 
 const useUserDetails = create<StoreProps>()(
   persist(
@@ -80,6 +86,14 @@ const useUserDetails = create<StoreProps>()(
           );
         },
         saveProfile: (skills: string[], trackedCategories: string[]) => {
+          if (skills.length < MIN_SKILLS) {
+            throw new Error(`Adicione ao menos ${MIN_SKILLS} habilidades`);
+          }
+
+          if (trackedCategories.length < MIN_TRACKED_CATEGORIES) {
+            throw new Error(`Adicione ao menos ${MIN_TRACKED_CATEGORIES} área para acompanhar`);
+          }
+
           if (trackedCategories.length > MAX_TRACKED_CATEGORIES) {
             throw new Error(`No máximo ${MAX_TRACKED_CATEGORIES} áreas para acompanhar`);
           }

@@ -7,6 +7,8 @@ import useUserDetails, { useUserDetailsHydrated } from "~/src/shared/store/useUs
 import {
   isProfileComplete,
   MAX_TRACKED_CATEGORIES,
+  MIN_SKILLS,
+  MIN_TRACKED_CATEGORIES,
 } from "~/src/shared/store/useUserDetails/@types";
 import { showToast } from "~/src/shared/utils/toast";
 
@@ -43,9 +45,9 @@ export function useProfileScreen() {
     [skills, categories, savedSkills, savedCategories]
   );
 
-  const meetsMinimum = skills.length > 0 && categories.length > 0;
+  const meetsMinimum = skills.length >= MIN_SKILLS && categories.length >= MIN_TRACKED_CATEGORIES;
   const canSave =
-    (isSetup.current ? meetsMinimum : dirty) && categories.length <= MAX_TRACKED_CATEGORIES;
+    meetsMinimum && categories.length <= MAX_TRACKED_CATEGORIES && (isSetup.current || dirty);
 
   const onSave = () => {
     if (!canSave) return;

@@ -41,6 +41,13 @@ export type Profile = {
 
 export const MAX_TRACKED_CATEGORIES = 3;
 
+/** Minimums the setup flow requires before a profile can be saved. */
+export const MIN_SKILLS = 3;
+export const MIN_TRACKED_CATEGORIES = 1;
+
 export function isProfileComplete(profile: Profile): boolean {
-  return profile.skills.length > 0 && profile.trackedCategories.length > 0;
+  return (
+    profile.skills.length >= MIN_SKILLS &&
+    profile.trackedCategories.length >= MIN_TRACKED_CATEGORIES
+  );
 }
