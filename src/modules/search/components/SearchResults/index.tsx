@@ -1,4 +1,5 @@
 import { ActivityIndicator, FlatList } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { YStack } from "tamagui";
 
 import { SEARCH_H_PADDING, SEARCH_TAB_BAR_CLEARANCE } from "../../search.constants";
@@ -16,6 +17,8 @@ type Props = {
 };
 
 export function SearchResults({ results, onPressJob, onEndReached, loadingMore }: Props) {
+  const insets = useSafeAreaInsets();
+
   return (
     <FlatList
       data={results}
@@ -25,7 +28,7 @@ export function SearchResults({ results, onPressJob, onEndReached, loadingMore }
       ItemSeparatorComponent={() => <YStack height={11} />}
       contentContainerStyle={{
         paddingHorizontal: SEARCH_H_PADDING,
-        paddingBottom: SEARCH_TAB_BAR_CLEARANCE,
+        paddingBottom: SEARCH_TAB_BAR_CLEARANCE + insets.bottom,
         flexGrow: 1,
       }}
       showsVerticalScrollIndicator={false}

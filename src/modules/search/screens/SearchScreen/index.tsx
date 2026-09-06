@@ -1,4 +1,5 @@
 import { ScrollView } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { YStack } from "tamagui";
 
 import { useSearchScreen } from "./useSearchScreen";
@@ -14,6 +15,7 @@ import { searchCopy } from "../../search.copy";
 
 export function SearchScreen() {
   const search = useSearchScreen();
+  const insets = useSafeAreaInsets();
 
   return (
     <>
@@ -46,7 +48,7 @@ export function SearchScreen() {
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={{
               paddingHorizontal: SEARCH_H_PADDING,
-              paddingBottom: SEARCH_TAB_BAR_CLEARANCE,
+              paddingBottom: SEARCH_TAB_BAR_CLEARANCE + insets.bottom,
             }}>
             <PlatformSearchStatus
               completed={search.completedPlatforms}
