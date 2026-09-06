@@ -2,6 +2,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "react-native";
 import { XStack, YStack } from "tamagui";
 
+import { PlatformChip } from "./PlatformChip";
 import { useJobCard } from "./useJobCard";
 
 import { IconButton } from "~/src/shared/components/ui/IconButton";
@@ -15,22 +16,6 @@ type Props = {
   onPress?: (job: Job) => void;
   showSave?: boolean;
 };
-
-function PlatformChip({ mono, color }: { mono: string; color: string }) {
-  return (
-    <YStack
-      width={14}
-      height={14}
-      rounded={5}
-      items="center"
-      justify="center"
-      style={{ backgroundColor: color }}>
-      <Text fontFamily="$bold" fontSize={6.5} lineHeight={7} color="$ji-white">
-        {mono}
-      </Text>
-    </YStack>
-  );
-}
 
 export function JobCard({ job, onPress, showSave = true }: Props) {
   const { saved, onToggleSave } = useJobCard(job);

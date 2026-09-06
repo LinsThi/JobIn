@@ -67,7 +67,10 @@
   },
   "eslintConfig": {
     "extends": "universe/native",
-    "root": true
+    "root": true,
+    "rules": {
+      "import/order": "off"
+    }
   },
   "private": true
 }

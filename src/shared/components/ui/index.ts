@@ -1,4 +1,5 @@
 export { Button } from "./Button";
+export { ChoiceChip } from "./ChoiceChip";
 export { IconButton } from "./IconButton";
 export { Screen } from "./Screen";
 export { SectionHeader } from "./SectionHeader";

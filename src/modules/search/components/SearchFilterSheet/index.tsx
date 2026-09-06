@@ -1,5 +1,5 @@
 import Feather from "@expo/vector-icons/Feather";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, ScrollView } from "react-native";
 import { XStack, YStack } from "tamagui";
 
@@ -15,126 +15,19 @@ import {
 } from "../../search.constants";
 import { searchCopy } from "../../search.copy";
 
+import { FilterSection } from "./FilterSection";
+import { PlatformRow } from "./PlatformRow";
+import { SearchFilterSheetProps } from "./types";
+
+import { ChoiceChip } from "~/src/shared/components/ui/ChoiceChip";
 import { IconButton } from "~/src/shared/components/ui/IconButton";
 import { Text } from "~/src/shared/components/ui/Text";
-import { JobPlatformId, getPlatformMeta } from "~/src/shared/domain/job";
-
-type Props = {
-  open: boolean;
-  filters: SearchFilters;
-  onClose: () => void;
-  onApply: (filters: SearchFilters) => void;
-};
 
 function toggle<T>(list: T[], value: T): T[] {
   return list.includes(value) ? list.filter((item) => item !== value) : [...list, value];
 }
 
-function FilterSection({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <YStack mb={22}>
-      <Text variant="cardMeta" fontFamily="$semibold" color="$ji-navy-900" mb={10}>
-        {title}
-      </Text>
-      {children}
-    </YStack>
-  );
-}
-
-type ChipProps = {
-  label: string;
-  active: boolean;
-  onPress: () => void;
-  grow?: boolean;
-  pill?: boolean;
-};
-
-function ChoiceChip({ label, active, onPress, grow, pill }: ChipProps) {
-  return (
-    <XStack
-      flex={grow ? 1 : undefined}
-      items="center"
-      justify="center"
-      px={pill ? 13 : 0}
-      py={pill ? 9 : 12}
-      rounded={pill ? 999 : 14}
-      bg={active ? "$ji-fill-accent" : "$ji-white"}
-      borderWidth={1}
-      borderColor={active ? "$ji-teal-500" : "$ji-border-2"}
-      pressStyle={{ opacity: 0.7 }}
-      onPress={onPress}>
-      <Text
-        variant="tag"
-        fontSize={pill ? 11.5 : 12}
-        color={active ? "$ji-teal-500" : "$ji-navy-600"}>
-        {label}
-      </Text>
-    </XStack>
-  );
-}
-
-function PlatformRow({
-  id,
-  speed,
-  active,
-  onPress,
-}: {
-  id: JobPlatformId;
-  speed: "fast" | "mid" | "slow";
-  active: boolean;
-  onPress: () => void;
-}) {
-  const meta = getPlatformMeta(id);
-
-  return (
-    <XStack
-      items="center"
-      gap={12}
-      px={14}
-      py={12}
-      rounded={16}
-      bg={active ? "$ji-fill-accent" : "$ji-white"}
-      borderWidth={1}
-      borderColor={active ? "$ji-teal-500" : "$ji-border-2"}
-      pressStyle={{ opacity: 0.8 }}
-      onPress={onPress}>
-      <YStack
-        width={34}
-        height={34}
-        rounded={11}
-        items="center"
-        justify="center"
-        style={{ backgroundColor: meta.color }}>
-        <Text fontFamily="$bold" fontSize={11} color="$ji-white">
-          {meta.mono}
-        </Text>
-      </YStack>
-
-      <YStack flex={1}>
-        <Text variant="cardMeta" fontFamily="$semibold" color="$ji-navy-900">
-          {meta.name}
-        </Text>
-        <Text variant="tag" color="$ji-ink-4" mt={2}>
-          {searchCopy.speedLabel[speed]}
-        </Text>
-      </YStack>
-
-      <YStack
-        width={20}
-        height={20}
-        rounded={7}
-        items="center"
-        justify="center"
-        borderWidth={1.5}
-        borderColor={active ? "$ji-teal-500" : "$ji-border-check"}
-        bg={active ? "$ji-teal-500" : "transparent"}>
-        {active ? <Feather name="check" size={11} color="#FFFFFF" /> : null}
-      </YStack>
-    </XStack>
-  );
-}
-
-export function SearchFilterSheet({ open, filters, onClose, onApply }: Props) {
+export function SearchFilterSheet({ open, filters, onClose, onApply }: SearchFilterSheetProps) {
   const [draft, setDraft] = useState<SearchFilters>(filters);
 
   useEffect(() => {
@@ -183,7 +76,6 @@ export function SearchFilterSheet({ open, filters, onClose, onApply }: Props) {
                   <ChoiceChip
                     key={model}
                     label={model}
-                    grow
                     active={draft.workModels.includes(model)}
                     onPress={() =>
                       setDraft((prev) => ({
@@ -221,7 +113,7 @@ export function SearchFilterSheet({ open, filters, onClose, onApply }: Props) {
                   <ChoiceChip
                     key={uf}
                     label={uf}
-                    pill
+                    variant="square"
                     active={draft.states.includes(uf)}
                     onPress={() =>
                       setDraft((prev) => ({ ...prev, states: toggle(prev.states, uf) }))
@@ -237,7 +129,7 @@ export function SearchFilterSheet({ open, filters, onClose, onApply }: Props) {
                   <ChoiceChip
                     key={contract}
                     label={contract}
-                    grow
+                    fullWidth
                     active={draft.contracts.includes(contract)}
                     onPress={() =>
                       setDraft((prev) => ({
@@ -255,7 +147,7 @@ export function SearchFilterSheet({ open, filters, onClose, onApply }: Props) {
                 {SALARY_STEPS.map((step) => (
                   <ChoiceChip
                     key={step}
-                    pill
+                    variant="pill"
                     label={step === 0 ? searchCopy.filters.anySalary : salaryStepLabel(step)}
                     active={draft.salaryMin === step}
                     onPress={() => setDraft((prev) => ({ ...prev, salaryMin: step }))}
