@@ -10,6 +10,7 @@ import {
 } from "./types";
 
 import { apiServe } from "~/src/shared/services/api";
+import { getDeviceId } from "~/src/shared/services/deviceId";
 
 const PAGE_SIZE = 20;
 const POLL_INTERVAL_MS = 2000;
@@ -49,7 +50,13 @@ async function startSearch(
 ): Promise<{ ready: boolean; jobId?: string }> {
   const response = await apiServe.get<SearchPageDTO | EnqueuedSearchDTO>("/jobs/search", {
     signal,
-    params: { ...searchParams(term, platforms, skills, states), page: 1 },
+    params: {
+      ...searchParams(term, platforms, skills, states),
+      page: 1,
+      // Tags the queued job so the backend can notify this device once the
+      // (possibly slow) scrape finishes — see `SearchCompletionNotifier`.
+      userId: getDeviceId(),
+    },
   });
 
   if (response.status === 202) {
@@ -149,11 +156,20 @@ export function useSearchJobs(
 
   const jobStatus = statusQuery.data?.status;
 
-  // Once the worker finishes, re-run `startSearch` so it now gets the cached 200.
+  // Once the worker finishes, re-run `startSearch` so it now gets the cached 200,
+  // and pull the notifications list instead of waiting for its 30s poll — the
+  // backend writes a "search results ready" notification for this device right
+  // after marking the job complete. That write is fire-and-forget on the worker,
+  // so give it a moment before refetching.
   useEffect(() => {
-    if (jobStatus === "completed") {
-      queryClient.invalidateQueries({ queryKey: startKey });
-    }
+    if (jobStatus !== "completed") return;
+
+    queryClient.invalidateQueries({ queryKey: startKey });
+
+    const timer = setTimeout(() => {
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    }, 1500);
+    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobStatus, query, platformKey, skillKey, stateKey]);
 
