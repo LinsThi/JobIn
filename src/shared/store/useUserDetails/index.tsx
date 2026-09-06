@@ -1,10 +1,12 @@
 /* eslint-disable import/order */
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { Job } from "~/src/shared/domain/job";
+import { zustandMMKVStorage } from "~/src/shared/services/mmkvStorage";
 import { PlataformProps } from "~/src/shared/utils/platforms";
-import { showCustomToast } from "~/src/shared/utils/toast";
-import { StoreProps, initialStateUserDetails } from "./@types";
+import { showToast } from "~/src/shared/utils/toast";
+import { MAX_TRACKED_CATEGORIES, StoreProps, initialStateUserDetails } from "./@types";
 
 const useUserDetails = create<StoreProps>()(
   persist(
@@ -33,7 +35,7 @@ const useUserDetails = create<StoreProps>()(
             }));
           }
 
-          showCustomToast("Plataformas atualizadas");
+          showToast({ type: "success", text: "Plataformas atualizadas" });
         },
         handleUnfollowPlatform: (platform: PlataformProps) => {
           const followedPlatforms = get().state.platformsFollowed;
@@ -47,43 +49,28 @@ const useUserDetails = create<StoreProps>()(
             },
           }));
 
-          showCustomToast("Plataformas atualizadas");
+          showToast({ type: "success", text: "Plataformas atualizadas" });
         },
-        handleSaveVacantion: (vacantion) => {
-          const vacantionSaved = get().state.vacantionSaved;
-
-          if (
-            !vacantionSaved.find(
-              (currentVacantion) =>
-                currentVacantion.vacationTitle === vacantion.vacationTitle &&
-                currentVacantion.companyName === vacantion.companyName
-            )
-          ) {
-            set((prevState) => ({
-              state: {
-                ...prevState.state,
-                vacantionSaved: [...vacantionSaved, vacantion],
-              },
-            }));
-
-            showCustomToast("Oportunidade salva");
-          }
-        },
-        handleUnsaveVacantion: (vacantion) => {
-          const vacantionSaved = get().state.vacantionSaved;
+        toggleSavedJob: (job: Job) => {
+          const savedJobs = get().state.savedJobs;
+          const alreadySaved = savedJobs.some((savedJob) => savedJob.id === job.id);
 
           set((prevState) => ({
             state: {
               ...prevState.state,
-              vacantionSaved: vacantionSaved.filter(
-                (vacantionSaved) =>
-                  vacantionSaved.vacationTitle !== vacantion.vacationTitle &&
-                  vacantionSaved.companyName !== vacantion.companyName
-              ),
+              savedJobs: alreadySaved
+                ? savedJobs.filter((savedJob) => savedJob.id !== job.id)
+                : [job, ...savedJobs],
             },
           }));
 
-          showCustomToast("Oportunidade removida dos salvos");
+          showToast({
+            type: "success",
+            text: alreadySaved ? "Vaga removida das salvas" : "Vaga salva com sucesso",
+          });
+        },
+        isJobSaved: (jobId: string) => {
+          return get().state.savedJobs.some((savedJob) => savedJob.id === jobId);
         },
         verifyIfPlatformIsFollowed: (platform: PlataformProps) => {
           const followedPlatforms = get().state.platformsFollowed;
@@ -92,25 +79,36 @@ const useUserDetails = create<StoreProps>()(
             (followedPlatform) => followedPlatform.name === platform.name
           );
         },
-        verifyIfVacantionIsSaved: (vacantion) => {
-          const vacantionSaved = get().state.vacantionSaved;
+        saveProfile: (skills: string[], trackedCategories: string[]) => {
+          if (trackedCategories.length > MAX_TRACKED_CATEGORIES) {
+            throw new Error(`No máximo ${MAX_TRACKED_CATEGORIES} áreas para acompanhar`);
+          }
 
-          return !!vacantionSaved.find(
-            (vacantionSaved) =>
-              vacantionSaved.vacationTitle === vacantion.vacationTitle &&
-              vacantionSaved.companyName === vacantion.companyName
-          );
+          set((prevState) => ({
+            state: {
+              ...prevState.state,
+              skills,
+              trackedCategories,
+            },
+          }));
         },
       },
     }),
     {
       name: "@JobIn:userDetails",
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => zustandMMKVStorage),
       merge: (persistedState, currentState) => {
-        const { state } = persistedState as StoreProps;
+        const persisted = (persistedState as Partial<StoreProps> | undefined) ?? {};
+        const state = persisted.state ?? initialStateUserDetails;
 
         return {
-          state,
+          state: {
+            vacantionRequired: state.vacantionRequired ?? "",
+            platformsFollowed: state.platformsFollowed ?? [],
+            savedJobs: state.savedJobs ?? [],
+            skills: state.skills ?? [],
+            trackedCategories: state.trackedCategories ?? [],
+          },
           actions: currentState.actions,
         };
       },
@@ -119,3 +117,20 @@ const useUserDetails = create<StoreProps>()(
 );
 
 export default useUserDetails;
+
+/**
+ * Whether the persisted state has finished loading from MMKV. Navigation
+ * guards wait on this before reading `skills`/`trackedCategories` so a cold
+ * app open doesn't briefly think the profile is incomplete.
+ */
+export function useUserDetailsHydrated() {
+  const [hydrated, setHydrated] = useState(() => useUserDetails.persist.hasHydrated());
+
+  useEffect(() => {
+    const unsub = useUserDetails.persist.onFinishHydration(() => setHydrated(true));
+    setHydrated(useUserDetails.persist.hasHydrated());
+    return unsub;
+  }, []);
+
+  return hydrated;
+}

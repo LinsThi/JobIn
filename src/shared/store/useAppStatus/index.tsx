@@ -1,7 +1,7 @@
 /* eslint-disable import/order */
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { zustandMMKVStorage } from "~/src/shared/services/mmkvStorage";
 import { StoreProps, initialStateAppStatus } from "./@types";
 
 const useAppStatus = create<StoreProps>()(
@@ -21,7 +21,7 @@ const useAppStatus = create<StoreProps>()(
     }),
     {
       name: "@JobIn:appStatus",
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => zustandMMKVStorage),
       merge: (persistedState, currentState) => {
         const {
           state: { alreadyOpenedApp },

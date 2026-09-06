@@ -2,7 +2,7 @@
   "expo": {
     "name": "JobIn",
     "slug": "linsdevjobin",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "scheme": "jobin",
     "web": {
       "bundler": "metro",
@@ -11,14 +11,25 @@
     },
     "plugins": [
       "expo-router",
+      "expo-font",
+      "expo-web-browser",
+      "expo-status-bar",
       [
-        "expo-dev-launcher",
+        "expo-splash-screen",
         {
-          "launchMode": "most-recent"
+          "image": "./assets/icon.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
         }
       ],
-      "expo-font",
-      "expo-web-browser"
+      "expo-video",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#F5F5F5"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
@@ -27,11 +38,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
+    "backgroundColor": "#F5FAFC",
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
@@ -41,8 +48,10 @@
       }
     },
     "android": {
+      "edgeToEdgeEnabled": false,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
+        "monochromeImage": "./assets/adaptive-icon-monochrome.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.linsdev.JobIn"

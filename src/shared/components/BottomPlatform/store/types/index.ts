@@ -1,13 +1,12 @@
 import { RefObject } from "react";
-import BottomSheet from "react-native-gesture-bottom-sheet";
 
 export type StateProps = {
-  bottomSheetRef: RefObject<BottomSheet> | null;
+  bottomSheetRef: RefObject<any> | null;
   haveALoading: boolean;
 };
 
 export type ActionProps = {
-  addBottomSheetRef: (ref: RefObject<BottomSheet>) => void;
+  addBottomSheetRef: (ref: RefObject<any>) => void;
   handleOpenBottomPlatform: () => void;
   handleCloseBottomPlatform: () => void;
   handleChangeHaveALoading: (isLoading: boolean) => void;

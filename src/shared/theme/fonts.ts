@@ -1,0 +1,82 @@
+export default {
+  // family: "Poppins_400Regular",
+  fonts: {
+    regular: {
+      family: "Poppins_400Regular",
+      weight: "400",
+    },
+    medium: {
+      family: "Poppins_500Medium",
+      weight: "500",
+    },
+    semibold: {
+      family: "Poppins_600SemiBold",
+      weight: "600",
+    },
+    bold: {
+      family: "Poppins_700Bold",
+      weight: "700",
+    },
+  },
+
+  size: {
+    display: 26,
+    "title-xl": 23,
+    "title-lg": 22,
+    "title-md": 21,
+    money: 19,
+    headline: 18,
+    screen: 16,
+    section: 15,
+    "card-title": 14.5,
+    body: 13,
+    "body-sm": 12.5,
+    meta: 11.5,
+    tag: 10.5,
+    nav: 9.5,
+    eyebrow: 9.5,
+  },
+
+  lineHeight: {
+    display: 31,
+    "title-xl": 29,
+    "title-lg": 28,
+    "title-md": 27,
+    money: 24,
+    headline: 23,
+    screen: 21,
+    section: 20,
+    "card-title": 19,
+    body: 20,
+    "body-sm": 19,
+    meta: 17,
+    tag: 15,
+    nav: 14,
+    eyebrow: 14,
+  },
+
+  letterSpacing: {
+    display: -0.8,
+    "title-xl": -0.7,
+    "title-lg": -0.7,
+    "title-md": -0.6,
+    money: -0.4,
+    headline: -0.4,
+    screen: -0.3,
+    section: -0.3,
+    "card-title": -0.2,
+    body: 0,
+    "body-sm": 0,
+    meta: 0,
+    tag: 0.1,
+    nav: 0.1,
+    eyebrow: 0.4,
+  },
+
+  weight: {
+    4: "400",
+    5: "500",
+    6: "600",
+    7: "700",
+  },
+};

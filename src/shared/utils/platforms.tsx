@@ -9,7 +9,7 @@ import TrabalhaBrasilLongLogo from "~/src/assets/svg/logos//trabalhaBrasil_logo.
 
 export const LONG_LOGOS = {
   InfoJobsLongLogo: (
-    <View className="pt-2">
+    <View style={{ paddingTop: 2 }}>
       <InfojobsLongLogo width={50} height={30} />
     </View>
   ),
@@ -19,10 +19,14 @@ export const LONG_LOGOS = {
 };
 
 export const SHORT_LOGOS = {
-  InfoJobsShortLogo: <Image className="h-12 w-12 rounded-full" source={InfoJobsShortLogo} />,
-  LinkedinShortLogo: <Image className="h-12 w-12 rounded-full" source={LinkedinShortLogo} />,
+  InfoJobsShortLogo: (
+    <Image style={{ height: 48, width: 48, borderRadius: 24 }} source={InfoJobsShortLogo} />
+  ),
+  LinkedinShortLogo: (
+    <Image style={{ height: 48, width: 48, borderRadius: 24 }} source={LinkedinShortLogo} />
+  ),
   TrabalhaBrasilShortLogo: (
-    <Image className="h-12 w-12 rounded-full" source={TrabalhaBrasilShortLogo} />
+    <Image style={{ height: 48, width: 48, borderRadius: 24 }} source={TrabalhaBrasilShortLogo} />
   ),
 };
 
