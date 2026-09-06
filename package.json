@@ -20,14 +20,14 @@
     "@expo/vector-icons": "^15.0.2",
     "@tamagui/config": "^2.7.7",
     "@tanstack/react-query": "^5.62.11",
-    "axios": "^1.7.9",
-    "expo": "^57.0.0",
+    "axios": "^1.20.0",
+    "expo": "~57.0.20",
     "expo-constants": "~57.0.16",
-    "expo-dev-client": "~57.0.16",
-    "expo-font": "~57.0.2",
-    "expo-linking": "~57.0.8",
+    "expo-dev-client": "~57.0.18",
+    "expo-font": "~57.0.3",
+    "expo-linking": "~57.0.9",
     "expo-notifications": "~57.0.17",
-    "expo-router": "~57.0.17",
+    "expo-router": "~57.0.19",
     "expo-splash-screen": "~57.0.8",
     "expo-status-bar": "~57.0.1",
     "expo-system-ui": "~57.0.3",
@@ -53,7 +53,7 @@
     "zustand": "^5.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
+    "@babel/core": "^7.29.6",
     "@types/react": "~19.2.10",
     "@typescript-eslint/eslint-plugin": "^7.7.0",
     "@typescript-eslint/parser": "^7.7.0",
@@ -71,6 +71,19 @@
     "rules": {
       "import/order": "off"
     }
+  },
+  "resolutions": {
+    "@babel/core": "^7.29.6",
+    "@xmldom/xmldom": "^0.8.11",
+    "brace-expansion": "^2.1.4",
+    "browserslist": "^4.24.5",
+    "decode-uri-component": "^0.5.0",
+    "js-yaml": "^3.14.2",
+    "minimatch": "^3.1.2",
+    "nanoid": "^3.3.11",
+    "shell-quote": "^1.8.4",
+    "svgo": "^3.3.2",
+    "underscore": "^1.13.7"
   },
   "private": true
 }
