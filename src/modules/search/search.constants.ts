@@ -38,8 +38,11 @@ export const SEARCH_STATES = [...POPULAR_SEARCH_STATES, ...OTHER_SEARCH_STATES];
 /** How many locations a user may pick at once. */
 export const MAX_SEARCH_STATES = 3;
 
-/** Salary floors offered in the filter sheet — `0` means "no minimum". */
-export const SALARY_STEPS = [0, 3000, 5000, 8000, 12000, 16000];
+/**
+ * Salary floors offered in the filter sheet. There is no "any" chip — leaving
+ * every chip unselected (`salaryMin === 0`) means "no minimum".
+ */
+export const SALARY_STEPS = [3000, 5000, 8000, 12000, 16000];
 
 export type PlatformSpeed = "fast" | "mid" | "slow";
 

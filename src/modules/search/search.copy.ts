@@ -33,7 +33,6 @@ export const searchCopy = {
     showLessStates: "Ver menos",
     contract: "Contrato",
     salary: "Salário mínimo",
-    anySalary: "Qualquer",
     clear: "Limpar filtros",
     apply: "Aplicar filtros",
   },
