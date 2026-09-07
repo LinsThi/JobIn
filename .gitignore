@@ -14,6 +14,10 @@ expo-env.d.ts
 
 .env
 
+# Google Play service account key for `eas submit`
+google-play-service-account*.json
+*service-account*.json
+
 
 
 ios
