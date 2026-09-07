@@ -15,6 +15,9 @@ import { getDeviceId } from "~/src/shared/services/deviceId";
 const PAGE_SIZE = 20;
 const POLL_INTERVAL_MS = 2000;
 
+/** Result ordering — mirrors the backend's `?sort=` values. */
+export type SearchSort = "relevance" | "recent";
+
 interface SearchPage {
   jobs: NormalizedJobDTO[];
   page: number;
@@ -22,7 +25,13 @@ interface SearchPage {
   hasMore: boolean;
 }
 
-function searchParams(term: string, platforms: string[], skills: string[], states: string[]) {
+function searchParams(
+  term: string,
+  platforms: string[],
+  skills: string[],
+  states: string[],
+  sort: SearchSort
+) {
   return {
     query: term,
     pageSize: PAGE_SIZE,
@@ -38,6 +47,9 @@ function searchParams(term: string, platforms: string[], skills: string[], state
     // pagination). Not part of the scrape cache key, so changing states never
     // triggers a re-scrape.
     ...(states.length ? { states: states.join(",") } : {}),
+    // Ordering — applied server-side over the full result set, never part of the
+    // scrape cache key, so toggling it re-orders without a re-scrape.
+    ...(sort === "recent" ? { sort } : {}),
   };
 }
 
@@ -50,6 +62,7 @@ async function startSearch(
   platforms: string[],
   skills: string[],
   states: string[],
+  sort: SearchSort,
   signal?: AbortSignal
 ): Promise<{ ready: boolean; jobId?: string }> {
   // `userId` (in `searchParams`) tags the queued job so the backend can notify
@@ -58,7 +71,7 @@ async function startSearch(
   const response = await apiServe.get<SearchPageDTO | EnqueuedSearchDTO>("/jobs/search", {
     signal,
     params: {
-      ...searchParams(term, platforms, skills, states),
+      ...searchParams(term, platforms, skills, states, sort),
       page: 1,
     },
   });
@@ -74,12 +87,13 @@ async function fetchSearchPage(
   platforms: string[],
   skills: string[],
   states: string[],
+  sort: SearchSort,
   page: number,
   signal?: AbortSignal
 ): Promise<SearchPage> {
   const { data } = await apiServe.get<SearchPageDTO>("/jobs/search", {
     signal,
-    params: { ...searchParams(term, platforms, skills, states), page },
+    params: { ...searchParams(term, platforms, skills, states, sort), page },
   });
 
   const total = data.meta?.total ?? data.data.length;
@@ -116,7 +130,8 @@ export function useSearchJobs(
   term: string,
   platforms: string[] = [],
   skills: string[] = [],
-  states: string[] = []
+  states: string[] = [],
+  sort: SearchSort = "relevance"
 ): UseSearchJobs {
   const query = term.trim();
   const enabled = query.length > 0;
@@ -133,11 +148,11 @@ export function useSearchJobs(
     .join(",");
   const queryClient = useQueryClient();
 
-  const startKey = ["searchJobs", "start", query, platformKey, skillKey, stateKey];
+  const startKey = ["searchJobs", "start", query, platformKey, skillKey, stateKey, sort];
 
   const startQuery = useQuery({
     queryKey: startKey,
-    queryFn: ({ signal }) => startSearch(query, platforms, skills, states, signal),
+    queryFn: ({ signal }) => startSearch(query, platforms, skills, states, sort, signal),
     enabled,
     retry: 1,
     staleTime: 60_000,
@@ -175,12 +190,12 @@ export function useSearchJobs(
     }, 1500);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jobStatus, query, platformKey, skillKey, stateKey]);
+  }, [jobStatus, query, platformKey, skillKey, stateKey, sort]);
 
   const pagesQuery = useInfiniteQuery({
-    queryKey: ["searchJobs", "pages", query, platformKey, skillKey, stateKey],
+    queryKey: ["searchJobs", "pages", query, platformKey, skillKey, stateKey, sort],
     queryFn: ({ pageParam, signal }) =>
-      fetchSearchPage(query, platforms, skills, states, pageParam, signal),
+      fetchSearchPage(query, platforms, skills, states, sort, pageParam, signal),
     initialPageParam: 1,
     getNextPageParam: (last) => (last.hasMore ? last.page + 1 : undefined),
     enabled: enabled && ready,

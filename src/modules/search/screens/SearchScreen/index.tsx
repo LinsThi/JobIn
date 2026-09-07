@@ -35,6 +35,8 @@ export function SearchScreen() {
             <SearchResultsHeader
               count={search.resultCount}
               activeFilterCount={search.activeFilterCount}
+              sort={search.sort}
+              onChangeSort={search.onChangeSort}
             />
           ) : null}
         </YStack>

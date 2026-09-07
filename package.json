@@ -5,6 +5,7 @@
   "scripts": {
     "start": "expo start --dev-client",
     "start:usb": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:3333 tcp:3333 && cross-env REACT_NATIVE_PACKAGER_HOSTNAME=localhost expo start --dev-client",
+    "start:usb:clear": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:3333 tcp:3333 && cross-env REACT_NATIVE_PACKAGER_HOSTNAME=localhost expo start --dev-client -c",
     "ios": "expo run:ios",
     "android": "expo run:android",
     "build:dev": "eas build --profile development",

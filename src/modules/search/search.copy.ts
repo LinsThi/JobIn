@@ -14,6 +14,10 @@ export const searchCopy = {
   activeFiltersSummary: (count: number) =>
     `${count} ${count === 1 ? "filtro ativo" : "filtros ativos"}`,
   allPlatformsSummary: "Várias plataformas",
+  sort: {
+    relevance: "Relevância",
+    recent: "Mais recentes",
+  },
   emptyTitle: "Nenhuma vaga com esses filtros",
   emptyBody: "Tente ampliar a faixa salarial ou incluir mais plataformas.",
   idleTitle: "Busque uma oportunidade agora",

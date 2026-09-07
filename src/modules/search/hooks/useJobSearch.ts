@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { ALL_PLATFORM_IDS, EMPTY_FILTERS, SearchFilters, SearchJob } from "../search.constants";
 
 import { JobPlatformId, normalizePlatformId, normalizedJobToJob } from "~/src/shared/domain/job";
-import { useSearchJobs } from "~/src/shared/queries/useSearchJobs";
+import { SearchSort, useSearchJobs } from "~/src/shared/queries/useSearchJobs";
 import { NormalizedJobDTO, SearchProgress } from "~/src/shared/queries/useSearchJobs/types";
 import useUserDetails from "~/src/shared/store/useUserDetails";
 import { showToast } from "~/src/shared/utils/toast";
@@ -95,6 +95,9 @@ export function useJobSearch() {
   const [query, setQuery] = useState("");
   const [submitted, setSubmitted] = useState("");
   const [filters, setFilters] = useState<SearchFilters>(EMPTY_FILTERS);
+  // Job boards keep listing stale vacancies, so default to newest-first; the
+  // user can switch back to relevance from the results header.
+  const [sort, setSort] = useState<SearchSort>("recent");
 
   const platformScope = useMemo(
     () => (filters.platforms.length ? filters.platforms : ALL_PLATFORM_IDS),
@@ -112,7 +115,7 @@ export function useJobSearch() {
     hasMore,
     loadingMore,
     loadMore,
-  } = useSearchJobs(submitted, platformScope, skills, filters.states);
+  } = useSearchJobs(submitted, platformScope, skills, filters.states, sort);
 
   const { done: completedPlatforms, errored: erroredPlatforms } = useMemo(
     () => splitProgress(progress),
@@ -147,6 +150,8 @@ export function useJobSearch() {
     submitted,
     filters,
     setFilters,
+    sort,
+    setSort,
     phase,
     completedPlatforms,
     erroredPlatforms,

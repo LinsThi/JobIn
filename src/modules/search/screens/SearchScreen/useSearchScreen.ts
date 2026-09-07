@@ -75,6 +75,8 @@ export function useSearchScreen() {
     erroredPlatforms: search.erroredPlatforms,
     results: search.results,
     resultCount: search.resultCount,
+    sort: search.sort,
+    onChangeSort: search.setSort,
     hasMore: search.hasMore,
     loadingMore: search.loadingMore,
     loadMore: search.loadMore,

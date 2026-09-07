@@ -55,8 +55,10 @@ function shortBody(data: unknown): unknown {
 if (DEBUG) {
   apiServe.interceptors.request.use((config) => {
     (config as { metadata?: { start: number } }).metadata = { start: Date.now() };
-    const url = `${config.baseURL ?? ""}${config.url ?? ""}`;
-    console.log(`[api] → ${config.method?.toUpperCase()} ${url}`, config.params ?? {});
+    // `getUri` serialises `params` the same way axios will on the wire, so the
+    // logged line is the exact URL the backend receives (query string included).
+    const url = apiServe.getUri(config);
+    console.log(`[api] → ${config.method?.toUpperCase()} ${url}`);
     return config;
   });
 }
@@ -70,7 +72,7 @@ apiServe.interceptors.response.use(
       const { config, status, data } = response;
       const start = (config as { metadata?: { start: number } }).metadata?.start;
       const ms = start ? `${Date.now() - start}ms` : "";
-      const url = `${config.baseURL ?? ""}${config.url ?? ""}`;
+      const url = apiServe.getUri(config);
       console.log(
         `[api] ← ${config.method?.toUpperCase()} ${url} ${status} ${ms}`.trimEnd(),
         shortBody(data)
@@ -80,7 +82,7 @@ apiServe.interceptors.response.use(
   },
   (error) => {
     const { config, response, message, code } = error ?? {};
-    const url = `${config?.baseURL ?? ""}${config?.url ?? ""}`;
+    const url = config ? apiServe.getUri(config) : (config?.url ?? "");
     const start = (config as { metadata?: { start: number } })?.metadata?.start;
     const ms = start ? ` (${Date.now() - start}ms)` : "";
 
