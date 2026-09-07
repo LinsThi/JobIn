@@ -2,7 +2,7 @@
   "expo": {
     "name": "JobIn",
     "slug": "linsdevjobin",
-    "version": "1.1.1",
+    "version": "1.2.1",
     "scheme": "jobin",
     "web": {
       "bundler": "metro",
