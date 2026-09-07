@@ -29,20 +29,56 @@ function splitProgress(progress: SearchProgress | undefined) {
   return { done, errored };
 }
 
+// Backend-style value normalization: NFD, strip diacritics, lowercase, collapse
+// whitespace. Mirrors `normalizeFilterValue` in the backend's `jobFilters.ts`.
+const DIACRITICS = /[̀-ͯ]/g;
+function norm(value: string | undefined): string {
+  return (value ?? "")
+    .normalize("NFD")
+    .replace(DIACRITICS, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+// Placeholder strings the scrapers emit when a field wasn't found — treated as
+// "no data", so a job carrying one is never excluded by that filter.
+const UNKNOWN_VALUES = new Set(["", "nao informado", "a combinar", "nao especificado"]);
+function hasValue(raw: string | undefined): boolean {
+  return !UNKNOWN_VALUES.has(norm(raw));
+}
+
 // The backend performs the keyword search and the location (`states`) filter —
-// the latter over the full result set, before pagination. This only applies the
-// remaining structured filters from the filter sheet against the returned jobs.
+// the latter over the full result set, before pagination. This applies the
+// remaining structured filters (work model, contract, salary, platform) against
+// the returned jobs.
+//
+// Chip labels ("CLT", "Remoto") are matched as diacritic-insensitive substrings,
+// like the backend's `filterJobs`, so "CLT (Efetivo)" and "100% Remoto" still
+// match. A job is only dropped when it *has* the field and it doesn't match —
+// missing / "Não informado" data never excludes a job, so turning a filter on
+// can't wipe the whole list.
 function matchesJob(job: SearchJob, filters: SearchFilters): boolean {
-  if (filters.workModels.length && !filters.workModels.includes(job.workModel ?? "")) {
-    return false;
+  if (filters.workModels.length && hasValue(job.workModel)) {
+    const model = norm(job.workModel);
+    if (!filters.workModels.some((selected) => model.includes(norm(selected)))) return false;
   }
-  if (filters.contracts.length && !filters.contracts.includes(job.contractType ?? "")) {
-    return false;
+
+  if (filters.contracts.length && hasValue(job.contractType)) {
+    const contract = norm(job.contractType);
+    if (!filters.contracts.some((selected) => contract.includes(norm(selected)))) return false;
   }
+
   const platformsNarrowed =
     filters.platforms.length > 0 && filters.platforms.length < ALL_PLATFORM_IDS.length;
   if (platformsNarrowed && !filters.platforms.includes(job.platformId)) return false;
-  if (filters.salaryMin > 0 && (job.salaryMin ?? 0) < filters.salaryMin) return false;
+
+  if (filters.salaryMin > 0) {
+    // Match the backend: judge by the top of the range, and keep jobs with no
+    // parsed salary rather than dropping them.
+    const ceiling = job.salaryMax ?? job.salaryMin;
+    if (ceiling !== undefined && ceiling < filters.salaryMin) return false;
+  }
 
   return true;
 }

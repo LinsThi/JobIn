@@ -40,6 +40,15 @@ export function useHomeScreen() {
     router.push("/search");
   }, [router]);
 
+  // "Ver mais" on the "Novos empregos encontrados" section. The Home feed
+  // aggregates up to 3 tracked areas; the Search screen takes a single term, so
+  // open it pre-filled with the first tracked area (falls back to an idle search
+  // if the user somehow has none).
+  const seeMoreNewJobs = useCallback(() => {
+    const term = trackedCategories[0]?.trim();
+    router.push(term ? { pathname: "/search", params: { q: term } } : "/search");
+  }, [router, trackedCategories]);
+
   const onSelectRecent = useCallback(
     (term: string) => {
       addSearch(term);
@@ -73,6 +82,7 @@ export function useHomeScreen() {
     newJobs,
     newJobsLoading,
     goToSearch,
+    seeMoreNewJobs,
     onSelectRecent,
     clearRecent: clearSearches,
     openJob,

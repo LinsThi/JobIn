@@ -39,7 +39,7 @@ export function HomeScreen() {
         jobs={home.newJobs}
         loading={home.newJobsLoading}
         onPressJob={home.openJob}
-        onSeeMore={home.goToSearch}
+        onSeeMore={home.seeMoreNewJobs}
       />
     </Screen>
   );

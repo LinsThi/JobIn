@@ -34,23 +34,64 @@ export const apiServe = axios.create({
   baseURL,
 });
 
+console.log(`[api] base URL: ${baseURL}`);
+
+// Full request/response tracing in the Metro console. Enabled in dev, or in any
+// build via `EXPO_PUBLIC_API_DEBUG=true` — useful to confirm on a device/APK
+// whether calls are even reaching the backend and what it answers.
+const DEBUG = __DEV__ || process.env.EXPO_PUBLIC_API_DEBUG === "true";
+
+function shortBody(data: unknown): unknown {
+  if (Array.isArray(data)) return `Array(${data.length})`;
+  if (data && typeof data === "object") {
+    const record = data as Record<string, unknown>;
+    if (Array.isArray(record.data)) {
+      return { ...record, data: `Array(${record.data.length})` };
+    }
+  }
+  return data;
+}
+
+if (DEBUG) {
+  apiServe.interceptors.request.use((config) => {
+    (config as { metadata?: { start: number } }).metadata = { start: Date.now() };
+    const url = `${config.baseURL ?? ""}${config.url ?? ""}`;
+    console.log(`[api] → ${config.method?.toUpperCase()} ${url}`, config.params ?? {});
+    return config;
+  });
+}
+
 // Surface why a request failed in the Metro console — otherwise a network error
 // on a physical device (wrong LAN host, firewall blocking :3333) only shows up
 // as a generic "Não foi possível..." toast with no trace.
 apiServe.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    if (DEBUG) {
+      const { config, status, data } = response;
+      const start = (config as { metadata?: { start: number } }).metadata?.start;
+      const ms = start ? `${Date.now() - start}ms` : "";
+      const url = `${config.baseURL ?? ""}${config.url ?? ""}`;
+      console.log(
+        `[api] ← ${config.method?.toUpperCase()} ${url} ${status} ${ms}`.trimEnd(),
+        shortBody(data)
+      );
+    }
+    return response;
+  },
   (error) => {
     const { config, response, message, code } = error ?? {};
     const url = `${config?.baseURL ?? ""}${config?.url ?? ""}`;
+    const start = (config as { metadata?: { start: number } })?.metadata?.start;
+    const ms = start ? ` (${Date.now() - start}ms)` : "";
 
     if (response) {
       console.warn(
-        `[api] ${config?.method?.toUpperCase()} ${url} -> ${response.status}`,
+        `[api] ✗ ${config?.method?.toUpperCase()} ${url} -> ${response.status}${ms}`,
         response.data
       );
     } else {
       console.warn(
-        `[api] ${config?.method?.toUpperCase()} ${url} failed: ${code ?? ""} ${message ?? ""}`.trim()
+        `[api] ✗ ${config?.method?.toUpperCase()} ${url} failed${ms}: ${code ?? ""} ${message ?? ""}`.trim()
       );
     }
 

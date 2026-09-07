@@ -26,6 +26,10 @@ function searchParams(term: string, platforms: string[], skills: string[], state
   return {
     query: term,
     pageSize: PAGE_SIZE,
+    // Sent on every call (start, status-less page fetches) so the "is it ready?"
+    // request and the page request are byte-identical in the logs and share the
+    // backend's in-flight dedup. Not part of the scrape cache key.
+    userId: getDeviceId(),
     ...(platforms.length ? { platforms: platforms.join(",") } : {}),
     // Sent so a search for a tracked category shares its result cache with the
     // Home feed (which always scores by skills).
@@ -48,14 +52,14 @@ async function startSearch(
   states: string[],
   signal?: AbortSignal
 ): Promise<{ ready: boolean; jobId?: string }> {
+  // `userId` (in `searchParams`) tags the queued job so the backend can notify
+  // this device once the (possibly slow) scrape finishes — see
+  // `SearchCompletionNotifier`.
   const response = await apiServe.get<SearchPageDTO | EnqueuedSearchDTO>("/jobs/search", {
     signal,
     params: {
       ...searchParams(term, platforms, skills, states),
       page: 1,
-      // Tags the queued job so the backend can notify this device once the
-      // (possibly slow) scrape finishes — see `SearchCompletionNotifier`.
-      userId: getDeviceId(),
     },
   });
 

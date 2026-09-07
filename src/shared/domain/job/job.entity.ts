@@ -12,6 +12,7 @@ export interface Job {
   location: string;
   salaryLabel: string;
   salaryMin?: number;
+  salaryMax?: number;
   workModel?: string;
   contractType?: string;
   seniority?: string;

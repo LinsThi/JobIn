@@ -71,6 +71,7 @@ export function normalizedJobToJob(dto: NormalizedJobDTO): Job {
     location: dto.location?.raw || "Local não informado",
     salaryLabel: dto.salary?.raw || "A combinar",
     salaryMin: dto.salary?.min,
+    salaryMax: dto.salary?.max,
     workModel: dto.workModel || undefined,
     contractType: dto.contractType || undefined,
     seniority: undefined,
