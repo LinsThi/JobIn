@@ -204,12 +204,19 @@ export function useSearchJobs(
   });
 
   const pages = pagesQuery.data?.pages ?? [];
-  const failed = startQuery.isError || statusQuery.isError || jobStatus === "failed";
+  const failed =
+    startQuery.isError || statusQuery.isError || jobStatus === "failed" || pagesQuery.isError;
+
+  // `ready` only means the search resolved server-side; the first page of
+  // results is fetched separately by `pagesQuery`. Stay "pending" until that
+  // page lands, otherwise the screen briefly renders the empty state ("nenhuma
+  // vaga") between `ready` flipping true and the results arriving.
+  const firstPageLoaded = pagesQuery.isSuccess;
 
   return {
     jobs: pages.flatMap((page) => page.jobs),
     total: pages[0]?.total ?? 0,
-    pending: enabled && !failed && !ready,
+    pending: enabled && !failed && (!ready || !firstPageLoaded),
     failed,
     progress: statusQuery.data?.progress,
     hasMore: !!pagesQuery.hasNextPage,
