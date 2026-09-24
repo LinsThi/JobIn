@@ -50,9 +50,9 @@ export type PlatformSpeed = "fast" | "mid" | "slow";
 export const SEARCH_PLATFORMS: { id: JobPlatformId; speed: PlatformSpeed }[] = [
   { id: "linkedin", speed: "fast" },
   { id: "infojobs", speed: "fast" },
-  { id: "catho", speed: "fast" },
-  { id: "trabalhabrasil", speed: "fast" },
-  { id: "gupy", speed: "mid" },
+  { id: "catho", speed: "mid" },
+  { id: "trabalhabrasil", speed: "mid" },
+  { id: "gupy", speed: "slow" },
 ];
 
 /** All platform ids, in query order. */
